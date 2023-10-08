@@ -3,13 +3,24 @@ import { GetUserArticles } from "@/lib/helpers/GetUserArticles";
 ("@/lib/constants/initialEditorValue");
 import { FormSchema as DraftArticleValidator } from "@/lib/validators/DraftArticleValidator";
 import { router, publicProcedure, protectedProcedure } from "@/server/trpc";
-import { Article, Prisma } from "@prisma/client";
 import { z } from "zod";
 export const articleRouter = router({
   userArticles: protectedProcedure.query(async ({ ctx }) => {
     const data = await GetUserArticles(ctx.user.userId);
     return data;
   }),
+  details: protectedProcedure
+    .input(z.object({ articleId: z.string() }))
+    .query(async ({ input, ctx }) => {
+      const data = await ctx.prisma.article.findUnique({
+        where: { id: input.articleId },
+        include: {
+          tags: true,
+          categories: true,
+        },
+      });
+      return data;
+    }),
   draftArticle: protectedProcedure
     .input(DraftArticleValidator)
     .mutation(async ({ input, ctx }) => {
@@ -44,7 +55,7 @@ export const articleRouter = router({
     .input(
       z.object({
         articleId: z.string(),
-        status: z.optional(z.enum(["DRAFT", "PUBLISHED", "SCHEDULED"])),
+        status: z.optional(z.enum(["DRAFT", "PUBLISHED"])),
         publishedAt: z.optional(z.date()),
       }),
     )
@@ -68,7 +79,6 @@ export const articleRouter = router({
           updatedAt: true,
         },
       });
-      console.log(input);
       return { success: true, article: data };
     }),
   duplicateArticle: protectedProcedure
@@ -127,7 +137,9 @@ export const articleRouter = router({
       z.object({
         articleId: z.string(),
         title: z.optional(z.string()),
+        slug: z.optional(z.string()),
         description: z.optional(z.nullable(z.string())),
+        publishedAt: z.optional(z.date().nullable()),
         coverImage: z.optional(z.nullable(z.string())),
       }),
     )
@@ -136,8 +148,10 @@ export const articleRouter = router({
         where: { id: input.articleId, authorId: ctx.user.userId },
         data: {
           title: input.title,
+          slug: input.slug,
           description: input.description,
           coverImage: input.coverImage,
+          publishedAt: input.publishedAt,
         },
       });
       return {

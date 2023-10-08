@@ -4,29 +4,40 @@ import { Icons } from "@/assets/icons";
 import { useUpload } from "@/hooks/use-s3-upload";
 import { useDropzone } from "react-dropzone";
 import { cn } from "@/lib/utils";
-import { useEditorStore } from "@/store/EditorStore";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import Image from "next/image";
 
-const UploadField = () => {
+interface UploadFieldProps {
+  value: string | null | undefined;
+  onChange: (value: string) => void;
+}
+
+const UploadField = (props: UploadFieldProps) => {
   const [loading, setLoading] = useState(false);
-  const { uploadFile, url, progress } = useUpload();
-  const [fileState, setFileState] = useState<File | null>(null);
-  const setCoverImage = useEditorStore((state) => state.setCoverImage);
-  const article = useEditorStore((state) => state.article);
+  const { uploadFile, progress } = useUpload({
+    onUploadStarted: () => {
+      setLoading(true);
+    },
+    onUploadComplete(url) {
+      props.onChange(url);
+      setLoading(false);
+    },
+    onError(error) {
+      toast.error(error);
+    },
+  });
+  const { value, onChange } = props;
 
   const onDrop = useCallback(async (acceptedFiles: File[]) => {
     const file = acceptedFiles[0];
     if (!file) return;
-    setFileState(() =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      }),
-    );
-    setLoading(true);
-    await uploadFile(file);
+    uploadFile(file);
   }, []);
+
+  useEffect(() => {
+    console.log("image", value);
+  }, [value]);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -47,33 +58,22 @@ const UploadField = () => {
     noClick: loading,
   });
 
-  useEffect(() => {
-    if (url) {
-      setCoverImage(url);
-      setLoading(false);
-    }
-  }, [url]);
-
   return (
-    <div className="flex flex-col space-y-2">
-      <span className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-        Featured Image
-      </span>
-      {article?.coverImage ? (
+    <div className="relative">
+      {value ? (
         <div className="flex overflow-hidden flex-col transition-[border] rounded-lg border bg-card text-card-foreground shadow-sm items-center justify-center h-44 gap-2">
           <div className="relative w-full h-full">
             <Image
               width={384}
               height={216}
-              src={article.coverImage}
+              src={value}
               className="object-cover aspect-video"
               alt="Featured Image"
             />
             <Button
               type="button"
               onClick={() => {
-                setCoverImage(null);
-                setFileState(null);
+                onChange("");
               }}
               size={"xs"}
               className="absolute bg-background/70 top-4 right-2"
@@ -101,18 +101,22 @@ const UploadField = () => {
             )}
           />
 
-          <>
-            <Icons.ImageIcon className="w-12 h-12 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">
-              {fileState ? fileState.name : "Drag and drop your image here"}
-            </span>
-          </>
+          {loading ? (
+            <div>
+              <span className="text-lg font-medium font-display text-muted-foreground">
+                {progress}%
+              </span>
+            </div>
+          ) : (
+            <>
+              <Icons.ImageIcon className="w-12 h-12 text-muted-foreground" />
+              <span className="text-sm text-muted-foreground">
+                Drag and drop your image here
+              </span>
+            </>
+          )}
         </div>
       )}
-
-      <p className="text-sm text-muted-foreground">
-        This will be the main image for your article.
-      </p>
     </div>
   );
 };

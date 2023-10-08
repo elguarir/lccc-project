@@ -1,9 +1,9 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'Este Center',
+  name: 'SOMACEP',
   description:
-    'A place for students of essaouira high school of technology to share their ideas and learn along the way..',
+    'Your partner',
   mainNav: [
     {
       title: 'Home',

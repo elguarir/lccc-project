@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import NavItems from "./NavItems";
 import { mainLinks, managementLinks } from "@/lib/constants/DashboardNavLinks";
+import { siteConfig } from "@/config/site";
 
 export function SideSheet() {
   return (
@@ -35,7 +36,7 @@ export function SideSheet() {
             <Link className="flex items-center w-full gap-3 " href={"/"}>
               <Icons.logo className="w-8 h-8 mt-1 text-foreground" />
               <span className="text-xl text-[1.15rem] font-bold tracking-wide font-display">
-                Este Center
+                {siteConfig.name}
               </span>
             </Link>
           </header>

@@ -60,7 +60,6 @@ model User {
 enum ArticleStatus {
   DRAFT
   PUBLISHED
-  SCHEDULED
 }
 
 model Article {

@@ -1,6 +1,5 @@
-import { Button } from "@/components/ui/button";
-import { PlusIcon } from "lucide-react";
 import React from "react";
+import NewArticleButton from "./NewArticleButton";
 
 type Props = {};
 
@@ -11,12 +10,7 @@ export default function Header({}: Props) {
         <h2 className="text-3xl font-[550] md:font-bold font-display text-foreground">
           Articles
         </h2>
-        <Button
-          size={"sm"}
-        >
-          <PlusIcon strokeWidth={2.5} className="w-4 h-4 mr-2" />
-          New Article
-        </Button>
+        <NewArticleButton />
       </header>
     </div>
   );

@@ -6,6 +6,7 @@ import NavItems from "./NavItems";
 import { SideSheet } from "./SideSheet";
 import { UserButton } from "../User/UserButton";
 import useAuthSession from "@/hooks/useAuthSession";
+import { siteConfig } from "@/config/site";
 
 async function DashboardSideBar() {
   const session = await useAuthSession();
@@ -23,7 +24,7 @@ async function DashboardSideBar() {
           <Link className="flex items-center w-full gap-3 " href={"/"}>
             <Icons.logo className="w-8 h-8 mt-1 text-foreground" />
             <span className="text-xl text-[1.15rem] font-bold tracking-wide font-display">
-              Este Center
+              {siteConfig.name}
             </span>
           </Link>
         </header>

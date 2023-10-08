@@ -1,68 +1,108 @@
 import { createImageUrl } from "@/lib/helpers/CreateImageUrl";
-import { useState, useCallback } from "react";
-
-const uploadFile = async (
-  file: File,
-  setProgress: React.Dispatch<React.SetStateAction<number>>,
-  setIsUploaded: React.Dispatch<React.SetStateAction<boolean>>,
-  setKey: React.Dispatch<React.SetStateAction<string | undefined>>,
-  setUrl: React.Dispatch<React.SetStateAction<string | undefined>>,
-) => {
-  const getUploadUrl = async (file: File) => {
-    const res = await fetch("/api/upload/generate", {
-      method: "POST",
-      body: JSON.stringify({
-        filename: file.name,
-        filetype: file.type,
-      }),
-    });
-    const data = await res.json();
-    return data;
-  };
-
-  const { url, key } = await getUploadUrl(file);
-
-  const xhr = new XMLHttpRequest();
-  xhr.open("PUT", url, true);
-
-  xhr.upload.onprogress = (progressEvent) => {
-    if (progressEvent.lengthComputable) {
-      const uploaded = progressEvent.loaded;
-      const total = file.size;
-      const newProgress = Math.round((uploaded / total) * 100);
-      setProgress(newProgress);
-    }
-  };
-
-  xhr.onload = () => {
-    setIsUploaded(true);
-    setKey(key);
-    const url = createImageUrl(key);
-    setUrl(url);
-  };
-
-  xhr.send(file);
-};
+import { useState, useCallback, useEffect } from "react";
 
 /**
  * Custom hook for uploading a single file and tracking its upload state.
+ * @param {Function} onUploadComplete - Callback function to execute when the upload is complete.
+ * @param {Function} onError - Callback function to execute when an error occurs during the upload.
  * @returns An object containing `uploadFile` function and the current upload state.
  */
-export const useUpload = () => {
+
+interface UploadHookProps {
+  onUploadStarted?: () => void;
+  onUploadComplete?: (url: string) => void;
+  onError?: (error: string) => void;
+}
+
+export const useUpload = (props: UploadHookProps) => {
   const [progress, setProgress] = useState<number>(0);
   const [isUploaded, setIsUploaded] = useState<boolean>(false);
   const [key, setKey] = useState<string | undefined>(undefined);
   const [url, setUrl] = useState<string | undefined>(undefined);
 
-  const uploadFileCallback = useCallback(
-    (file: File) => {
+  const { onUploadStarted, onUploadComplete, onError } = props;
+
+  const uploadFile = useCallback(
+    async (file: File) => {
       setProgress(0);
       setIsUploaded(false);
       setKey(undefined);
       setUrl(undefined);
-      uploadFile(file, setProgress, setIsUploaded, setKey, setUrl);
+
+      const getUploadUrl = async (file: File) => {
+        try {
+          const res = await fetch("/api/upload/generate", {
+            method: "POST",
+            body: JSON.stringify({
+              filename: file.name,
+              filetype: file.type,
+            }),
+          });
+          if (!res.ok) {
+            throw new Error("Failed to generate upload URL");
+          }
+          const data = await res.json();
+          return data;
+        } catch (error) {
+          console.error("Error generating upload URL:", error);
+          if (onError) {
+            onError(error as string); // Execute the onError callback
+          }
+          return null;
+        }
+      };
+
+      const uploadToS3 = async (url: string, file: File) => {
+        const xhr = new XMLHttpRequest();
+
+        xhr.upload.addEventListener("loadstart", () => {
+          if (onUploadStarted) {
+            onUploadStarted();
+          }
+        });
+
+        xhr.open("PUT", url, true);
+
+        xhr.upload.onprogress = (progressEvent) => {
+          if (progressEvent.lengthComputable) {
+            const uploaded = progressEvent.loaded;
+            const total = file.size;
+            const newProgress = Math.round((uploaded / total) * 100);
+            setProgress(newProgress);
+          }
+        };
+
+        xhr.onload = () => {
+          setIsUploaded(true);
+          setKey(key);
+          const imageUrl = createImageUrl(key);
+          setUrl(imageUrl);
+          if (onUploadComplete) {
+            onUploadComplete(imageUrl); // Execute the onUploadComplete callback with the final URL
+          }
+
+          // Reset the progress bar
+          setTimeout(() => {
+            setProgress(0);
+          }, 1000);
+        };
+
+        xhr.onerror = () => {
+          console.error("Error uploading file to S3");
+          if (onError) {
+            onError("Error uploading file to S3"); // Execute the onError callback
+          }
+        };
+
+        xhr.send(file);
+      };
+
+      const { url, key } = await getUploadUrl(file);
+      if (url) {
+        uploadToS3(url, file);
+      }
     },
-    [setProgress, setIsUploaded, setKey, setUrl],
+    [onUploadComplete, onError],
   );
 
   return {
@@ -70,6 +110,6 @@ export const useUpload = () => {
     isUploaded,
     key,
     url,
-    uploadFile: uploadFileCallback,
+    uploadFile,
   };
 };

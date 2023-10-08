@@ -41,7 +41,7 @@ export const managementLinks: DashboardLinkProps[] = [
     ),
     items: [
       { name: "Published", href: "/dashboard/articles?type=published" },
-      { name: "Drafts", href: "/dashboard/articles?type=drafts" },
+      { name: "Draft", href: "/dashboard/articles?type=draft" },
     ],
   },
   {

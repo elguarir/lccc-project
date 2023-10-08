@@ -4,6 +4,7 @@ import { format, formatDistance, subDays } from "date-fns";
 import Link from "next/link";
 import React from "react";
 import { ActionButtons } from "./ActionButtons";
+import { Badge } from "@/components/ui/badge";
 
 type Props = {
   article: UserArticlesType[0];
@@ -11,7 +12,10 @@ type Props = {
 
 const ArticleCard = ({ article }: Props) => {
   return (
-    <li className="relative flex items-center w-full gap-2 transition-colors duration-200 rounded-sm bg-background hover:bg-muted/80">
+    <li
+      key={article.id}
+      className="relative flex items-center w-full gap-2 transition-colors duration-200 rounded-sm bg-background hover:bg-muted/80"
+    >
       <Link
         className="flex items-center w-full gap-3 px-3 py-3"
         href={`/editor/${article.id}`}
@@ -19,6 +23,7 @@ const ArticleCard = ({ article }: Props) => {
         {article.coverImage ? (
           <div className="overflow-hidden min-w-[2.75rem] rounded-[5px]">
             <img
+              // aspect video
               className="object-cover h-11 aspect-video"
               src={article.coverImage}
               alt={article.title}
@@ -30,11 +35,11 @@ const ArticleCard = ({ article }: Props) => {
           </div>
         )}
 
-        <div className="flex flex-1 gap-0.5 flex-col">
-          <h3 className="text-base font-semibold line-clamp-1 md:text-lg">
+        <div className="flex flex-col flex-1 gap-0">
+          <h3 className="text-sm font-semibold line-clamp-1 md:text-base">
             {article.title || "Untitled"}
           </h3>
-          <div className="inline-flex gap-1 text-xs tracking-wide max-sm:flex max-sm:flex-col md:text-sm max-w-max text-muted-foreground">
+          <div className="inline-flex text-xs tracking-wide gap-0.5 max-sm:flex max-sm:flex-col md:text-xs max-w-max text-muted-foreground">
             <div>
               by <span className="font-medium">{article.author.name}</span>
             </div>
@@ -47,7 +52,7 @@ const ArticleCard = ({ article }: Props) => {
                   addSuffix: true,
                 },
               )}
-              <span className="transition-opacity duration-300 opacity-0 group-hover:opacity-100">
+              <span className="hidden ml-1 transition-opacity duration-300 group-hover:inline-block">
                 {" "}
                 on {format(article.createdAt, "do MMM yyyy")}
               </span>
@@ -55,6 +60,15 @@ const ArticleCard = ({ article }: Props) => {
           </div>
         </div>
       </Link>
+      <div className="px-4">
+        <Badge variant={article.status === "PUBLISHED" ? "success" : "outline"}>
+          {article.status === "PUBLISHED"
+            ? "Published"
+            : article.status === "DRAFT"
+            ? "Draft"
+            : "Private"}
+        </Badge>
+      </div>
       <div className="px-4">
         <ActionButtons article={article} />
       </div>
