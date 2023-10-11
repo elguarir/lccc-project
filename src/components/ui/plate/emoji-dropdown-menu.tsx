@@ -29,7 +29,8 @@ export function EmojiDropdownMenu({
   return (
     <EmojiToolbarDropdown
       control={
-        <ToolbarButton variant={"ghost"} size={"xs"} type="button" {...props}>
+        //@ts-ignore
+        <ToolbarButton variant={"outline"} size={"xs"} type="button" {...props}>
           <Icons.emoji />
         </ToolbarButton>
       }
