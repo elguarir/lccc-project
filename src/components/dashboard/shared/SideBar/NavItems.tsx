@@ -45,7 +45,7 @@ function NavItems({ links }: Props) {
                 </li>
                 <AccordionContent>
                   {link.items?.map((item) => (
-                    <NavLink className="px-8 pl-14" href={item.href}>
+                    <NavLink key={item.name} className="px-8 pl-14" href={item.href}>
                       {item.name}
                     </NavLink>
                   ))}

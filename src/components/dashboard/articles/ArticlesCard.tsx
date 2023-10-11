@@ -24,13 +24,13 @@ const ArticleCard = ({ article }: Props) => {
           <div className="overflow-hidden min-w-[2.75rem] rounded-[5px]">
             <img
               // aspect video
-              className="object-cover h-11 aspect-video"
+              className="hidden object-cover md:block h-11 aspect-video"
               src={article.coverImage}
               alt={article.title}
             />
           </div>
         ) : (
-          <div className="overflow-hidden h-11 aspect-video flex items-center justify-center px-2 bg-secondary dark:bg-muted/80 rounded-[5px]">
+          <div className="overflow-hidden hidden md:flex h-11 aspect-video  items-center justify-center px-2 bg-secondary dark:bg-muted/80 rounded-[5px]">
             <QuestionMarkCircledIcon className="w-4 h-4 text-muted-foreground" />
           </div>
         )}
@@ -60,7 +60,7 @@ const ArticleCard = ({ article }: Props) => {
           </div>
         </div>
       </Link>
-      <div className="px-4">
+      <div className="relative">
         <Badge variant={article.status === "PUBLISHED" ? "success" : "outline"}>
           {article.status === "PUBLISHED"
             ? "Published"
@@ -69,7 +69,7 @@ const ArticleCard = ({ article }: Props) => {
             : "Private"}
         </Badge>
       </div>
-      <div className="px-4">
+      <div className="pl-2 pr-3">
         <ActionButtons article={article} />
       </div>
     </li>

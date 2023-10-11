@@ -31,6 +31,7 @@ import { ELEMENT_EXCALIDRAW } from '@udecode/plate-excalidraw';
 import { KEY_LIST_STYLE_TYPE, toggleIndentList } from '@udecode/plate-indent-list';
 import { toggleList } from '@udecode/plate-list';
 import { ELEMENT_LINK, triggerFloatingLink } from '@udecode/plate-link';
+import { Button } from '../button';
 
 const items = [
   {
@@ -72,12 +73,12 @@ const items = [
         description: 'Quote (⌘+⇧+.)',
         icon: Icons.blockquote,
       },
-      {
-        value: ELEMENT_TABLE,
-        label: 'Table',
-        description: 'Table',
-        icon: Icons.table,
-      },
+      // {
+      //   value: ELEMENT_TABLE,
+      //   label: 'Table',
+      //   description: 'Table',
+      //   icon: Icons.table,
+      // },
       // {
       //   value: 'ul',
       //   label: 'Bulleted list',
@@ -119,12 +120,12 @@ const items = [
       //   description: 'Embed',
       //   icon: Icons.embed,
       // },
-      {
-        value: ELEMENT_EXCALIDRAW,
-        label: 'Excalidraw',
-        description: 'Excalidraw',
-        icon: Icons.moon,
-      },
+      // {
+      //   value: ELEMENT_EXCALIDRAW,
+      //   label: 'Excalidraw',
+      //   description: 'Excalidraw',
+      //   icon: Icons.moon,
+      // },
     ],
   },
   // {
@@ -147,9 +148,9 @@ export function InsertDropdownMenu(props: DropdownMenuProps) {
   return (
     <DropdownMenu modal={false} {...openState} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={openState.open} tooltip="Insert" isDropdown>
-          <Icons.add />
-        </ToolbarButton>
+        <Button type='button' size={"xs"} variant={"ghost"}>
+          <Icons.add  className='w-4 h-4'/>
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent

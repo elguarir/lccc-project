@@ -1,6 +1,6 @@
-import React from 'react';
-import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
-import { ELEMENT_BLOCKQUOTE } from '@udecode/plate-block-quote';
+import React from "react";
+import { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
+import { ELEMENT_BLOCKQUOTE } from "@udecode/plate-block-quote";
 import {
   collapseSelection,
   findNode,
@@ -10,11 +10,16 @@ import {
   TElement,
   toggleNodeType,
   useEditorState,
-} from '@udecode/plate-common';
-import { ELEMENT_H1, ELEMENT_H2, ELEMENT_H3, ELEMENT_H4 } from '@udecode/plate-heading';
-import { ELEMENT_PARAGRAPH } from '@udecode/plate-paragraph';
+} from "@udecode/plate-common";
+import {
+  ELEMENT_H1,
+  ELEMENT_H2,
+  ELEMENT_H3,
+  ELEMENT_H4,
+} from "@udecode/plate-heading";
+import { ELEMENT_PARAGRAPH } from "@udecode/plate-paragraph";
 
-import { Icons } from '@/assets/icons';
+import { Icons } from "@/assets/icons";
 
 import {
   DropdownMenu,
@@ -24,44 +29,46 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
   useOpenState,
-} from './dropdown-menu';
-import { ToolbarButton } from './toolbar';
+} from "./dropdown-menu";
+import { ToolbarButton } from "./toolbar";
+import { Button } from "../button";
+import { ChevronDown } from "lucide-react";
 
 const items = [
   {
     value: ELEMENT_PARAGRAPH,
-    label: 'Paragraph',
-    description: 'Paragraph',
+    label: "Paragraph",
+    description: "Paragraph",
     icon: Icons.paragraph,
   },
   {
     value: ELEMENT_H1,
-    label: 'Heading 1',
-    description: 'Heading 1',
+    label: "Heading 1",
+    description: "Heading 1",
     icon: Icons.h1,
   },
   {
     value: ELEMENT_H2,
-    label: 'Heading 2',
-    description: 'Heading 2',
+    label: "Heading 2",
+    description: "Heading 2",
     icon: Icons.h2,
   },
   {
     value: ELEMENT_H3,
-    label: 'Heading 3',
-    description: 'Heading 3',
+    label: "Heading 3",
+    description: "Heading 3",
     icon: Icons.h3,
   },
   {
     value: ELEMENT_H4,
-    label: 'Heading 4',
-    description: 'Heading 4',
+    label: "Heading 4",
+    description: "Heading 4",
     icon: Icons.h4,
   },
   {
     value: ELEMENT_BLOCKQUOTE,
-    label: 'Quote',
-    description: 'Quote (⌘+⇧+.)',
+    label: "Quote",
+    description: "Quote (⌘+⇧+.)",
     icon: Icons.blockquote,
   },
   // {
@@ -103,15 +110,16 @@ export function TurnIntoDropdownMenu(props: DropdownMenuProps) {
   return (
     <DropdownMenu modal={false} {...openState} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton
-          pressed={openState.open}
-          tooltip="Turn into"
-          isDropdown
+        <Button
+          type="button"
+          variant={"ghost"}
+          size={"xs"}
           className="lg:min-w-[130px]"
         >
           <SelectedItemIcon className="w-5 h-5 lg:hidden" />
           <span className="max-lg:hidden">{selectedItemLabel}</span>
-        </ToolbarButton>
+          <ChevronDown className="w-4 h-4 ml-auto" />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="min-w-0">

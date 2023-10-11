@@ -1,21 +1,22 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
+import React from "react";
+import { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   useColorDropdownMenu,
   useColorDropdownMenuState,
-} from '@udecode/plate-font';
+} from "@udecode/plate-font";
 
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuTrigger,
-} from '@/components/ui/plate/dropdown-menu';
-import { ToolbarButton } from '@/components/ui/plate/toolbar';
+} from "@/components/ui/plate/dropdown-menu";
+import { ToolbarButton } from "@/components/ui/plate/toolbar";
 
-import { DEFAULT_COLORS, DEFAULT_CUSTOM_COLORS } from './color-constants';
-import { ColorPicker } from './color-picker';
+import { DEFAULT_COLORS, DEFAULT_CUSTOM_COLORS } from "./color-constants";
+import { ColorPicker } from "./color-picker";
+import { Button } from "../button";
 
 export type TColor = {
   name: string;
@@ -45,9 +46,9 @@ export function ColorDropdownMenu({
   return (
     <DropdownMenu modal={false} {...menuProps}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton tooltip={tooltip} {...buttonProps}>
+        <Button variant={"ghost"} size={"xs"} type="button" {...buttonProps}>
           {children}
-        </ToolbarButton>
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start">

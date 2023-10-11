@@ -108,6 +108,7 @@ const ToolbarButton = React.forwardRef<
         >
           <ToolbarToggleItem
             ref={ref}
+            type="button"
             className={cn(
               toggleVariants({
                 variant,
@@ -130,6 +131,7 @@ const ToolbarButton = React.forwardRef<
       ) : (
         <ToolbarPrimitive.Button
           ref={ref}
+          type="button"
           className={cn(
             toggleVariants({
               variant,

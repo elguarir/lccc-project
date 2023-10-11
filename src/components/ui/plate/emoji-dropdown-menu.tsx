@@ -1,18 +1,19 @@
-import React from 'react';
+import React from "react";
 import {
   EmojiDropdownMenuOptions,
   useEmojiDropdownMenuState,
-} from '@udecode/plate-emoji';
+} from "@udecode/plate-emoji";
 
-import { Icons } from '@/assets/icons';
-import { EmojiToolbarDropdown } from '@/components/ui/plate/emoji-toolbar-dropdown';
+import { Icons } from "@/assets/icons";
+import { EmojiToolbarDropdown } from "@/components/ui/plate/emoji-toolbar-dropdown";
 import {
   ToolbarButton,
   ToolbarButtonProps,
-} from '@/components/ui/plate/toolbar';
+} from "@/components/ui/plate/toolbar";
 
-import { emojiCategoryIcons, emojiSearchIcons } from './emoji-icons';
-import { EmojiPicker } from './emoji-picker';
+import { emojiCategoryIcons, emojiSearchIcons } from "./emoji-icons";
+import { EmojiPicker } from "./emoji-picker";
+import { Button } from "../button";
 
 type EmojiDropdownMenuProps = {
   options?: EmojiDropdownMenuOptions;
@@ -28,9 +29,9 @@ export function EmojiDropdownMenu({
   return (
     <EmojiToolbarDropdown
       control={
-        <ToolbarButton pressed={isOpen} isDropdown tooltip="Emoji" {...props}>
+        <Button variant={"ghost"} size={"xs"} type="button" {...props}>
           <Icons.emoji />
-        </ToolbarButton>
+        </Button>
       }
       isOpen={isOpen}
       setIsOpen={setIsOpen}

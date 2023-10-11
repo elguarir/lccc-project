@@ -21,7 +21,7 @@ export function MoreDropdownMenu(props: DropdownMenuProps) {
   return (
     <DropdownMenu modal={false} {...openState} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={openState.open} tooltip="Insert">
+        <ToolbarButton type='button' pressed={openState.open} tooltip="Insert">
           <Icons.more />
         </ToolbarButton>
       </DropdownMenuTrigger>
@@ -39,7 +39,7 @@ export function MoreDropdownMenu(props: DropdownMenuProps) {
             focusEditor(editor);
           }}
         >
-          <Icons.superscript className="mr-2 h-5 w-5" />
+          <Icons.superscript className="w-5 h-5 mr-2" />
           Superscript
           {/* (⌘+,) */}
         </DropdownMenuItem>
@@ -52,7 +52,7 @@ export function MoreDropdownMenu(props: DropdownMenuProps) {
             focusEditor(editor);
           }}
         >
-          <Icons.subscript className="mr-2 h-5 w-5" />
+          <Icons.subscript className="w-5 h-5 mr-2" />
           Subscript
           {/* (⌘+.) */}
         </DropdownMenuItem>

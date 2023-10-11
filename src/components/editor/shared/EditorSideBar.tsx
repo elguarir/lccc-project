@@ -21,6 +21,7 @@ import {
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 type Props = {
   skelaton?: boolean;
+  children?: React.ReactNode;
 };
 
 const EditorSideBar = (props: Props) => {
@@ -51,7 +52,7 @@ const EditorSideBar = (props: Props) => {
   };
 
   return (
-    <motion.div className="relative hidden h-full gap-1 transition-all duration-300 translate-x-0 xl:flex ">
+    <motion.div className="relative hidden h-full min-h-screen gap-1 transition-all duration-300 translate-x-0 xl:flex ">
       <Tooltip>
         <TooltipTrigger asChild>
           <Button
@@ -75,14 +76,14 @@ const EditorSideBar = (props: Props) => {
         </TooltipContent>
       </Tooltip>
 
-      <ScrollArea className="relative flex flex-col">
+      <ScrollArea className="relative flex flex-col flex-1 h-full">
         <motion.div
           initial={false}
           className="relative flex-col hidden h-full min-w-0 overflow-hidden border-l border-r bg-muted/50 xl:flex"
           variants={sidebarVariants}
           animate={isCollapsed ? "collapsed" : "open"}
         >
-          <Card className="flex flex-col flex-1 border-none rounded-none min-w-[384px] bg-inherit">
+          <Card className="flex flex-col min-h-screen flex-1 border-none rounded-none min-w-[384px] bg-inherit">
             {/* <DateTimePicker /> */}
             <CardHeader>
               <CardTitle>Article Details</CardTitle>
@@ -90,9 +91,7 @@ const EditorSideBar = (props: Props) => {
                 Fill in the details of your article.
               </CardDescription>
             </CardHeader>
-            <CardContent>
-              <ArticleDetailsForm />
-            </CardContent>
+            <CardContent>{props.children}</CardContent>
           </Card>
         </motion.div>
         <ScrollBar orientation="vertical" />

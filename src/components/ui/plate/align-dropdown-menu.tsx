@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import { DropdownMenuProps } from '@radix-ui/react-dropdown-menu';
+import React from "react";
+import { DropdownMenuProps } from "@radix-ui/react-dropdown-menu";
 import {
   useAlignDropdownMenu,
   useAlignDropdownMenuState,
-} from '@udecode/plate-alignment';
+} from "@udecode/plate-alignment";
 
-import { Icons, iconVariants } from '@/assets/icons';
+import { Icons, iconVariants } from "@/assets/icons";
 
 import {
   DropdownMenu,
@@ -16,24 +16,25 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
   useOpenState,
-} from './dropdown-menu';
-import { ToolbarButton } from './toolbar';
+} from "./dropdown-menu";
+import { ToolbarButton } from "./toolbar";
+import { Button } from "../button";
 
 const items = [
   {
-    value: 'left',
+    value: "left",
     icon: Icons.alignLeft,
   },
   {
-    value: 'center',
+    value: "center",
     icon: Icons.alignCenter,
   },
   {
-    value: 'right',
+    value: "right",
     icon: Icons.alignRight,
   },
   {
-    value: 'justify',
+    value: "justify",
     icon: Icons.alignJustify,
   },
 ];
@@ -55,9 +56,13 @@ export function AlignDropdownMenu({
   return (
     <DropdownMenu modal={false} {...openState} {...props}>
       <DropdownMenuTrigger asChild>
-        <ToolbarButton pressed={openState.open} tooltip="Align" isDropdown>
-          <IconValue />
-        </ToolbarButton>
+        <Button
+          variant={"ghost"}
+          size={"xs"}
+          type="button"
+        >
+          <IconValue className="w-4 h-4" />
+        </Button>
       </DropdownMenuTrigger>
 
       <DropdownMenuContent align="start" className="min-w-0">
@@ -67,7 +72,7 @@ export function AlignDropdownMenu({
         >
           {items.map(({ value: itemValue, icon: Icon }) => (
             <DropdownMenuRadioItem key={itemValue} value={itemValue} hideIcon>
-              <Icon className={iconVariants({ variant: 'toolbar' })} />
+              <Icon className={iconVariants({ variant: "toolbar" })} />
             </DropdownMenuRadioItem>
           ))}
         </DropdownMenuRadioGroup>

@@ -51,10 +51,16 @@ export const managementLinks: DashboardLinkProps[] = [
     icon: Icons.categoriesIcon,
   },
   {
-    name: "Tags",
-    href: "/dashboard/tags",
+    name: "Projects",
+    href: "/dashboard/projects",
     type: "link",
-    icon: Icons.tagsIconRounded,
+    icon: Icons.ProjectIcon,
+  },
+  {
+    name: "Services",
+    href: "/dashboard/services",
+    type: "link",
+    icon: Icons.ServicesIcon,
   },
   {
     name: "Members",

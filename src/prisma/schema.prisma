@@ -32,6 +32,7 @@ model Session {
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
+
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -52,14 +53,39 @@ model User {
 
   role    Role      @default(USER)
   Article Article[]
-  Comment Comment[]
 }
 
-
-
-enum ArticleStatus {
+enum Status {
   DRAFT
   PUBLISHED
+}
+
+model Project {
+  id              String            @id @default(cuid())
+  title           String
+  slug            String
+  description     String?
+  status          Status            @default(DRAFT)
+  images          String[]
+  client          String?
+  json            Json
+  startDate       DateTime?
+  endDate         DateTime?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  ProjectCategory ProjectCategory[]
+}
+
+model Service {
+  id          String            @id @default(cuid())
+  name        String
+  slug        String
+  description String?
+  json        Json
+  Image       String
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+  categories  ServiceCategory[]
 }
 
 model Article {
@@ -67,7 +93,7 @@ model Article {
   title       String
   description String?
   body        String?
-  status      ArticleStatus     @default(DRAFT)
+  status      Status            @default(DRAFT)
   json        Json
   coverImage  String?
   slug        String?           @unique
@@ -76,7 +102,6 @@ model Article {
   updatedAt   DateTime          @updatedAt
   authorId    String
   author      User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  comments    Comment[]
   categories  ArticleCategory[]
   tags        ArticleTag[]
 
@@ -103,10 +128,12 @@ model Tag {
 }
 
 model Category {
-  id       String            @id @default(cuid())
-  name     String
-  slug     String            @unique
-  articles ArticleCategory[]
+  id              String            @id @default(cuid())
+  name            String
+  slug            String            @unique
+  articles        ArticleCategory[]
+  ProjectCategory ProjectCategory[]
+  ServiceCategory ServiceCategory[]
 
   @@index([slug], name: "Category_slug")
 }
@@ -122,21 +149,28 @@ model ArticleCategory {
   @@id([categoryId])
 }
 
-model Comment {
-  id        String    @id @default(cuid())
-  body      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  authorId  String
-  author    User      @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  articleId String
-  article   Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  replies   Comment[] @relation("CommentToComment")
-  Comment   Comment?  @relation(fields: [commentId], references: [id], name: "CommentToComment")
-  commentId String?
+model ProjectCategory {
+  projectId  String
+  categoryId String
+  name       String
+  slug       String
+  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
 
-  @@index([authorId], name: "Comment_authorId")
-  @@index([articleId], name: "articleId")
+  @@id([projectId, categoryId])
+}
+
+model ServiceCategory {
+  serviceId  String
+  categoryId String
+  service    Service   @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime? @updatedAt
+
+  @@id([serviceId, categoryId])
 }
 
 enum Role {

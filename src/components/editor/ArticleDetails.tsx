@@ -27,7 +27,8 @@ import { trpc } from "@/server/client";
 import slugify from "slugify";
 import { toast } from "sonner";
 import axios from "axios";
-import shallow from "zustand/shallow";
+import { Article } from "@prisma/client";
+import { ArticleByIdType } from "@/types/article";
 
 const articleSchema = z.object({
   title: z
@@ -38,28 +39,34 @@ const articleSchema = z.object({
     .max(100, {
       message: "Title must be at most 100 characters long",
     }),
-  slug: z.string().optional(),
+  slug: z.string().optional().nullable(),
   description: z.string().optional().nullable(),
   publishedAt: z.date().optional().nullable(),
   coverImage: z.string().optional().nullable(),
 });
-
-export default function ArticleDetailsForm() {
+interface ArticleDetailsFormProps {
+  initialData?: ArticleByIdType;
+}
+export default function ArticleDetailsForm({
+  initialData,
+}: ArticleDetailsFormProps) {
   const articleId = useEditorStore((state) => state.article?.id);
   const articleTitle = useEditorStore((state) => state.article?.title);
   const syncArticle = useEditorStore((state) => state.syncArticle);
-  const [loading, setLoading] = useState(true);
   const { mutate: updateMutation, isLoading } =
     trpc.article.updateArticleDetails.useMutation();
 
-  // const initialData = trpc.article.
-
   const form = useForm<z.infer<typeof articleSchema>>({
     resolver: zodResolver(articleSchema),
+    defaultValues: {
+      title: initialData?.title,
+      slug: initialData?.slug,
+      description: initialData?.description,
+      coverImage: initialData?.coverImage,
+      publishedAt: new Date(initialData?.publishedAt ?? new Date()),
+    },
   });
-
   const { title } = form.watch();
-
   async function onSubmit(data: z.infer<typeof articleSchema>) {
     const { title, description, publishedAt, coverImage } = data;
     const slug = slugify(articleTitle + "-" + new Date().getTime(), {
@@ -88,35 +95,35 @@ export default function ArticleDetailsForm() {
     );
   }
 
-  useEffect(() => {
-    const getInitialData = async (id: string) => {
-      const res = await axios.get(`/api/articles/${articleId}`);
-      if (articleId && res.data) {
-        const { title, description, publishedAt, coverImage } = res.data;
-        form.setValue("title", title as string);
-        form.setValue("description", description);
-        form.setValue("publishedAt", new Date(publishedAt ?? new Date()));
-        form.setValue("coverImage", coverImage);
-      }
-    };
-    if (articleId) {
-      getInitialData(articleId);
-      setLoading(false);
-    }
-  }, [articleId]);
-  if (loading)
-    return (
-      <div className="flex flex-col justify-center flex-1 h-screen">
-        <div>
-          <div className="flex items-center justify-center">
-            <Loader2 className="w-10 h-10 text-muted-foreground animate-spin" />
-          </div>
-          <div className="flex items-center justify-center mt-4 text-sm text-muted-foreground">
-            Loading...
-          </div>
-        </div>
-      </div>
-    );
+  // useEffect(() => {
+  //   const getInitialData = async (id: string) => {
+  //     const res = await axios.get(`/api/articles/${id}`);
+  //     if (articleId && res.data) {
+  //       const { title, description, publishedAt, coverImage } = res.data;
+  //       form.setValue("title", title as string);
+  //       form.setValue("description", description);
+  //       form.setValue("publishedAt", new Date(publishedAt ?? new Date()));
+  //       form.setValue("coverImage", coverImage);
+  //     }
+  //   };
+  //   if (articleId) {
+  //     getInitialData(articleId);
+  //     setLoading(false);
+  //   }
+  // }, [articleId]);
+  // if (loading)
+  //   return (
+  //     <div className="flex flex-col justify-center flex-1 h-screen">
+  //       <div>
+  //         <div className="flex items-center justify-center">
+  //           <Loader2 className="w-10 h-10 text-muted-foreground animate-spin" />
+  //         </div>
+  //         <div className="flex items-center justify-center mt-4 text-sm text-muted-foreground">
+  //           Loading...
+  //         </div>
+  //       </div>
+  //     </div>
+  //   );
 
   return (
     <>
@@ -145,7 +152,7 @@ export default function ArticleDetailsForm() {
           <FormField
             control={form.control}
             name="slug"
-            render={({ field, fieldState }) => {
+            render={() => {
               let slug = "";
               if (title) {
                 slug = slugify(title + "-" + new Date().getTime(), {

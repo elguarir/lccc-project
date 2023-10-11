@@ -1,3 +1,4 @@
+import ArticleDetailsForm from "@/components/editor/ArticleDetails";
 import BackButton from "@/components/editor/BackButton";
 import PublishButton from "@/components/editor/PublishButton";
 import EditorSideBar from "@/components/editor/shared/EditorSideBar";
@@ -47,7 +48,9 @@ const EditorPage = async ({ params }: EditorPageProps) => {
           </div>
         </div>
       </ScrollArea>
-      <EditorSideBar />
+      <EditorSideBar>
+        <ArticleDetailsForm initialData={article} />
+      </EditorSideBar>
     </>
   );
 };

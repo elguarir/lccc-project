@@ -29,7 +29,6 @@ export function ActionButtons({ article }: ActionButtonsProps) {
     utils.article.userArticles.invalidate();
   };
 
-  const router = useRouter();
 
   return (
     <DropdownMenu>
@@ -50,7 +49,7 @@ export function ActionButtons({ article }: ActionButtonsProps) {
           className="px-3 text-muted-foreground font-[450] py-2"
         >
           <Link href={`/articles/${article.slug}`}>
-            <Icons.viewing className="w-4 h-4 mr-2 stroke-[2.2px]" />
+            <Icons.eyeVisible strokeWidth={3} className="w-4 h-4 mr-2 stroke-[2.2px]" />
             <span>View Article</span>
           </Link>
         </DropdownMenuItem>
@@ -62,7 +61,7 @@ export function ActionButtons({ article }: ActionButtonsProps) {
               },
               {
                 onSuccess: () => {
-                  toast.success("Article duplicated successfully!");
+                  toast("Article duplicated successfully!");
                   refresh();
                 },
                 onError: (err) => {
@@ -84,7 +83,7 @@ export function ActionButtons({ article }: ActionButtonsProps) {
               },
               {
                 onSuccess: () => {
-                  toast.success("Article deleted successfully!");
+                  toast("Article deleted successfully!");
                   refresh();
                 },
                 onError: (err) => {

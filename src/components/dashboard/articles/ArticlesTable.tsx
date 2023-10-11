@@ -40,7 +40,7 @@ const ArticlesTable = ({}: Props) => {
     filteredarticles.length === 0
   ) {
     return (
-      <div className="flex items-center justify-center w-full p-4 border-2 border-dashed rounded-lg h-52">
+      <div className="flex items-center justify-center w-full p-4 border border-dashed rounded-lg h-52">
         <div className="text-lg text-muted-foreground">
           You have not created any {type !== undefined ? type : ""} articles
           yet.
@@ -49,7 +49,7 @@ const ArticlesTable = ({}: Props) => {
     );
   }
   return (
-    <ul className="table w-full divide-y border-y">
+    <ul className="table w-full overflow-hidden border border-dashed divide-y rounded-lg divide-dashed">
       {filteredarticles.map((article) => (
         <ArticleCard key={article.id} article={article} />
       ))}
