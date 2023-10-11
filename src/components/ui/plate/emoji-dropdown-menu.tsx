@@ -29,9 +29,9 @@ export function EmojiDropdownMenu({
   return (
     <EmojiToolbarDropdown
       control={
-        <Button variant={"ghost"} size={"xs"} type="button" {...props}>
+        <ToolbarButton variant={"ghost"} size={"xs"} type="button" {...props}>
           <Icons.emoji />
-        </Button>
+        </ToolbarButton>
       }
       isOpen={isOpen}
       setIsOpen={setIsOpen}
