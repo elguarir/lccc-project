@@ -30,11 +30,29 @@ import MultipleImageField from "./MultipleImageField";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { Project } from "@prisma/client";
 
-export default function ProjectCreationForm() {
+interface Props {
+  project?: Project;
+}
+
+export default function ProjectCreationForm(props: Props) {
+  let initialValues = undefined;
+  if (props.project) {
+    initialValues = {
+      title: props.project.title,
+      client: props.project.client!,
+      description: props.project.description!,
+      json: props.project.json!,
+      startDate: props.project.startDate!,
+      endDate: props.project.endDate!,
+      images: props.project.images!,
+    };
+  }
+
   const form = useForm<z.infer<typeof schema>>({
     resolver: zodResolver(schema),
-    defaultValues: {
+    defaultValues: initialValues ?? {
       images: [],
       status: "DRAFT" as const,
     },
@@ -57,11 +75,15 @@ export default function ProjectCreationForm() {
       },
       {
         onSuccess: (data, variables) => {
-          toast.success("Project created!");
+          if (props.project) {
+            toast.success(`Project updated successfully!`);
+          } else {
+            toast.success(`Project created successfully!`);
+          }
           router.push("/dashboard/projects");
         },
         onError: (error) => {
-          toast.error("Something went wrong!");
+          toast.error(error.message ?? "Something went wrong!");
         },
       },
     );

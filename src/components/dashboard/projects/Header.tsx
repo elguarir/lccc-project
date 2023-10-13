@@ -1,5 +1,5 @@
 import React from "react";
-import NewArticleButton from "./NewProjectButton";
+import NewProjectButton from "./NewProjectButton";
 
 type Props = {};
 
@@ -10,7 +10,7 @@ export default function Header({}: Props) {
         <h2 className="text-3xl font-[550] md:font-bold font-display text-foreground">
           Projects
         </h2>
-        <NewArticleButton />
+        <NewProjectButton />
       </header>
     </div>
   );

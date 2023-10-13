@@ -1,16 +1,17 @@
 import Header from "@/components/dashboard/projects/Header";
+import ProjectsTable from "@/components/dashboard/projects/ProjectsTable";
 import React from "react";
 
-async function ProjectsPage() {
+async function ArticlesPage() {
 
   return (
     <div>
       <Header />
       <div className="w-full pt-4">
-        {/* <ArticlesTable /> */}
+        <ProjectsTable />
       </div>
     </div>
   );
 }
 
-export default ProjectsPage;
+export default ArticlesPage;

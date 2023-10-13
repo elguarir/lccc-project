@@ -52,6 +52,7 @@ const EditorSideBar = (props: Props) => {
   };
 
   return (
+    <>
     <motion.div className="relative hidden h-full min-h-screen gap-1 transition-all duration-300 translate-x-0 xl:flex ">
       <Tooltip>
         <TooltipTrigger asChild>
@@ -75,7 +76,6 @@ const EditorSideBar = (props: Props) => {
           </p>
         </TooltipContent>
       </Tooltip>
-
       <ScrollArea className="relative flex flex-col flex-1 h-full">
         <motion.div
           initial={false}
@@ -97,6 +97,7 @@ const EditorSideBar = (props: Props) => {
         <ScrollBar orientation="vertical" />
       </ScrollArea>
     </motion.div>
+    </>
   );
 };
 

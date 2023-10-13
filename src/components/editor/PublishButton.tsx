@@ -37,6 +37,7 @@ const PublishButton = ({ disabled }: Props) => {
   if (article?.status === "DRAFT") {
     return (
       <Button
+      size={"sm"}
       isLoading={isLoading}
       loadingText="Publishing..."
         onClick={() => {
@@ -74,7 +75,7 @@ const PublishButton = ({ disabled }: Props) => {
     return (
       <AlertDialog open={modalOpen} onOpenChange={setModalOpen}>
         <AlertDialogTrigger asChild>
-          <Button disabled={disabled} variant="ghost">
+          <Button size={"sm"} disabled={disabled} variant="ghost">
             Unpublish
           </Button>
         </AlertDialogTrigger>

@@ -1,27 +1,91 @@
 import { router, protectedProcedure } from "@/server/trpc";
 import { schema } from "@/lib/validators/ProjectCreation";
 import slugify from "slugify";
+import { Prisma } from "@prisma/client";
+import { TRPCError } from "@trpc/server";
+import { z } from "zod";
 export const projectRouter = router({
-  projects: protectedProcedure.query(async ({ ctx }) => {
-    const projects = await ctx.prisma.project.findMany();
-    return projects;
+  getProjects: protectedProcedure.query(async ({ ctx }) => {
+    return await ctx.prisma.project.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
   }),
 
   createProject: protectedProcedure
     .input(schema)
     .mutation(async ({ input, ctx }) => {
-      const project = await ctx.prisma.project.create({
+      const project = await ctx.prisma.project
+        .create({
+          data: {
+            title: input.title,
+            description: input.description,
+            slug: slugify(input.title),
+            status: "DRAFT",
+            client: input.client,
+            json: input.json as any,
+            images: input.images,
+            startDate: input.startDate,
+            endDate: input.endDate,
+          },
+        })
+        .catch((err) => {
+          if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === "P2002") {
+              return new TRPCError({
+                message: "Project with this title already exists",
+                code: "CONFLICT",
+              });
+            }
+          }
+        });
+      return project;
+    }),
+
+  updateProject: protectedProcedure
+    .input(
+      schema.extend({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const project = await ctx.prisma.project.update({
+        where: {
+          id: input.id,
+        },
         data: {
           title: input.title,
           description: input.description,
           slug: slugify(input.title),
-          status: "DRAFT",
+          status: input.status,
+          client: input.client,
           json: input.json as any,
           images: input.images,
           startDate: input.startDate,
           endDate: input.endDate,
         },
       });
+      return project;
+    }),
+  deleteProject: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const project = await ctx.prisma.project.delete({
+        where: {
+          id: input.id,
+        },
+      });
+      if (!project) {
+        return new TRPCError({
+          message: "Project not found!",
+          code: "NOT_FOUND",
+        });
+      }
       return project;
     }),
 });

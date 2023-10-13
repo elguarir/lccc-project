@@ -64,13 +64,13 @@ model Project {
   id              String            @id @default(cuid())
   title           String
   slug            String
-  description     String?
+  description     String
   status          Status            @default(DRAFT)
   images          String[]
-  client          String?
+  client          String
   json            Json
-  startDate       DateTime?
-  endDate         DateTime?
+  startDate       DateTime
+  endDate         DateTime
   createdAt       DateTime          @default(now())
   updatedAt       DateTime          @updatedAt
   ProjectCategory ProjectCategory[]
