@@ -23,8 +23,8 @@ export const schema = z.object({
   client: z.string().nonempty({
     message: "The client field is required!",
   }),
-  startDate: z.date().optional(),
-  endDate: z.date().optional(),
+  startDate: z.date(),
+  endDate: z.date(),
   status: z.enum(["DRAFT", "PUBLISHED"]).default("DRAFT"),
   images: z.array(z.string()).nonempty({
     message: "The images field is required!",
