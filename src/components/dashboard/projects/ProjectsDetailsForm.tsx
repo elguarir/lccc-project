@@ -26,7 +26,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import PlateEditor from "@/components/BasicEditor";
-import MultipleImageField from "./MultipleImageField";
+import MultipleImageField from "../../shared/MultipleImageField";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -36,7 +36,7 @@ interface Props {
   project?: Project;
 }
 
-export default function ProjectCreationForm(props: Props) {
+export default function ProjectsDetailsForm(props: Props) {
   let initialValues = undefined;
   if (props.project) {
     initialValues = {
@@ -59,34 +59,55 @@ export default function ProjectCreationForm(props: Props) {
   });
   const router = useRouter();
 
-  const { mutate: createProject, isLoading } =
+  const { mutate: createProject, isLoading: isCreating } =
     trpc.project.createProject.useMutation();
+  const { mutate: updateProject, isLoading: isUpdating } =
+    trpc.project.updateProject.useMutation();
 
   async function onSubmit(data: z.infer<typeof schema>) {
-    createProject(
-      {
-        title: data.title,
-        client: data.client,
-        description: data.description,
-        json: data.json,
-        startDate: data.startDate,
-        endDate: data.endDate,
-        images: data.images,
-      },
-      {
-        onSuccess: (data, variables) => {
-          if (props.project) {
+    if (props.project) {
+      updateProject(
+        {
+          id: props.project.id,
+          title: data.title,
+          client: data.client,
+          description: data.description,
+          json: data.json,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          images: data.images,
+        },
+        {
+          onSuccess: () => {
             toast.success(`Project updated successfully!`);
-          } else {
+          },
+          onError: (error) => {
+            toast.error(error.message ?? "Something went wrong!");
+          },
+        },
+      );
+    } else {
+      createProject(
+        {
+          title: data.title,
+          client: data.client,
+          description: data.description,
+          json: data.json,
+          startDate: data.startDate,
+          endDate: data.endDate,
+          images: data.images,
+        },
+        {
+          onSuccess: (data, variables) => {
             toast.success(`Project created successfully!`);
-          }
-          router.push("/dashboard/projects");
+            router.push("/dashboard/projects");
+          },
+          onError: (error) => {
+            toast.error(error.message ?? "Something went wrong!");
+          },
         },
-        onError: (error) => {
-          toast.error(error.message ?? "Something went wrong!");
-        },
-      },
-    );
+      );
+    }
   }
 
   return (
@@ -183,6 +204,7 @@ export default function ProjectCreationForm(props: Props) {
                     <div className="border-2 rounded-lg ">
                       <PlateEditor
                         value={field.value}
+                        initialData={props.project}
                         onChange={(v) => {
                           form.setValue("json", v as any);
                         }}
@@ -286,34 +308,28 @@ export default function ProjectCreationForm(props: Props) {
           />
 
           <div className="flex items-center justify-end w-full mt-4 xl:col-span-2">
-            <Button
-              isLoading={isLoading}
-              loadingText="Saving..."
-              type="submit"
-              size={"sm"}
-            >
-              Save
-            </Button>
+            {props.project ? (
+              <Button
+                isLoading={isUpdating}
+                loadingText="Updating..."
+                type="submit"
+                size={"sm"}
+              >
+                Update
+              </Button>
+            ) : (
+              <Button
+                isLoading={isCreating}
+                loadingText="Saving..."
+                type="submit"
+                size={"sm"}
+              >
+                Save
+              </Button>
+            )}
           </div>
         </form>
       </Form>
     </>
   );
 }
-
-// const Editor = () => {
-//   return (
-//     <div className="w-full space-y-2 xl:col-span-2">
-//       <Label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
-//         Description
-//       </Label>
-//       <div className="border-2 rounded-lg ">
-//         <PlateEditor />
-//       </div>
-//       <div className="text-sm text-muted-foreground">
-//         The description of the project, this will be shown on the project
-//         details page.
-//       </div>
-//     </div>
-//   );
-// };

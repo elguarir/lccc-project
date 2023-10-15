@@ -12,6 +12,7 @@
     --popover-foreground: 0 0% 3.9%;
     --primary: 0 72.2% 50.6%;
     --primary-foreground: 0 85.7% 97.3%;
+    --primary-background: 0 74% 39%;
     --secondary: 0 0% 96.1%;
     --secondary-foreground: 0 0% 9%;
     --muted: 0 0% 96.1%;
@@ -24,8 +25,9 @@
     --input: 0 0% 89.8%;
     --ring: 0 72.2% 50.6%;
     --radius: 0.75rem;
+    --dark: #232323;
   }
- 
+
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -46,6 +48,7 @@
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
     --ring: 0 72.2% 50.6%;
+    --dark: #232323;
   }
 }
 
@@ -54,6 +57,7 @@
   * {
     @apply border-border;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -76,10 +80,12 @@
   width: fit-content;
   min-width: 150px;
   white-space: nowrap;
+
   &[data-focus-within] {
     border-color: var(--highlight-background);
     box-shadow: 0 0 0 1px var(--highlight-background);
   }
+
   padding: 4px 14px;
   border-radius: 8px;
   /* @apply px-3.5 py-1 rounded-md; */

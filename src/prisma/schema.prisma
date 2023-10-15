@@ -128,12 +128,10 @@ model Tag {
 }
 
 model Category {
-  id              String            @id @default(cuid())
-  name            String
-  slug            String            @unique
-  articles        ArticleCategory[]
-  ProjectCategory ProjectCategory[]
-  ServiceCategory ServiceCategory[]
+  id       String            @id @default(cuid())
+  name     String
+  slug     String            @unique
+  articles ArticleCategory[]
 
   @@index([slug], name: "Category_slug")
 }
@@ -150,27 +148,22 @@ model ArticleCategory {
 }
 
 model ProjectCategory {
-  projectId  String
-  categoryId String
-  name       String
-  slug       String
-  project    Project   @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
-
-  @@id([projectId, categoryId])
+  id        String    @id @default(cuid())
+  name      String
+  slug      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Project   Project?  @relation(fields: [projectId], references: [id])
+  projectId String?
 }
 
 model ServiceCategory {
+  id         String    @id @default(cuid())
   serviceId  String
   categoryId String
   service    Service   @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
   createdAt  DateTime  @default(now())
   updatedAt  DateTime? @updatedAt
-
-  @@id([serviceId, categoryId])
 }
 
 enum Role {

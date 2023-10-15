@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useRef } from "react";
 import { CommentsProvider } from "@udecode/plate-comments";
-import { Plate, TElement, Value } from "@udecode/plate-common";
+import { Plate, Value } from "@udecode/plate-common";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { commentsUsers, myUserId } from "@/lib/plate/comments";
@@ -16,31 +16,36 @@ import { FloatingToolbar } from "@/components/ui/plate/floating-toolbar";
 import { FloatingToolbarButtons } from "@/components/ui/plate/floating-toolbar-buttons";
 import initialEditorValue from "@/lib/constants/initialEditorValue";
 import { ArticleByIdType } from "@/types/article";
+import { Project } from "@prisma/client";
 
 interface PlateEditorProps {
-  initialData?: ArticleByIdType;
+  initialData?: Project;
   value: Value;
   onChange: (value: Value) => void;
 }
 
-export default function PlateEditor({ initialData, onChange, value }: PlateEditorProps) {
+export default function PlateEditor({
+  initialData,
+  onChange,
+  value,
+}: PlateEditorProps) {
   const containerRef = useRef(null);
   return (
     <div className="px-2">
       <DndProvider backend={HTML5Backend}>
         <CommentsProvider users={commentsUsers} myUserId={myUserId}>
           <Plate
-          value={value}
-          onChange={(newValue) => {
-            onChange(newValue)
-          }}
-          plugins={plugins} initialValue={initialEditorValue}>
+            value={value}
+            onChange={(newValue) => {
+              onChange(newValue);
+            }}
+            plugins={plugins}
+            initialValue={initialData?.json as Value ?? initialEditorValue}
+          >
             <div
               ref={containerRef}
               className={cn(
                 "h-full",
-                // Block selection
-                // '[&_.slate-start-area-left]:!w-[64px] [&_.slate-start-area-right]:!w-[64px] [&_.slate-start-area-top]:!h-4 editor-wrap'
               )}
             >
               <FixedToolbar>

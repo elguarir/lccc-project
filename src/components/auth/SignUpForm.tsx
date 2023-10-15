@@ -93,7 +93,6 @@ export default function SignUpForm({}: SignUpFormProps) {
             )}
           />
           <Button
-            disabled={loading}
             isLoading={isLoading}
             loadingText="Signing Up..."
             className="w-full"

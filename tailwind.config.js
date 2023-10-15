@@ -13,6 +13,9 @@ module.exports = {
       },
     },
     extend: {
+      backgroundImage: {
+        header: "url('/images/banner-2.svg')",
+      },
       maxWidth: {
         "8xl": "85rem",
       },
@@ -25,6 +28,7 @@ module.exports = {
         primary: {
           DEFAULT: "hsl(var(--primary))",
           foreground: "hsl(var(--primary-foreground))",
+          background: "hsl(var(--primary-background))",
         },
         secondary: {
           DEFAULT: "hsl(var(--secondary))",
@@ -50,6 +54,10 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        dark: {
+          DEFAULT: "var(--dark)",
+          foreground: "var(--dark-foreground)",
+        },
       },
       borderRadius: {
         xl: `calc(var(--radius) + 4px)`,
@@ -67,6 +75,14 @@ module.exports = {
         "accordion-down": {
           from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
+          gauge_fadeIn: {
+            from: { opacity: "0" },
+            to: { opacity: "1" },
+          },
+          gauge_fill: {
+            from: { "stroke-dashoffset": "332", opacity: "0" },
+            to: { opacity: "1" },
+          },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },
@@ -74,6 +90,8 @@ module.exports = {
         },
       },
       animation: {
+        gauge_fadeIn: "gauge_fadeIn 1s ease forwards",
+        gauge_fill: "gauge_fill 1s ease forwards",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
       },

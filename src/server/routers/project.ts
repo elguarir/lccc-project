@@ -42,7 +42,32 @@ export const projectRouter = router({
         });
       return project;
     }),
-
+  createCategory: protectedProcedure
+    .input(
+      z.object({
+        name: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const category = await ctx.prisma.projectCategory
+        .create({
+          data: {
+            name: input.name,
+            slug: slugify(input.name),
+          },
+        })
+        .catch((err) => {
+          if (err instanceof Prisma.PrismaClientKnownRequestError) {
+            if (err.code === "P2002") {
+              return new TRPCError({
+                message: "Category with this title already exists",
+                code: "CONFLICT",
+              });
+            }
+          }
+        });
+      return category;
+    }),
   updateProject: protectedProcedure
     .input(
       schema.extend({

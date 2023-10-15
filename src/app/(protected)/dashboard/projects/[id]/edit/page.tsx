@@ -1,4 +1,4 @@
-import ProjectCreationForm from "@/components/dashboard/projects/ProjectsCreationForm";
+import ProjectsDetailsForm from "@/components/dashboard/projects/ProjectsDetailsForm";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -45,7 +45,7 @@ const ProjectEditPage = async (props: Props) => {
         </header>
       </div>
       <main className="py-4">
-        <ProjectCreationForm project={project} />
+        <ProjectsDetailsForm project={project} />
       </main>
     </div>
   );

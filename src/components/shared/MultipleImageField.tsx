@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 import React, { useCallback, useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import { toast } from "sonner";
+import { Gauge } from "../ui/gauge";
 
 type Props = {
   images: string[];
@@ -17,12 +19,13 @@ interface FileState {
   file: File;
   progress: number;
   preview?: string;
+  isUploaded?: boolean;
 }
 
 const MultipleImageField = ({ images, setImages }: Props) => {
   const [files, setFiles] = useState<FileState[]>([]);
 
-  const { startUpload, removeUpload } = useUpload({
+  const { startUpload, removeUpload, uploadStates } = useUpload({
     onUploadComplete: (file, url) => {
       // @ts-ignore
       setFiles((prevStates) => prevStates.filter((v) => v.file !== file));
@@ -36,6 +39,7 @@ const MultipleImageField = ({ images, setImages }: Props) => {
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {
+      if (acceptedFiles.length === 0) return;
       acceptedFiles.forEach((file) => {
         setFiles((prevStates) => [
           ...prevStates,
@@ -46,8 +50,6 @@ const MultipleImageField = ({ images, setImages }: Props) => {
     },
     [startUpload],
   );
-
-
   const updateLocalFileState = (file: File, progress: number) => {
     setFiles((prevStates) => {
       return prevStates.map((state) =>
@@ -59,7 +61,27 @@ const MultipleImageField = ({ images, setImages }: Props) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple: true,
+    onDropRejected: (files) => {
+      toast.error("Only images are allowed.");
+    },
+    accept: {
+      "image/*": [
+        ".jpeg",
+        ".png",
+        ".jpg",
+        ".gif",
+        ".webp",
+        ".svg",
+        ".bmp",
+        ".tiff",
+        ".jfif",
+      ],
+    },
   });
+
+  useEffect(() => {
+    console.log("files", files);
+  }, [files]);
 
   if (images.length === 0 && files.length === 0) {
     return (
@@ -113,9 +135,7 @@ const MultipleImageField = ({ images, setImages }: Props) => {
         >
           {fileState.progress !== 100 && (
             <div className="absolute top-0 left-0 flex items-center justify-center w-full h-full bg-black/60">
-              <span className="text-lg font-medium font-display text-background">
-                {fileState.progress}%
-              </span>
+              <Gauge value={fileState.progress} size="medium" showValue={true} />
             </div>
           )}
 
@@ -156,26 +176,3 @@ const MultipleImageField = ({ images, setImages }: Props) => {
 };
 
 export default MultipleImageField;
-
-const ImageCard = ({
-  url,
-  onRemove,
-}: {
-  url: string;
-  onRemove: () => void;
-}) => {
-  return (
-    <div className="relative overflow-hidden rounded-lg aspect-video">
-      <Button
-        className="absolute w-5 h-5 p-0.5 rounded-[5px] top-3 right-2"
-        type="button"
-        size={"xs"}
-        variant={"secondary"}
-        onClick={onRemove}
-      >
-        <X className="w-3 h-3" strokeWidth={2} />
-      </Button>
-      <img className="object-cover w-full h-full" src={url} />
-    </div>
-  );
-};
