@@ -70,6 +70,7 @@ module.exports = {
         mono: ["var(--font-mono)", ...fontFamily.mono],
         display: ["var(--font-display)", ...fontFamily.sans],
         heading: ["var(--font-heading)", ...fontFamily.sans],
+        home: ["var(--font-home)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

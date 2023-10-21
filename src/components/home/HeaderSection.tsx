@@ -6,9 +6,24 @@ const HeaderSection = () => {
   return (
     <section className="flex flex-col items-center w-full px-2 pb-8 lg:px-6 lg:flex-row lg:gap-12">
       <div className="flex items-center w-full h-full py-8">
-        <div className="flex flex-col w-full p-8 py-8 space-y-5 text-white max-lg:text-center">
-          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl xl:text-6xl 2xl:text-7xl font-display">
-            Building Your Vision, Together.
+        <div className="flex flex-col w-full p-8 py-8 space-y-5 text-neutral-900 max-lg:text-center">
+          <h1 className="text-4xl font-black text-dark-foreground md:text-5xl xl:text-6xl 2xl:text-7xl font-home">
+            Building Your Vision,{" "}
+            <span className="relative z-10 text-primary-background">
+              <svg
+                className="absolute left-0 -z-[1] h-7 w-full max-w-full -mt-4 top-full"
+                viewBox="0 0 220 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M134.66 13.107c-10.334-.37-20.721-.5-31.12-.291l-2.6.06c-4.116.04-8.193.602-12.3.749-14.502.43-29.029 1.196-43.514 2.465-6.414.63-12.808 1.629-19.04 2.866-7.93 1.579-16.113 3.71-23.367 5.003-2.211.374-3.397-1.832-2.31-4.906.5-1.467 1.838-3.456 3.418-4.813a16.047 16.047 0 0 1 6.107-3.365c16.88-4.266 33.763-6.67 51.009-7.389C71.25 3.187 81.81 1.6 92.309.966c11.53-.65 23.097-.938 34.66-.96 7.117-.054 14.25.254 21.36.318l16.194.803 4.62.39c3.85.32 7.693.618 11.53.813 8.346.883 16.673.802 25.144 2.159 1.864.276 3.714.338 5.566.873l.717.225c6.162 1.977 7.92 3.64 7.9 7.197l-.003.203c-.017.875.05 1.772-.112 2.593-.581 2.762-4.066 4.12-8.637 3.63-13.696-1.06-27.935-3.332-42.97-4.168-11.055-.83-22.314-1.459-33.596-1.603l-.022-.332Z"
+                  fill="#D1D5DB"
+                  fillRule="evenodd"
+                />
+              </svg>
+              Together
+            </span>
+            .
           </h1>
           <p className="text-sm 2xl:text-base font-[450] max-lg:[text-wrap:balance]  lg:pr-20">
             Discover how your small actions can make a big impact as we work
@@ -27,7 +42,7 @@ const HeaderSection = () => {
             <Button
               size={"sm"}
               variant={"link"}
-              className="px-8 text-white rounded-full w-fit"
+              className="px-8 rounded-full border- text-neutral-900 w-fit"
             >
               <span className="text-sm font-semibold ">Contact Us</span>
               {/* <ChevronRight className="w-4 h-4 ml-2" /> */}
@@ -36,23 +51,83 @@ const HeaderSection = () => {
         </div>
       </div>
       <div className="w-full h-full rounded-sm">
-        <div className="relative grid justify-center pr-[10px] gap-10 items-center  w-full [grid-template-rows:_auto_auto] [grid-template-columns:_1fr_1fr] [grid-auto-columns:_1fr]">
-          <img
-            className="relative object-cover rounded-md z-[2] -rotate-6 scale-[80%] translate-x-8 translate-y-3 brightness-90 self-end slide-in-from-top-11 w-4/5  antialiased h-[210px]"
-            src="https://images.pexels.com/photos/7245333/pexels-photo-7245333.jpeg?cs=srgb&dl=pexels-olga-lioncat-7245333.jpg&fm=jpg&w=1920&h=1281&_gl=1*ld32c7*_ga*ODQ4NjQ0ODM2LjE2OTczOTMzNjA.*_ga_8JE65Q40S6*MTY5NzM5MzM2MS4xLjEuMTY5NzM5MzM3OC4wLjAuMA.."
-          />
-          <img
-            className="relative object-cover rounded-md z-[2] brightness-90 self-end slide-in-from-top-11 w-4/5 antialiased  h-[210px] scale-90 rotate-[5deg] -translate-x-8 translate-y-3"
-            src="https://images.pexels.com/photos/7244373/pexels-photo-7244373.jpeg?cs=srgb&dl=pexels-olga-lioncat-7244373.jpg&fm=jpg&w=1920&h=1281&_gl=1*vz9cww*_ga*ODQ4NjQ0ODM2LjE2OTczOTMzNjA.*_ga_8JE65Q40S6*MTY5NzM5MzM2MS4xLjEuMTY5NzM5MzQwNC4wLjAuMA.."
-          />
-          <img
-            className="relative object-cover scale-[80%] -rotate-6 translate-x-8 -translate-y-5 rounded-md z-[2] brightness-90 self-end slide-in-from-top-11 w-5/6 h-[210px]"
-            src="https://images.pexels.com/photos/4876018/pexels-photo-4876018.jpeg?cs=srgb&dl=pexels-ion-ceban-ionelceban-4876018.jpg&fm=jpg&w=1920&h=1281&_gl=1*1yjdeqo*_ga*ODQ4NjQ0ODM2LjE2OTczOTMzNjA.*_ga_8JE65Q40S6*MTY5NzM5MzM2MS4xLjEuMTY5NzM5MzQyMC4wLjAuMA.."
-          />
-          <img
-            className="relative rotate-6 -translate-x-4 object-cover rounded-md z-[2] brightness-90 self-end slide-in-from-top-11 w-4/5 antialiased  h-[210px]"
-            src="https://images.pexels.com/photos/7078501/pexels-photo-7078501.jpeg?cs=srgb&dl=pexels-laura-tancredi-7078501.jpg&fm=jpg&w=1920&h=1281&_gl=1*18ewgs0*_ga*ODQ4NjQ0ODM2LjE2OTczOTMzNjA.*_ga_8JE65Q40S6*MTY5NzM5MzM2MS4xLjEuMTY5NzM5MzQ0Mi4wLjAuMA.."
-          />
+        <div className="flex h-[500px] justify-center mx-auto overflow-hidden w-full items-center space-x-6 lg:space-x-8">
+          <div className="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
+            <div className="h-full overflow-hidden opacity-100 w-44">
+              <img
+                className="object-cover"
+                src="./images/image-1.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+            <div className="h-full overflow-hidden w-44">
+              <img
+                className="object-cover"
+                src="./images/image-6.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+          </div>
+          <div className="grid flex-shrink-0 grid-cols-1 gap-y-6 lg:gap-y-8">
+            <div className="h-full overflow-hidden w-44">
+              <img
+                className="object-cover"
+                src="./images/image-3.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+            <div className="h-full overflow-hidden w-44">
+              <img
+                className="object-cover"
+                src="./images/image-8.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+            <div className="h-full overflow-hidden w-44">
+              <img
+                className="object-cover"
+                src="./images/image-3.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+          </div>
+          <div className="flex-shrink-0 hidden grid-cols-1 md:grid gap-y-6 lg:gap-y-8">
+            <div className="h-full overflow-hidden w-44">
+              <img
+                className="object-cover"
+                src="./images/image-10.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+            <div className="h-full overflow-hidden w-44">
+              <img
+                className="object-cover"
+                src="./images/image-4.jpg"
+                decoding="async"
+                height={926}
+                loading="lazy"
+                width={428}
+              />
+            </div>
+          </div>
         </div>
       </div>
     </section>

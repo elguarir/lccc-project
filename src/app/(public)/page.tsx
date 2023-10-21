@@ -9,16 +9,16 @@ export const metadata = {
 export default function IndexPage() {
   return (
     <>
-      <section className="bg-[#f6f7f9] py-32 -mt-6">
+      <section className="bg-[#f6f7f9] rounded-t-xl py-10 -mt-6">
         <div className="container flex flex-col justify-center gap-12 py-4 rounded-lg max-lg:px-2 lg:h-[500px] lg:flex-row">
-          <div className="relative w-full h-full overflow-hidden rounded-md max-lg:aspect-square max-h-[500px] mx-auto">
+          <div className="relative w-full h-full overflow-hidden rounded-xl max-lg:aspect-square max-h-[500px] mx-auto">
             <img
               className="object-cover w-full h-full"
-              src="https://assets.website-files.com/64e48603c6d16b61230cf754/64f8c86dcee8ee6cd036f622_google-deepmind-s2TPKAD6fag-unsplash%20(2).webp"
+              src="./images/image-11.jpeg"
               alt=""
             />
           </div>
-          <div className="flex flex-col w-full h-full px-8 py-6 space-y-6 text-dark">
+          <div className="flex flex-col w-full h-full px-4 py-6 space-y-6 lg:px-8 text-dark">
             <h2 className="text-2xl font-semibold tracking-tight lg:text-4xl">
               Building Excellence, One Project at a Time.
             </h2>
@@ -55,11 +55,13 @@ export default function IndexPage() {
       <section className="py-16 h-96">
         <div className="container flex flex-col w-full h-full px-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-4xl font-semibold text-dark">Our Services</h2>
+            <h2 className="text-xl font-semibold font-home lg:text-4xl text-dark">
+              Our Services
+            </h2>
             <Button
               asChild
               variant={"ghost"}
-              className="text-base rounded-full"
+              className="text-sm rounded-full max-lg:h-8 max-lg:px-3 lg:text-base"
             >
               <Link href={"/our-services"}>
                 Discover More
@@ -67,8 +69,10 @@ export default function IndexPage() {
               </Link>
             </Button>
           </div>
-          <div>
-
+          <div className="mt-2">
+            <p className="text-sm font-[450] text-muted-foreground">
+              We Prodvide Quality Construction Services
+            </p>
           </div>
         </div>
       </section>

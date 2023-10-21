@@ -1,4 +1,4 @@
-import { fontDisplay, fontSans, fontHeading, fontMono } from "@/assets/fonts";
+import { fontDisplay, fontSans, fontHome, fontHeading, fontMono } from "@/assets/fonts";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { TooltipProvider } from "@/components/ui/plate/tooltip";
@@ -43,7 +43,8 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontSans.variable,
             fontDisplay.variable,
             fontHeading.variable,
-            fontMono.variable
+            fontMono.variable,
+            fontHome.variable,
           )}
         >
           <ProgressBarProvider>
