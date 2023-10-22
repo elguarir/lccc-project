@@ -70,8 +70,8 @@ export default function ArticleDetailsForm({
   async function onSubmit(data: z.infer<typeof articleSchema>) {
     const { title, description, publishedAt, coverImage } = data;
     const slug = slugify(articleTitle + "-" + new Date().getTime(), {
+      strict: true,
       lower: true,
-      remove: /[*+~.()'"!:@]/g,
       trim: true,
     });
     if (!articleId) return;
@@ -156,7 +156,9 @@ export default function ArticleDetailsForm({
               let slug = "";
               if (title) {
                 slug = slugify(title + "-" + new Date().getTime(), {
+                  strict: true,
                   lower: true,
+                  trim: true,
                 });
               }
               return (

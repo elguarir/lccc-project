@@ -12,7 +12,11 @@ export const tagRouter = router({
     .mutation(async ({ ctx, input }) => {
       const { name } = input;
       const { prisma } = ctx;
-      const slug = slugify(name, { lower: true, trim: true });
+      const slug = slugify(name, {
+        strict: true,
+        lower: true,
+        trim: true,
+      });
       return await prisma.tag.upsert({
         where: { slug },
         create: { name, slug },

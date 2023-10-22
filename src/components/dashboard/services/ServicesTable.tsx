@@ -1,17 +1,11 @@
 "use client";
-import { UserArticlesType } from "@/types/article";
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { trpc } from "@/server/client";
 import { Skeleton } from "../../ui/skeleton";
-import { useSearchParams } from "next/navigation";
-import ProjectCard from "./ProjectCard";
+import ServiceCard from "./ServiceCard";
 
-type Props = {
-  articles?: UserArticlesType;
-};
-
-const ProjectsTable = ({}: Props) => {
-  const { data: projects, isLoading } = trpc.project.getProjects.useQuery();
+const ServicesTable = () => {
+  const { data: services, isLoading } = trpc.service.getServices.useQuery();
 
   if (isLoading) {
     return (
@@ -23,22 +17,23 @@ const ProjectsTable = ({}: Props) => {
     );
   }
 
-  if (!projects || projects.length === 0) {
+  if (!services || services.length === 0) {
     return (
       <div className="flex items-center justify-center w-full p-4 border-[1.35px] border-dashed rounded-lg h-52">
         <div className="text-lg text-muted-foreground">
-          You have not created any projects yet.
+          You have not created any services yet.
         </div>
       </div>
     );
   }
+
   return (
     <ul className="table w-full overflow-hidden border-[1.35px] border-dashed divide-y rounded-lg divide-dashed">
-      {projects?.map((project) => (
-        <ProjectCard key={project.id} project={project} />
+      {services?.map((service) => (
+        <ServiceCard key={service.id} service={service} />
       ))}
     </ul>
   );
 };
 
-export default ProjectsTable;
+export default ServicesTable;

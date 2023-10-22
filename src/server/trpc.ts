@@ -1,4 +1,4 @@
-import { TRPCError, inferAsyncReturnType, initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import useAuthSession from "@/hooks/useAuthSession";
 import prisma from "@/lib/db";
 import superjson from 'superjson';
@@ -33,4 +33,6 @@ export const publicProcedure = t.procedure.use((opts) => {
     }
   })
 })
+
+
 export const protectedProcedure = t.procedure.use(isAuthed);

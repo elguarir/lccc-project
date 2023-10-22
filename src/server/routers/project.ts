@@ -21,7 +21,11 @@ export const projectRouter = router({
           data: {
             title: input.title,
             description: input.description,
-            slug: slugify(input.title),
+            slug: slugify(input.title, {
+              strict: true,
+              lower: true,
+              trim: true,
+            }),
             status: "DRAFT",
             client: input.client,
             json: input.json as any,
@@ -53,7 +57,11 @@ export const projectRouter = router({
         .create({
           data: {
             name: input.name,
-            slug: slugify(input.name),
+            slug: slugify(input.name, {
+              strict: true,
+              lower: true,
+              trim: true,
+            }),
           },
         })
         .catch((err) => {
@@ -82,7 +90,11 @@ export const projectRouter = router({
         data: {
           title: input.title,
           description: input.description,
-          slug: slugify(input.title),
+          slug: slugify(input.title, {
+            strict: true,
+            lower: true,
+            trim: true,
+          }),
           status: input.status,
           client: input.client,
           json: input.json as any,

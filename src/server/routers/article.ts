@@ -16,7 +16,7 @@ export const articleRouter = router({
         where: { id: input.articleId },
         include: {
           tags: true,
-          categories: true,
+          // categories: true,
         },
       });
       return data;
@@ -43,7 +43,7 @@ export const articleRouter = router({
           coverImage: true,
           publishedAt: true,
           authorId: true,
-          categories: true,
+          // categories: true,
           tags: true,
           createdAt: true,
           updatedAt: true,
@@ -73,7 +73,7 @@ export const articleRouter = router({
           coverImage: true,
           status: true,
           tags: true,
-          categories: true,
+          // categories: true,
           publishedAt: true,
           createdAt: true,
           updatedAt: true,
@@ -88,7 +88,7 @@ export const articleRouter = router({
         where: { id: input.articleId },
         include: {
           tags: true,
-          categories: true,
+          // categories: true,
         },
       });
 
@@ -113,11 +113,11 @@ export const articleRouter = router({
           tags: {
             connect: existingArticle.tags.map((tag) => ({ tagId: tag.tagId })),
           },
-          categories: {
-            connect: existingArticle.categories.map((category) => ({
-              categoryId: category.categoryId,
-            })),
-          },
+          // // categories: {
+          //   // connect: existingArticle.categories.map((category) => ({
+          //     categoryId: category.categoryId,
+          //   })),
+          // },
         },
       });
 

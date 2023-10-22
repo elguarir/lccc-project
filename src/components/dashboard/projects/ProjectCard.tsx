@@ -21,10 +21,10 @@ const ProjectCard = ({ project }: Props) => {
         href={`/dashboard/projects/${project.id}/edit`}
       >
         {project.images[0] ? (
-          <div className="overflow-hidden min-w-[2.75rem] rounded-[5px]">
+          <div className="hidden md:block overflow-hidden min-w-[2.75rem] rounded-[5px]">
             <img
               // aspect video
-              className="hidden object-cover md:block h-11 aspect-video"
+              className="object-cover  h-11 aspect-video"
               src={project.images[0]}
             />
           </div>

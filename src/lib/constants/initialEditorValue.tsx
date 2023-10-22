@@ -6,11 +6,7 @@ const initialEditorValue = [
         text: "Welcome to the ",
       },
       {
-        text: "Este Center",
-        backgroundColor: "#EA9999",
-      },
-      {
-        text: " Editor!",
+        text: "Editor!",
       },
     ],
     id: "o4td5",

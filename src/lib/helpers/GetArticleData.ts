@@ -16,7 +16,7 @@ export const GetArticleDataById = async (articleId: string, userId: string) => {
       coverImage: true,
       status: true,
       tags: true,
-      categories: true,
+      // categories: true,
       publishedAt: true,
       createdAt: true,
       updatedAt: true,

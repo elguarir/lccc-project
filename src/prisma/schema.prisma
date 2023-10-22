@@ -76,33 +76,52 @@ model Project {
   ProjectCategory ProjectCategory[]
 }
 
+model ProjectCategory {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Project   Project?  @relation(fields: [projectId], references: [id])
+  projectId String?
+}
+
 model Service {
-  id          String            @id @default(cuid())
-  name        String
-  slug        String
-  description String?
-  json        Json
-  Image       String
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-  categories  ServiceCategory[]
+  id                String          @id @default(cuid())
+  name              String
+  slug              String
+  description       String?
+  json              Json
+  Image             String
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
+  category          ServiceCategory @relation(fields: [serviceCategoryId], references: [id])
+  serviceCategoryId String
+}
+
+model ServiceCategory {
+  id        String    @id @default(cuid())
+  name      String
+  slug      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime? @updatedAt
+  Service   Service[]
 }
 
 model Article {
-  id          String            @id @default(cuid())
+  id          String       @id @default(cuid())
   title       String
   description String?
   body        String?
-  status      Status            @default(DRAFT)
+  status      Status       @default(DRAFT)
   json        Json
   coverImage  String?
-  slug        String?           @unique
+  slug        String?      @unique
   publishedAt DateTime?
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
   authorId    String
-  author      User              @relation(fields: [authorId], references: [id], onDelete: Cascade)
-  categories  ArticleCategory[]
+  author      User         @relation(fields: [authorId], references: [id], onDelete: Cascade)
   tags        ArticleTag[]
 
   @@index([slug], name: "Article_slug")
@@ -125,45 +144,6 @@ model Tag {
   articles ArticleTag[]
 
   @@index([slug], name: "Tag_slug")
-}
-
-model Category {
-  id       String            @id @default(cuid())
-  name     String
-  slug     String            @unique
-  articles ArticleCategory[]
-
-  @@index([slug], name: "Category_slug")
-}
-
-model ArticleCategory {
-  articleId  String
-  categoryId String
-  article    Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
-
-  @@id([categoryId])
-}
-
-model ProjectCategory {
-  id        String    @id @default(cuid())
-  name      String
-  slug      String
-  createdAt DateTime  @default(now())
-  updatedAt DateTime? @updatedAt
-  Project   Project?  @relation(fields: [projectId], references: [id])
-  projectId String?
-}
-
-model ServiceCategory {
-  id         String    @id @default(cuid())
-  serviceId  String
-  categoryId String
-  service    Service   @relation(fields: [serviceId], references: [id], onDelete: Cascade)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime? @updatedAt
 }
 
 enum Role {
