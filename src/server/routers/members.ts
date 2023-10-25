@@ -2,12 +2,14 @@ import { router, protectedProcedure } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 import bcryptjs from "bcryptjs";
+import { schema as passwordChangeSchema } from "@/lib/validators/PasswordChangeValidator";
+import { schema } from "@/lib/validators/MemberCreation";
 
 export const memberRouter = router({
   getMembers: protectedProcedure.query(async ({ ctx }) => {
     const members = await ctx.prisma.user.findMany({
       orderBy: {
-        name: "asc",
+        createdAt: "desc",
       },
       select: {
         id: true,
@@ -15,10 +17,12 @@ export const memberRouter = router({
         name: true,
         image: true,
         role: true,
+        createdAt: true,
       },
     });
     return members;
   }),
+
   changeRole: protectedProcedure
     .input(
       z.object({
@@ -56,6 +60,7 @@ export const memberRouter = router({
         },
       });
     }),
+
   deleteUser: protectedProcedure
     .input(
       z.object({
@@ -82,15 +87,9 @@ export const memberRouter = router({
         },
       });
     }),
+
   updateUser: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-        name: z.string().min(3, "Name must be at least 3 characters long."),
-        email: z.string().email("Invalid email address."),
-        image: z.string().url().optional(),
-      }),
-    )
+    .input(schema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: {
@@ -113,25 +112,24 @@ export const memberRouter = router({
           name: input.name,
           email: input.email,
           image: input.image,
+          bio: input.bio,
+          role: input.role,
+          contact: input.contact,
         },
         select: {
           id: true,
-          email: true,
           name: true,
+          email: true,
           image: true,
           role: true,
+          bio: true,
+          contact: true,
         },
       });
     }),
 
   createUser: protectedProcedure
-    .input(
-      z.object({
-        name: z.string(),
-        email: z.string().email(),
-        image: z.string().url(),
-      }),
-    )
+    .input(schema)
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: {
@@ -145,14 +143,16 @@ export const memberRouter = router({
           message: "User already exists.",
         });
       }
-      const password = await bcryptjs.hash("12345678", 10);
+      const password = await bcryptjs.hash("123456", 10);
       return await ctx.prisma.user.create({
         data: {
           name: input.name,
           email: input.email,
           password: password,
           image: input.image,
-          role: "USER",
+          role: input.role,
+          bio: input.bio,
+          contact: input.contact,
         },
         select: {
           id: true,
@@ -160,16 +160,14 @@ export const memberRouter = router({
           name: true,
           image: true,
           role: true,
+          bio: true,
+          contact: true,
         },
       });
     }),
 
   resetPassword: protectedProcedure
-    .input(
-      z.object({
-        id: z.string(),
-      }),
-    )
+    .input(passwordChangeSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       const user = await ctx.prisma.user.findUnique({
         where: {
@@ -184,7 +182,7 @@ export const memberRouter = router({
         });
       }
 
-      const password = await bcryptjs.hash("12345678", 10);
+      const password = await bcryptjs.hash(input.password, 10);
       return await ctx.prisma.user.update({
         where: {
           id: input.id,

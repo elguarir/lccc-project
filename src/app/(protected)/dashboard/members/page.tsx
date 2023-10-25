@@ -1,9 +1,17 @@
-import React from 'react'
+import Header from "@/components/dashboard/members/Header";
+import MembersTable from "@/components/dashboard/members/MembersTable";
+import React from "react";
 
-function Members() {
+async function ArticlesPage() {
+
   return (
-    <div>Members</div>
-  )
+    <div>
+      <Header />
+      <div className="w-full pt-4">
+        <MembersTable />
+      </div>
+    </div>
+  );
 }
 
-export default Members
+export default ArticlesPage;

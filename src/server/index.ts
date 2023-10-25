@@ -1,5 +1,5 @@
 import { articleRouter } from "./routers/article";
-// import { categoryRouter } from "./routers/category";
+import { memberRouter } from "./routers/members";
 import { projectRouter } from "./routers/project";
 import { serviceRouter } from "./routers/service";
 import { tagRouter } from "./routers/tag";
@@ -11,7 +11,7 @@ export const appRouter = router({
   article: articleRouter,
   project: projectRouter,
   service: serviceRouter,
-  // category: categoryRouter,
+  member: memberRouter,
   tag: tagRouter,
 });
 

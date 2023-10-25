@@ -41,7 +41,7 @@ import {
 import { MenubarLabel, MenubarSeparator } from "@/components/ui/menubar";
 import { Loader2, PlusIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface Props {
@@ -56,7 +56,7 @@ export default function ServicesDetailsForm(props: Props) {
     initialValues = {
       name: props.service.name,
       description: props.service.description!,
-      json: props.service.json!,
+      json: props.service.json,
       Image: props.service.Image,
       category: props.service.serviceCategoryId,
     };
@@ -80,6 +80,12 @@ export default function ServicesDetailsForm(props: Props) {
 
   const { data: categories, isLoading: categoriesLoading } =
     trpc.service.getCategories.useQuery();
+
+  const jsonData = form.watch("json");
+
+  useEffect(() => {
+    console.log(jsonData);
+  }, [jsonData]);
 
   async function onSubmit(data: z.infer<typeof schema>) {
     if (props.service) {

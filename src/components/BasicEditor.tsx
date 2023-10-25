@@ -15,11 +15,9 @@ import { FixedToolbarButtons } from "@/components/ui/plate/fixed-toolbar-buttons
 import { FloatingToolbar } from "@/components/ui/plate/floating-toolbar";
 import { FloatingToolbarButtons } from "@/components/ui/plate/floating-toolbar-buttons";
 import initialEditorValue from "@/lib/constants/initialEditorValue";
-import { ArticleByIdType } from "@/types/article";
-import { Project } from "@prisma/client";
 
 interface PlateEditorProps {
-  initialData?: Project;
+  initialData?: Value;
   value: Value;
   onChange: (value: Value) => void;
 }
@@ -40,7 +38,7 @@ export default function PlateEditor({
               onChange(newValue);
             }}
             plugins={plugins}
-            initialValue={initialData?.json as Value ?? initialEditorValue}
+            initialValue={initialData as Value ?? initialEditorValue}
           >
             <div
               ref={containerRef}

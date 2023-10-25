@@ -204,7 +204,7 @@ export default function ProjectsDetailsForm(props: Props) {
                     <div className="border-2 rounded-lg ">
                       <PlateEditor
                         value={field.value}
-                        initialData={props.project}
+                        initialData={props.project?.json as any}
                         onChange={(v) => {
                           form.setValue("json", v as any);
                         }}
