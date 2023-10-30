@@ -8,7 +8,7 @@ type Props = {
 
 function PublicLayout({ children }: Props) {
   return (
-    <div className="bg-neutral-50">
+    <div className="overflow-x-hidden bg-neutral-50">
       <div className="relative">
         <SiteHeader />
         <div className="z-50 w-full h-full pt-32 pb-10 lg:container">

@@ -155,3 +155,7 @@
     --highlight-background-invalid: LinkText;
   }
 }
+
+.no-scroll {
+  overflow: hidden;
+}

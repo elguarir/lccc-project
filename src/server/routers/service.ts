@@ -4,31 +4,11 @@ import slugify from "slugify";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import prisma from "@/lib/db";
 
 export const serviceRouter = router({
   getServices: protectedProcedure.query(async ({ ctx }) => {
-    const services = await ctx.prisma.service.findMany({
-      orderBy: {
-        createdAt: "desc",
-      },
-      select: {
-        id: true,
-        name: true,
-        slug: true,
-        description: true,
-        json: true,
-        Image: true,
-        createdAt: true,
-        updatedAt: true,
-        category: {
-          select: {
-            name: true,
-            slug: true,
-          },
-        },
-      },
-    });
-    return services;
+    return await getServices();
   }),
 
   createService: protectedProcedure
@@ -163,3 +143,28 @@ export const serviceRouter = router({
       return category;
     }),
 });
+
+export const getServices = async () => {
+  const services = await prisma.service.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      description: true,
+      json: true,
+      Image: true,
+      createdAt: true,
+      updatedAt: true,
+      category: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
+    },
+  });
+  return services;
+};

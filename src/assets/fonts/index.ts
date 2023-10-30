@@ -2,6 +2,7 @@ import {
   JetBrains_Mono as FontMono,
   Inter as FontSans,
   Bricolage_Grotesque as FontDisplay,
+  Gochi_Hand as FontHand,
 } from "next/font/google";
 import localFont from "next/font/local";
 
@@ -20,6 +21,12 @@ export const fontHeading = localFont({
   variable: "--font-heading",
 });
 
+export const fontHand = FontHand({
+  subsets: ["latin"],
+  style: "normal",
+  weight: "400",
+  variable: "--font-hand",
+});
 
 export const fontHome = localFont({
   src: [

@@ -2,11 +2,10 @@ import * as React from "react";
 import Link from "next/link";
 
 import { NavItem } from "@/types/nav";
-import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
-import { Icons } from "@/assets/icons";
 import { Button } from "../ui/button";
 import { Mail } from "lucide-react";
+import MobileNav from "./mobile-nav";
 
 interface MainNavProps {
   items?: NavItem[];
@@ -14,12 +13,12 @@ interface MainNavProps {
 
 export function MainNav({ items }: MainNavProps) {
   return (
-    <div className="flex items-center justify-between flex-1 gap-6 px-4 md:gap-10">
+    <div className="flex items-center justify-between flex-1 gap-6 md:gap-10">
       <Link href="/" className="flex items-center space-x-2">
         <img src="/images/somacep.png" alt="" className="h-14" />
       </Link>
-      {/* {items?.length ? (
-        <nav className="flex gap-6">
+      {items?.length ? (
+        <nav className="hidden gap-6 md:flex">
           {items?.map(
             (item, index) =>
               item.href && (
@@ -27,7 +26,7 @@ export function MainNav({ items }: MainNavProps) {
                   key={index}
                   href={item.href}
                   className={cn(
-                    "flex items-center text-base font-medium hover:text-neutral-400 transition-colors  text-white",
+                    "flex items-center text-base font-[550] hover:text-primary-background transition-colors  text-dark-foreground",
                     item.disabled && "cursor-not-allowed opacity-80",
                   )}
                 >
@@ -36,10 +35,18 @@ export function MainNav({ items }: MainNavProps) {
               ),
           )}
         </nav>
-      ) : null} */}
-      <Button size={"sm"} variant={"secondary"}>
-        <Mail className="w-4 h-4 mr-2" />
-        Contact Us
+      ) : null}
+      <MobileNav items={items} />
+      <Button
+        className="hidden text-base font-medium md:flex"
+        size={"default"}
+        variant={"default"}
+        asChild
+      >
+        <Link href={"/contact"}>
+          <Mail className="w-4 h-4 mr-2" strokeWidth={2.5} />
+          Contact Us
+        </Link>
       </Button>
     </div>
   );

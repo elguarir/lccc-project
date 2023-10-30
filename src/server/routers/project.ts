@@ -4,6 +4,7 @@ import slugify from "slugify";
 import { Prisma } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
+import prisma from "@/lib/db";
 export const projectRouter = router({
   getProjects: protectedProcedure.query(async ({ ctx }) => {
     return await ctx.prisma.project.findMany({
@@ -126,3 +127,13 @@ export const projectRouter = router({
       return project;
     }),
 });
+
+// functions
+
+export const getProjects = async () => {
+  return await prisma.project.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
