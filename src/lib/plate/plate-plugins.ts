@@ -35,7 +35,7 @@ import {
   unwrapCodeBlock,
 } from "@udecode/plate-code-block";
 import { createComboboxPlugin } from "@udecode/plate-combobox";
-import { createCommentsPlugin, MARK_COMMENT } from "@udecode/plate-comments";
+import { MARK_COMMENT } from "@udecode/plate-comments";
 import {
   createPlugins,
   isBlockAboveEmpty,

@@ -1,11 +1,19 @@
+"use client";
 import { getServices } from "@/server/routers/service";
 import { DoubleArrowRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import React from "react";
 import type { RouterOutput } from "@/types/router";
-const ServicesSection = async () => {
-  const services = await getServices();
+import { useRef, useState } from "react";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 
+const ServicesSection = ({
+  services,
+}: {
+  services: RouterOutput["service"]["getServices"];
+}) => {
   return (
     <section
       className="object-cover py-24 bg-no-repeat bg-dark"
@@ -35,11 +43,34 @@ const ServicesSection = async () => {
           </div>
         </div>
         <div className="mt-20">
-          <div className="grid grid-cols-1 gap-6 mx-auto lg:px-10 md:grid-cols-2 lg:grid-cols-3">
+          <Swiper
+            pagination={{
+              dynamicBullets: true,
+            }}
+            modules={[Pagination]}
+            className="grid grid-cols-1 gap-6 mx-auto mySwiper lg:px-10 md:grid-cols-2 lg:grid-cols-3"
+            breakpoints={{
+              950: {
+                slidesPerView: 3,
+                spaceBetween: 25,
+              },
+              712: {
+                slidesPerView: 2,
+                spaceBetween: 20,
+              },
+              // when window width is < 520px
+              0: {
+                slidesPerView: 1,
+                spaceBetween: 20,
+              },
+            }}
+          >
             {services.map((service) => (
-              <ServiceCard key={service.id} service={service} />
+              <SwiperSlide>
+                <ServiceCard key={service.id} service={service} />
+              </SwiperSlide>
             ))}
-          </div>
+          </Swiper>
         </div>
       </div>
     </section>
@@ -59,49 +90,10 @@ const ServiceCard = ({
         <img src={service.Image} className="object-cover w-full h-64" />
       </div>
       <div className="px-[1.8rem] py-6 bg-no-repeat relative z-[3] rounded-sm transition-all duration-300">
-        {/* <div className="svg-content">
-          <svg
-            className="top-svg"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-            width="374px"
-            height="63px"
-          >
-            <path
-              fillRule="evenodd"
-              d="M0.000,13.000 C0.000,13.000 72.000,77.250 159.000,59.000 C246.000,40.750 324.750,14.750 370.000,30.000 L370.000,19.000 C370.000,19.000 355.000,-4.750 164.000,47.000 C164.000,47.000 73.250,71.000 0.000,-0.000 L0.000,13.000 Z"
-            />
-          </svg>
-          <svg
-            className="bottom-svg"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-            width="374px"
-            height="63px"
-          >
-            <path
-              fillRule="evenodd"
-              d="M0.000,13.000 C0.000,13.000 72.000,77.250 159.000,59.000 C246.000,40.750 324.750,14.750 370.000,30.000 L370.000,19.000 C370.000,19.000 355.000,-4.750 164.000,47.000 C164.000,47.000 73.250,71.000 0.000,-0.000 L0.000,13.000 Z"
-            />
-          </svg>
-          <svg
-            className="bottom-svgw"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlnsXlink="http://www.w3.org/1999/xlink"
-            width="374px"
-            height="57px"
-          >
-            <path
-              fillRule="evenodd"
-              fill="rgb(255, 255, 255)"
-              d="M0.000,0.000 C0.000,0.000 58.000,66.000 150.000,51.000 C150.000,51.000 325.000,1.667 370.000,21.000 L370.000,57.000 L0.000,57.000 "
-            />
-          </svg>
-        </div> */}
         <h3 className="mb-2 text-xl font-semibold tracking-tight transition-colors duration-200 hover:text-primary-background">
           <Link href={`/services/${service.slug}`}>{service.name}</Link>
         </h3>
-        <p className="text-sm font-[450] line-clamp-5">{service.description}</p>
+        <p className="text-sm font-[450] line-clamp-4">{service.description}</p>
         <div className="transition-all duration-300 opacity-0 group-hover:opacity-100">
           <Link
             href={"#"}

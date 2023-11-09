@@ -128,12 +128,19 @@ export const projectRouter = router({
     }),
 });
 
-// functions
-
 export const getProjects = async () => {
   return await prisma.project.findMany({
     orderBy: {
       createdAt: "desc",
     },
   });
+};
+
+export const getProjectBySlug = async (slug: string) => {
+  const project = await prisma.project.findFirst({
+    where: {
+      slug: slug,
+    },
+  });
+  return project;
 };

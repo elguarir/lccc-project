@@ -1,4 +1,10 @@
+"use client";
 import React from "react";
+// Import Swiper and SwiperSlide components
+import { Swiper, SwiperSlide } from "swiper/react";
+// Import swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
 
 const ClientsSection = () => {
   return (
@@ -15,20 +21,49 @@ const ClientsSection = () => {
             </h2>
           </div>
         </div>
-        <div className="grid grid-cols-4 gap-12 mt-16 place-items-center place-content-center">
-          <div className="w-32 transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
-            <img src="/images/maroc_telecom.png" alt="" />
-          </div>
-          <div className="w-32 transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
-            <img src="/images/ram_logo.png" alt="" />
-          </div>
-          <div className="w-32 transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
-            <img src="/images/Picture2.png" alt="" />
-          </div>
-          <div className="w-32 transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
-            <img src="/images/fenie.png" alt="" />
-          </div>
-        </div>
+        {/* Add Swiper component here */}
+        <Swiper
+          className="!pt-10"
+          loop={true} // Enable infinite loop
+          slidesPerView={4}
+          autoplay={{ delay: 3000 }}
+          breakpoints={{
+            0: {
+              slidesPerView: 1,
+              spaceBetween: 0,
+            },
+            520: {
+              slidesPerView: 2,
+              spaceBetween: 10,
+            },
+            950: {
+              slidesPerView: 4,
+              spaceBetween: 20,
+            },
+          }}
+        >
+          {/* Wrap client logos inside SwiperSlide components */}
+          <SwiperSlide className="!flex w-full justify-center items-center">
+            <div className="!w-32 h-28 flex items-center transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
+              <img src="/images/maroc_telecom.png" alt="" />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className="!flex w-full justify-center items-center">
+            <div className="!w-32 h-28 flex items-center transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
+              <img src="/images/ram_logo.png" alt="" />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className="!flex w-full justify-center items-center">
+            <div className="!w-32 h-28 flex items-center transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
+              <img src="/images/Picture2.png" alt="" />
+            </div>
+          </SwiperSlide>
+          <SwiperSlide className="!flex w-full justify-center items-center">
+            <div className="!w-32 h-28 flex items-center transition-all duration-300 cursor-pointer grayscale hover:grayscale-0 hover:scale-90">
+              <img src="/images/fenie.png" alt="" />
+            </div>
+          </SwiperSlide>
+        </Swiper>
       </div>
     </section>
   );

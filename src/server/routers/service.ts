@@ -168,3 +168,29 @@ export const getServices = async () => {
   });
   return services;
 };
+
+
+export const getServiceBySlug = async (slug: string) => {
+  const service = await prisma.service.findFirst({
+    where: {
+      slug: slug,
+    },
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      description: true,
+      json: true,
+      Image: true,
+      createdAt: true,
+      updatedAt: true,
+      category: {
+        select: {
+          name: true,
+          slug: true,
+        },
+      },
+    },
+  });
+  return service;
+}

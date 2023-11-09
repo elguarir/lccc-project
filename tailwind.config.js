@@ -77,14 +77,14 @@ module.exports = {
         "accordion-down": {
           from: { height: 0 },
           to: { height: "var(--radix-accordion-content-height)" },
-          gauge_fadeIn: {
-            from: { opacity: "0" },
-            to: { opacity: "1" },
-          },
-          gauge_fill: {
-            from: { "stroke-dashoffset": "332", opacity: "0" },
-            to: { opacity: "1" },
-          },
+        },
+        gauge_fadeIn: {
+          from: { opacity: "0" },
+          to: { opacity: "1" },
+        },
+        gauge_fill: {
+          from: { "stroke-dashoffset": "332", opacity: "0" },
+          to: { opacity: "1" },
         },
         "accordion-up": {
           from: { height: "var(--radix-accordion-content-height)" },

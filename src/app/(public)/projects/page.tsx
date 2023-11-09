@@ -1,55 +1,60 @@
+import { Button } from "@/components/ui/button";
 import { getProjects } from "@/server/routers/project";
 import { RouterOutput } from "@/types/router";
+import { DoubleArrowRightIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 import React from "react";
-import { Button } from "../ui/button";
-import { DoubleArrowRightIcon } from "@radix-ui/react-icons";
 
-const ProjectsSection = async () => {
+const page = async () => {
   const projects = await getProjects();
+
   return (
-    <section className="object-cover py-24">
-      <div className="container">
-        <div className="relative w-full gap-6 px-5 text-neutral-600">
-          <div className="grid w-full gap-3 -mt-10 [text-wrap:balance] lg:max-w-prose mx-auto">
-            <div className="flex items-center justify-center gap-2 text-xs font-semibold whitespace-nowrap">
-              <span className="w-[20px] h-[2.7px] rounded-sm bg-primary-background" />
-              OUR PROJECTS
-            </div>
-            <h2 className="text-3xl text-center lg:text-4xl font-[700] lg:font-[800] leading-8 lg:leading-10 [text-wrap:balance] ">
-              Explore Our Latest Projects And Recent Works
-            </h2>
-          </div>
-          <div className="absolute items-center hidden gap-4 lg:flex">
-            <span className="text-2xl font-medium tracking-normal -rotate-12 font-hand">Our latest Projects</span>
-            <svg
-              viewBox="0 0 85 29"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              className="w-16 relative top-2 -left-1 rotate-[230deg]"
-            >
-              <path
-                d="M84.1428 1.12604C68.4579 15.0432 48.2728 24.8484 26.7076 22.7737C20.393 22.1662 13.251 19.5041 7.51 16.6647C6.29685 16.0646 5.19832 15.2656 4.08583 14.4969C3.06981 13.7949 4.95423 22.296 5.12047 23.2959C6.89794 33.9863 5.2443 22.4385 4.04146 18.4653C3.10796 15.3818 1.13626 12.2911 0.701068 9.07517C0.350636 6.4856 5.49948 7.02736 7.26614 6.8582C9.08258 6.68426 20.8214 3.77937 19.2507 7.81152C16.4328 15.0458 10.9147 19.889 6.01223 25.5572"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-              />
-            </svg>
-          </div>
+    <div className="py-8 lg:py-20">
+      <div className="container space-y-2">
+        <h1 className="text-xl font-bold lg:text-3xl xl:text-5xl">
+          Our Recent Projects
+        </h1>
+        <div className="flex items-center gap-2 !mt-1 text-sm font-semibold tracking-wide">
+          <Link
+            className="transition-colors duration-200 hover:text-primary-background"
+            href={"/"}
+          >
+            SOMACEP
+          </Link>{" "}
+          •{" "}
+          <Link
+            className="transition-colors duration-200 hover:text-primary-background"
+            href={"/projects"}
+          >
+            Projects
+          </Link>
         </div>
-        <div className="mt-28">
-          <div className="grid gap-8 mx-auto lg:px-6 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
-            ))}
-          </div>
+        <p className="text-sm !mt-3 leading-relaxed [text-wrap:balance] max-w-5xl font-medium text-muted-foreground">
+          Experience unrivaled construction excellence. Our services deliver
+          impeccable quality, expert craftsmanship, and seamless project
+          management. From residential havens to commercial masterpieces, we
+          bring your vision to life with passion and precision. Trust us to
+          exceed your expectations and redefine construction excellence.
+        </p>
+      </div>
+
+      <div
+        style={{
+          backgroundImage: "url('/images/services-banner.png')",
+        }}
+        className="object-cover py-24 bg-no-repeat"
+      >
+        <div className="container grid grid-cols-1 gap-6 mx-auto mt-24 md:grid-cols-2 lg:grid-cols-3">
+          {projects.map((project) => (
+            <ProjectCard key={project.id} project={project} />
+          ))}
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default ProjectsSection;
+export default page;
 
 interface ProjectCardProps {
   project: RouterOutput["project"]["getProjects"][0];

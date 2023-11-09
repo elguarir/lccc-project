@@ -1,4 +1,4 @@
-import HeaderSection from "@/components/home/HeaderSection";
+import Footer from "@/components/home/Footer";
 import { SiteHeader } from "@/components/site/site-header";
 import React from "react";
 
@@ -11,11 +11,10 @@ function PublicLayout({ children }: Props) {
     <div className="overflow-x-hidden bg-neutral-50">
       <div className="relative">
         <SiteHeader />
-        <div className="z-50 w-full h-full pt-32 pb-10 lg:container">
-          <HeaderSection />
-        </div>
+        
       </div>
-      <div>{children}</div>
+      <div className="z-50 w-full h-full min-h-screen pt-32 pb-10">{children}</div>
+      <Footer />
     </div>
   );
 }
