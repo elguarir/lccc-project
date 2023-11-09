@@ -45,7 +45,7 @@ const page = async ({ params }: { params: { slug: string } }) => {
         </div>
       </div>
       <div className="container grid gap-4">
-        <div className="grid w-full h-full grid-cols-2 gap-4 p-6 py-8 place-items-center place-content-center">
+        <div className="grid w-full h-full grid-cols-1 gap-4 p-6 py-8 lg:grid-cols-2 place-items-center place-content-center">
           {project.images &&
             project.images.length > 0 &&
             project.images.map((image) => (

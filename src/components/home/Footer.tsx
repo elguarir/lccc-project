@@ -149,9 +149,9 @@ const Footer = () => {
   ];
   return (
     <div className="bg-[#0a0a0a] text-neutral-100">
-      <div className="container grid gap-3 py-20 pb-6">
-        <div className="flex justify-between pb-12 border-b border-neutral-800">
-          <div className="p-2 px-4 rounded-lg bg-neutral-300">
+      <div className="container grid py-20 pb-6 lg:gap-3">
+        <div className="flex flex-col justify-between pb-12 border-b max-lg:space-y-6 lg:flex-row border-neutral-900">
+          <div className="p-2 px-4 rounded-lg w-fit bg-neutral-300">
             <img src="/images/somacep.png" alt="" className="w-28" />
           </div>
           <div className="flex items-center gap-2">
@@ -188,7 +188,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="flex items-center justify-between py-12 border-b border-neutral-800">
+        <div className="flex flex-col justify-between gap-12 py-12 border-b lg:items-center lg:flex-row border-neutral-900">
           <div className="flex flex-col h-full">
             <span className="text-2xl font-semibold leading-relaxed">
               Usefull Links

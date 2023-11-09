@@ -84,7 +84,7 @@ const page = async () => {
               </div>
             </div>
           </div>
-
+        
           {/* contact form */}
           <div className="px-10 py-16 border rounded-md bg-muted border-input">
             <div className="flex items-center gap-1">
