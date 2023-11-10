@@ -3,7 +3,7 @@ export type SiteConfig = typeof siteConfig;
 export const siteConfig = {
   name: 'SOMACEP',
   description:
-    'Your partner',
+    'Your partner ',
   mainNav: [
     {
       title: 'Home',

@@ -140,7 +140,6 @@ export function ActionButtons({ member }: ActionButtonsProps) {
                   </div>
                   <span>ADMIN</span>
                 </DropdownMenuItem>
-                {/* <DropdownMenuSeparator /> */}
                 <DropdownMenuItem
                   onClick={() => {
                     updateRole(

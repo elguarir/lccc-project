@@ -9,7 +9,11 @@ function SignInPage({}: Props) {
   return (
     <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
       <div className="flex flex-col space-y-2 text-center">
-        <Icons.logo className="w-10 h-10 mx-auto md:w-12 md:h-12" />
+        <img
+          src="/images/somacep.png"
+          alt=""
+          className="w-32 mx-auto"
+        />
         <h1 className="text-3xl font-semibold tracking-tight font-display">
           Welcome back
         </h1>
@@ -19,12 +23,12 @@ function SignInPage({}: Props) {
       </div>
       <SignInForm />
       <p className="px-8 text-sm text-center text-muted-foreground">
-        <Link
+        {/* <Link
           href="/sign-up"
           className="underline font-[450] transition-colors duration-300 hover:text-primary underline-offset-4"
         >
           Don't have an account? Sign Up
-        </Link>
+        </Link> */}
       </p>
     </div>
   );

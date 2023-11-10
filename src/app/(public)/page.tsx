@@ -16,7 +16,7 @@ export default async function IndexPage() {
 
   return (
     <>
-      <div className="z-50 w-full h-full pt-32 pb-10 lg:container">
+      <div className="z-50 w-full h-full pb-10 lg:pt-20 lg:container">
         <HeaderSection />
       </div>
 

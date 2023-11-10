@@ -3,29 +3,30 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "../../ui/button";
 import { Icons } from "@/assets/icons";
-import { UserArticlesType } from "@/types/article";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { Project } from "@prisma/client";
+import { cn } from "@/lib/utils";
 
 interface ActionButtonsProps {
   project: Project;
 }
 
 export function ActionButtons({ project }: ActionButtonsProps) {
-  const utils = trpc.useContext();
-  const { mutate: deletePostMutation, isLoading } =
+  const { mutate: deleteProjectMutation, isLoading } =
     trpc.project.deleteProject.useMutation();
+  const { mutate: updateStatus } = trpc.project.updateStatus.useMutation();
 
-  const { mutate: duplicatePostMutation, isLoading: DuplicateLoading } =
-    trpc.article.duplicateArticle.useMutation();
-
+  const utils = trpc.useContext();
   const refresh = () => {
     utils.project.getProjects.invalidate();
   };
@@ -48,39 +49,98 @@ export function ActionButtons({ project }: ActionButtonsProps) {
           asChild
           className="px-3 text-muted-foreground font-[450] py-2"
         >
-          <Link href={`/articles/`}>
+          <Link href={`/dashboard/projects/${project.id}/edit`}>
+            <Icons.EditIcon
+              strokeWidth={3}
+              className="w-4 h-4 mr-2 stroke-[2.2px]"
+            />
+            <span>Edit</span>
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
+            <>
+              <span
+                className={cn(
+                  "w-2 h-2 mx-2 rounded-full",
+                  project.status === "DRAFT" ? "bg-yellow-400" : "bg-green-500",
+                )}
+              />
+              <span>Status</span>
+            </>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuPortal>
+            <DropdownMenuSubContent className="mr-1">
+              <DropdownMenuItem
+                onClick={() => {
+                  updateStatus(
+                    {
+                      id: project.id,
+                      status: "DRAFT",
+                    },
+                    {
+                      onSuccess: () => {
+                        toast("Status updated successfully!");
+                        refresh();
+                      },
+                      onError: (err) => {
+                        toast.error(err.message);
+                      },
+                    },
+                  );
+                }}
+              >
+                <div className="w-6">
+                  {project.status === "DRAFT" && (
+                    <Icons.check className="w-4 h-4 stroke-[2.2px]" />
+                  )}
+                </div>
+                <span>DRAFT</span>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  updateStatus(
+                    {
+                      id: project.id,
+                      status: "PUBLISHED",
+                    },
+                    {
+                      onSuccess: () => {
+                        toast("Status updated successfully!");
+                        refresh();
+                      },
+                      onError: (err) => {
+                        toast.error(err.message);
+                      },
+                    },
+                  );
+                }}
+              >
+                <div className="w-6">
+                  {project.status === "PUBLISHED" && (
+                    <Icons.check className="w-4 h-4 stroke-[2.2px]" />
+                  )}
+                </div>
+                <span>PUBLISHED</span>
+              </DropdownMenuItem>
+            </DropdownMenuSubContent>
+          </DropdownMenuPortal>
+        </DropdownMenuSub>
+        <DropdownMenuItem
+          asChild
+          className="px-3 text-muted-foreground font-[450] py-2"
+        >
+          <Link href={`/projects/${project.slug}`}>
             <Icons.eyeVisible
               strokeWidth={3}
               className="w-4 h-4 mr-2 stroke-[2.2px]"
             />
-            <span>View Article</span>
+            <span>View</span>
           </Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem
-          onClick={() => {
-            duplicatePostMutation(
-              {
-                articleId: article.id,
-              },
-              {
-                onSuccess: () => {
-                  toast("Article duplicated successfully!");
-                  refresh();
-                },
-                onError: (err) => {
-                  toast.error(err.message);
-                },
-              },
-            );
-          }}
-          className="px-3 text-muted-foreground font-[450] py-2"
-        >
-          <Icons.clipBoardCopy className="w-4 h-4 mr-2 stroke-[2.2px]" />
-          <span>Duplicate</span>
-        </DropdownMenuItem> */}
         <DropdownMenuItem
           onClick={() => {
-            deletePostMutation(
+            deleteProjectMutation(
               {
                 id: project.id,
               },
@@ -95,9 +155,13 @@ export function ActionButtons({ project }: ActionButtonsProps) {
               },
             );
           }}
-          className="px-3 py-2 text-destructive hover:text-red-600 focus:text-red-600"
+          className="px-3 py-2 font-[450] text-destructive
+                   hover:text-red-600 focus:text-red-600"
         >
-          <Icons.deleteTrashCan className="w-4 h-4 mr-2 stroke-[2.2px]" />
+          <Icons.deleteTrashCan
+            strokeWidth={3.5}
+            className="w-4 h-4 mr-2 stroke-[2.2px]"
+          />
           <span>Delete</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

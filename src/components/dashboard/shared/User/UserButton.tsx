@@ -31,7 +31,7 @@ export function UserButton({ user }: UserButtonProps) {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         align="end"
-        className="mt-1 py-2 md:hidden w-[250px] rounded-xl px-3"
+        className="mt-1 py-2 w-[250px] rounded-xl px-3"
       >
         <DropdownMenuLabel className="text-lg">
           Hello, <br />

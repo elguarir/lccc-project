@@ -49,31 +49,21 @@ export function ActionButtons({ service }: ActionButtonsProps) {
               strokeWidth={3}
               className="w-4 h-4 mr-2 stroke-[2.2px]"
             />
-            <span>View Service</span>
+            <span>View</span>
           </Link>
         </DropdownMenuItem>
-        {/* <DropdownMenuItem
-          onClick={() => {
-            duplicatePostMutation(
-              {
-                articleId: article.id,
-              },
-              {
-                onSuccess: () => {
-                  toast("Article duplicated successfully!");
-                  refresh();
-                },
-                onError: (err) => {
-                  toast.error(err.message);
-                },
-              },
-            );
-          }}
+        <DropdownMenuItem
+          asChild
           className="px-3 text-muted-foreground font-[450] py-2"
         >
-          <Icons.clipBoardCopy className="w-4 h-4 mr-2 stroke-[2.2px]" />
-          <span>Duplicate</span>
-        </DropdownMenuItem> */}
+          <Link href={`/dashboard/service/${service.id}/edit`}>
+            <Icons.EditIcon
+              strokeWidth={3}
+              className="w-4 h-4 mr-2 stroke-[2.2px]"
+            />
+            <span>Edit</span>
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => {
             deletePostMutation(

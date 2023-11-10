@@ -60,7 +60,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                     {children}
                   </div>
                   <ToasterProvider />
-                  <TailwindIndicator />
+                  {/* <TailwindIndicator /> */}
                 </TooltipProvider>
               </ThemeProvider>
             </TrpcClientProvider>

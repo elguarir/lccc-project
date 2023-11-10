@@ -14,6 +14,24 @@ export const projectRouter = router({
     });
   }),
 
+  updateStatus: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        status: z.enum(["DRAFT", "PUBLISHED"]),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const project = await ctx.prisma.project.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          status: input.status,
+        },
+      });
+      return project;
+    }),
   createProject: protectedProcedure
     .input(schema)
     .mutation(async ({ input, ctx }) => {
