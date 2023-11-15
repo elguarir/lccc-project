@@ -329,7 +329,8 @@ const CategoryCreationModal = () => {
             Add Category
           </Button>
         </DialogTrigger>
-        <DialogContent className={cn("sm:max-w-[425px]", !modal && "hidden")}>
+        
+        <DialogContent className={cn("sm:max-w-[425px]")}>
           <DialogHeader>
             <DialogTitle>Create a Category</DialogTitle>
             <DialogDescription>

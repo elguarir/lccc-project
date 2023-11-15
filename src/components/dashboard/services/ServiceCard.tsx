@@ -46,7 +46,7 @@ const ServiceCard = ({ service }: Props) => {
       </Link>
       <div className="relative px-4 text-xs font-medium md:text-sm min-w-fit">
         <div>
-          Published on {" "}
+          Added on {" "}
           <span className="block lg:inline-block">
           {format(new Date(service.createdAt), "dd MMM yyyy")}  
           </span>

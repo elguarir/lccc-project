@@ -5,7 +5,7 @@ import { Phone } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React from "react";
-
+import { format } from "date-fns";
 const page = async ({ params }: { params: { slug: string } }) => {
   const project = await getProjectBySlug(params.slug);
 
@@ -68,6 +68,16 @@ const page = async ({ params }: { params: { slug: string } }) => {
             Client:
             <span className="text-sm font-semibold text-primary-background">
               {project.client}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            Date of completion:
+            <span className="text-sm font-semibold text-primary-background">
+              {format(new Date(project.startDate), "dd MMM yyyy")}
+            </span>
+            to
+            <span className="text-sm font-semibold text-primary-background">
+              {format(new Date(project.endDate), "dd MMM yyyy")}
             </span>
           </div>
         </div>
