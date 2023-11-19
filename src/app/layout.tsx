@@ -33,13 +33,12 @@ interface RootLayoutProps {
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
-      <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up">
+      <ClerkProvider signInUrl="/sign-in" signUpUrl="/sign-up" >
         <html lang="en" suppressHydrationWarning>
           <head />
           <body
             className={cn(
-              "min-h-screen bg-background font-sans antialiased",
-              "[&_.slate-selected]:!bg-primary/20 [&_.slate-selection-area]:border [&_.slate-selection-area]:border-primary [&_.slate-selection-area]:bg-primary/10",
+              "min-h-screen bg-background antialiased",
               fontSans.className,
             )}
           >
