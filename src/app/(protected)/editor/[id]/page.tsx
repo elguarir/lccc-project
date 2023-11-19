@@ -1,6 +1,6 @@
-import ArticleDetailsForm from "@/components/editor/ArticleDetails";
-import BackButton from "@/components/editor/BackButton";
-import PublishButton from "@/components/editor/PublishButton";
+// import ArticleDetailsForm from "@/components/editor/ArticleDetails";
+// import BackButton from "@/components/editor/BackButton";
+// import PublishButton from "@/components/editor/PublishButton";
 import EditorSideBar from "@/components/editor/shared/EditorSideBar";
 import { Button } from "@/components/ui/button";
 import {
@@ -34,9 +34,9 @@ const EditorPage = async ({ params }: EditorPageProps) => {
         <div className="w-full">
           <div className="flex flex-col w-full gap-4 py-8 xl:px-6 xl:gap-6">
             <div className="flex mx-auto max-w-[1200px] items-center justify-between w-full">
-              <BackButton />
+              {/* <BackButton /> */}
               <div className="flex items-center gap-1">
-                <PublishButton disabled={false} />
+                {/* <PublishButton disabled={false} /> */}
                 <Sheet>
                   <SheetTrigger asChild>
                     <Button
