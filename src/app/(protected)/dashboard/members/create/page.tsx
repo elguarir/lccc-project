@@ -1,4 +1,4 @@
-import MemberCreationForm from "@/components/dashboard/members/MembersDetailsForm";
+// import MemberCreationForm from "@/components/dashboard/members/MembersDetailsForm";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -29,7 +29,7 @@ const MemberCreate = () => {
         </header>
       </div>
       <main className="py-4">
-        <MemberCreationForm />
+        {/* <MemberCreationForm /> */}
       </main>
     </div>
   );

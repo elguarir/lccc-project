@@ -1,4 +1,4 @@
-import MembersDetailsForm from "@/components/dashboard/members/MembersDetailsForm";
+// import MembersDetailsForm from "@/components/dashboard/members/MembersDetailsForm";
 import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
@@ -45,7 +45,7 @@ const MemberEditPage = async (props: Props) => {
         </header>
       </div>
       <main className="py-4">
-        <MembersDetailsForm user={user} />
+        {/* <MembersDetailsForm user={user} /> */}
       </main>
     </div>
   );

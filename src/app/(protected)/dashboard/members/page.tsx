@@ -1,5 +1,5 @@
 import Header from "@/components/dashboard/members/Header";
-import MembersTable from "@/components/dashboard/members/MembersTable";
+// import MembersTable from "@/components/dashboard/members/MembersTable";
 import React from "react";
 
 async function ArticlesPage() {
@@ -8,7 +8,7 @@ async function ArticlesPage() {
     <div>
       <Header />
       <div className="w-full pt-4">
-        <MembersTable />
+        {/* <MembersTable /> */}
       </div>
     </div>
   );
