@@ -8,7 +8,9 @@ import localFont from "next/font/local";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
+  display: "swap",
   variable: "--font-sans",
+  fallback: ["system-ui", "sans-serif", "serif"],
 });
 
 export const fontMono = FontMono({
@@ -16,42 +18,11 @@ export const fontMono = FontMono({
   variable: "--font-mono",
 });
 
-export const fontHeading = localFont({
-  src: "./GeneralSans.woff2",
-  variable: "--font-heading",
-});
-
 export const fontHand = FontHand({
   subsets: ["latin"],
   style: "normal",
   weight: "400",
   variable: "--font-hand",
-});
-
-export const fontHome = localFont({
-  src: [
-    {
-      path: "./CabinetGrotesk-Regular.otf",
-      style: "normal",
-      weight: "400",
-    },
-    {
-      path: "./CabinetGrotesk-Medium.otf",
-      style: "normal",
-      weight: "500",
-    },
-    {
-      path: "./CabinetGrotesk-Bold.otf",
-      style: "normal",
-      weight: "700",
-    },
-    {
-      path: "./CabinetGrotesk-Extrabold.otf",
-      style: "normal",
-      weight: "900",
-    },
-  ],
-  variable: "--font-home",
 });
 
 export const fontDisplay = FontDisplay({
