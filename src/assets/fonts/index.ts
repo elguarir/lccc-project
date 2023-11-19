@@ -8,9 +8,8 @@ import localFont from "next/font/local";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
-  display: "swap",
   variable: "--font-sans",
-  fallback: ["system-ui", "sans-serif", "serif"],
+  fallback: ["sans-serif", "system-ui", "serif"],
 });
 
 export const fontMono = FontMono({
