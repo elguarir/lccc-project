@@ -8,29 +8,6 @@ const mg = mailgun.client({
   key: env.MAILGUN_API_KEY,
 });
 
-// const transporter = nodemailer.createTransport({
-//   // host: env.SMTP_HOST,
-//   // port: 465,
-//   // secure: true,
-//   // auth: {
-//   //   user: env.SMTP_USER,
-//   //   pass: env.SMTP_PASS,
-//   // },
-//   // from: env.SMTP_FROM,
-//   host: "smtp.mailgun.org",
-//   port: 465,
-//   secure: true,
-//   auth: {
-//     user: "moha@elguarir.dev",
-//     pass: "Bol7ya@#",
-//   },
-//   from: "Este Center <moha@elguarir.dev>",
-// });
-// return await transporter.sendMail({
-//   to: email,
-//   subject,
-//   html,
-// });
 
 type SendEmailProps = {
   to: string;

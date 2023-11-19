@@ -25,7 +25,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/plate/input";
 import { useState } from "react";
 import {
   Form,
@@ -39,6 +38,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { schema } from "@/lib/validators/PasswordChangeValidator";
+import { Input } from "@/components/ui/input";
 interface ActionButtonsProps {
   member: RouterOutput["member"]["getMembers"][0];
 }

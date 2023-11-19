@@ -1,4 +1,3 @@
-import { QuickDraft } from "@/components/dashboard/QuickDraft";
 
 function DashboardPage() {
   return (
@@ -7,7 +6,6 @@ function DashboardPage() {
         Dashboard
       </h1>
       <div className="grid gap-4 xl:grid-cols-2">
-        <QuickDraft />
       </div>
     </div>
   );

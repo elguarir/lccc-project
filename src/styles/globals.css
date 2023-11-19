@@ -159,3 +159,8 @@
 .no-scroll {
   overflow: hidden;
 }
+
+
+.cl-card >div:last-child {
+  display: none;
+}

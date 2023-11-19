@@ -1,5 +1,3 @@
-import Footer from "@/components/home/Footer";
-import { SiteHeader } from "@/components/site/site-header";
 import React from "react";
 
 type Props = {
@@ -8,13 +6,10 @@ type Props = {
 
 function PublicLayout({ children }: Props) {
   return (
-    <div className="overflow-x-hidden bg-neutral-50">
-      <div className="relative">
-        <SiteHeader />
-        
+    <div className="bg-neutral-50">
+      <div className="w-full h-full min-h-screen">
+        {children}
       </div>
-      <div className="z-50 w-full h-full min-h-screen pt-32 pb-10">{children}</div>
-      <Footer />
     </div>
   );
 }

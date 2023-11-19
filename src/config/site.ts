@@ -1,34 +1,28 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: 'SOMACEP',
-  description:
-    'Your partner ',
+  name: "LCC Club",
+  description: "Your hub for all things language, culture and creativity",
   mainNav: [
     {
-      title: 'Home',
-      href: '/',
+      title: "Home",
+      href: "/",
     },
     {
-      title: 'Services',
-      href: '/services',
+      title: "About",
+      href: "/about",
     },
     {
-      title: 'Projects',
-      href: '/projects',
+      title: "Blog",
+      href: "/blog",
     },
     {
-      title: 'Approvals',
-      href: '/approvals',
-    },
-    {
-      title: 'Our Agencies',
-      href: '/agencies',
+      title: "Contact",
+      href: "/contact",
     },
   ],
   links: {
-    twitter: 'https://twitter.com/zbeyens',
-    github: 'https://github.com/udecode/plate',
-    docs: 'https://platejs.org',
+    twitter: "https://twitter.com/lcc-club",
+    github: "https://github.com/lcc-club",
   },
 };

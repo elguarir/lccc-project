@@ -4,7 +4,7 @@ import * as React from 'react';
 import { useTheme } from 'next-themes';
 
 import { Icons } from '@/assets/icons';
-import { Button } from '@/components/ui/plate/button';
+import { Button } from '../ui/button';
 
 export function ThemeToggle() {
   const { setTheme, theme } = useTheme();

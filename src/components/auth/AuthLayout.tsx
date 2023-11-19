@@ -1,27 +1,23 @@
-import { cn } from "@/lib/utils";
 import Link from "next/link";
-import { buttonVariants } from "../ui/plate/button";
 import { ChevronLeftIcon } from "lucide-react";
+import { Button } from "../ui/button";
+
 interface AuthLayoutProps {
   children: React.ReactNode;
 }
 
 export default function AuthLayout({ children }: AuthLayoutProps) {
   return (
-    <div className="relative flex items-center justify-center flex-1 w-full h-full px-6">
-      <Link
-        href="/"
-        className={cn(
-          buttonVariants({ variant: "ghost" }),
-          "absolute left-4 top-4 md:left-8 md:top-8",
-        )}
-      >
-        <>
+    <div className="flex flex-col flex-1 w-full h-screen px-6 py-4">
+      <Button asChild size={"sm"} className="w-fit" variant={"ghost"}>
+        <Link href="/">
           <ChevronLeftIcon className="w-4 h-4 mr-2" />
           Back
-        </>
-      </Link>
-      {children}
+        </Link>
+      </Button>
+      <div className="flex items-center justify-center flex-1 h-full">
+        {children}
+      </div>
     </div>
   );
 }

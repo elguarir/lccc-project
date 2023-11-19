@@ -1,5 +1,5 @@
 import { createImageUrl } from "@/lib/helpers/CreateImageUrl";
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 /**
  * Custom hook for uploading a single file and tracking its upload state.

@@ -67,11 +67,6 @@ module.exports = {
       },
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-        mono: ["var(--font-mono)", ...fontFamily.mono],
-        display: ["var(--font-display)", ...fontFamily.sans],
-        heading: ["var(--font-heading)", ...fontFamily.sans],
-        home: ["var(--font-home)", ...fontFamily.sans],
-        hand: ["var(--font-hand)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

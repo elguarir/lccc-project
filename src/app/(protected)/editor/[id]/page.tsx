@@ -2,7 +2,6 @@ import ArticleDetailsForm from "@/components/editor/ArticleDetails";
 import BackButton from "@/components/editor/BackButton";
 import PublishButton from "@/components/editor/PublishButton";
 import EditorSideBar from "@/components/editor/shared/EditorSideBar";
-import PlateEditor from "@/components/plate-editor";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,10 +12,7 @@ import {
 } from "@/components/ui/card";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import useAuthSession from "@/hooks/useAuthSession";
-import { GetArticleDataById } from "@/lib/helpers/GetArticleData";
 import { cn } from "@/lib/utils";
-import { TElement, Value } from "@udecode/plate-common";
 import { ArrowLeftFromLine, ChevronLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -29,12 +25,6 @@ interface EditorPageProps {
 }
 const EditorPage = async ({ params }: EditorPageProps) => {
   const id = params.id;
-  const session = await useAuthSession();
-  if (!session?.user) redirect("/sign-in");
-  const userId = session.user.userId;
-
-  const article = await GetArticleDataById(id, userId);
-  if (!article) return notFound();
 
   return (
     <>
@@ -73,7 +63,7 @@ const EditorPage = async ({ params }: EditorPageProps) => {
                           </CardDescription>
                         </CardHeader>
                         <CardContent>
-                          <ArticleDetailsForm initialData={article} />
+                          {/* <ArticleDetailsForm initialData={article} /> */}
                         </CardContent>
                       </Card>
                       <ScrollBar orientation="vertical" />
@@ -84,14 +74,14 @@ const EditorPage = async ({ params }: EditorPageProps) => {
             </div>
             <div className="mx-auto max-w-[1200px] h-full items-center w-full rounded-lg border bg-background shadow-sm">
               <div className="h-full">
-                <PlateEditor initialData={article} />
+                {/* <PlateEditor initialData={article} /> */}
               </div>
             </div>
           </div>
         </div>
       </ScrollArea>
       <EditorSideBar>
-        <ArticleDetailsForm initialData={article} />
+        {/* <ArticleDetailsForm initialData={article} /> */}
       </EditorSideBar>
     </>
   );

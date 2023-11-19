@@ -10,22 +10,6 @@ export const mainLinks: DashboardLinkProps[] = [
     type: "link",
     icon: Icons.dashboardIcon,
   },
-  // {
-  //   name: "View Site",
-  //   href: "/",
-  //   type: "link",
-  //   icon: Icons.HomeIcon,
-  //   endContent: () => (
-  //     <Button
-  //       className={buttonVariants({
-  //         variant: "outline",
-  //         size: "xs",
-  //       })}
-  //     >
-  //       <Icons.externalArrow className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
-  //     </Button>
-  //   ),
-  // },
 ];
 
 export const managementLinks: DashboardLinkProps[] = [

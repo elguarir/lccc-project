@@ -1,5 +1,5 @@
 import { createImageUrl } from "@/lib/helpers/CreateImageUrl";
-import { useState, useCallback } from "react";
+import { useState} from "react";
 
 interface UploadState {
   progress: number;
