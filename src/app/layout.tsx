@@ -42,7 +42,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
               fontSans.className,
             )}
           >
-            <ProgressBarProvider>
+            {/* <ProgressBarProvider> */}
               <TrpcClientProvider>
                 <ThemeProvider attribute="class" defaultTheme="light">
                   <div className="relative flex flex-col min-h-screen">
@@ -51,7 +51,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                   <ToasterProvider />
                 </ThemeProvider>
               </TrpcClientProvider>
-            </ProgressBarProvider>
+            {/* </ProgressBarProvider> */}
           </body>
         </html>
       </ClerkProvider>

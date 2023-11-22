@@ -1,21 +1,9 @@
 import { Icons } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 import NavItems from "./NavItems";
 import { mainLinks, managementLinks } from "@/lib/constants/DashboardNavLinks";
-import { siteConfig } from "@/config/site";
 
 export function SideSheet() {
   return (
@@ -32,12 +20,13 @@ export function SideSheet() {
       </SheetTrigger>
       <SheetContent side={"left"} className="h-full w-fit">
         <aside className="relative flex translate-x-0 overflow-hidden transition-[flex-basis] flex-col w-64 h-full min-w-0 flex-[0_0_320px]">
-          <header className="relative w-full h-24 p-8">
+          <header className="relative w-full h-24 p-8 mb-8">
             <Link className="flex items-center w-full gap-3 " href={"/"}>
-              <Icons.logo className="w-8 h-8 mt-1 text-foreground" />
-              <span className="text-xl text-[1.15rem] font-bold tracking-wide font-display">
-                {siteConfig.name}
-              </span>
+              <img
+                className="object-cover w-48"
+                src="/images/logo.png"
+                alt="LCCC Logo"
+              />
             </Link>
           </header>
           <section className="flex flex-col justify-between flex-1 w-full overflow-y-auto">

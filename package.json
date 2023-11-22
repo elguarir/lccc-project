@@ -93,6 +93,7 @@
     "slugify": "^1.6.6",
     "sonner": "^1.0.3",
     "superjson": "^1.13.3",
+    "svix": "^1.14.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss-animate": "1.0.7",
     "zod": "^3.22.2",

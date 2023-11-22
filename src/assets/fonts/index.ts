@@ -4,12 +4,11 @@ import {
   Bricolage_Grotesque as FontDisplay,
   Gochi_Hand as FontHand,
 } from "next/font/google";
-import localFont from "next/font/local";
 
 export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
-  fallback: ["sans-serif", "system-ui", "serif"],
+  fallback: ["Inter", "sans-serif", "system-ui", "serif"],
 });
 
 export const fontMono = FontMono({
