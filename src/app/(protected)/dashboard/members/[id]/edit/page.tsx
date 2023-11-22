@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
-import prisma from "@/lib/db";
+import prisma from "@/prisma";
 import { redirect } from "next/navigation";
 type Props = {
   params: {

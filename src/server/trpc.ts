@@ -1,6 +1,6 @@
 import { TRPCError, initTRPC } from "@trpc/server";
 // import useAuthSession from "@/hooks/useAuthSession";
-import prisma from "@/lib/db";
+import prisma from "@/prisma";
 import superjson from 'superjson';
 
 const t = initTRPC.context().create({
