@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs";
 import MobileNav from "./MobileNav";
+import { ThemeToggle } from "./theme-toggle";
+import { Separator } from "../ui/separator";
 
 const NavBar = async () => {
   const user = await currentUser();
@@ -42,7 +44,10 @@ const NavBar = async () => {
               <Link href={"/contact"}>Contact Us</Link>
             </li>
           </ul>
-          <div className="items-center hidden space-x-3 md:flex">
+          <div className="items-center hidden gap-3 md:flex">
+            <ThemeToggle />
+            <Separator orientation={"vertical"} className="h-5" />
+
             {user ? (
               <Button asChild size={"sm"} className="">
                 <Link href={"/dashboard"}>Dashboard</Link>

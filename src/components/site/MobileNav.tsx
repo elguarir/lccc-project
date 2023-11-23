@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, buttonVariants } from "../ui/button";
 import { Cross2Icon, HamburgerMenuIcon } from "@radix-ui/react-icons";
 import { AnimatePresence, motion } from "framer-motion";
@@ -7,6 +7,15 @@ import Link from "next/link";
 const MobileNav = () => {
   const [open, setOpen] = useState(false);
 
+  useEffect(() => {
+    if (open) {
+      document.body.classList.add("no-scroll");
+    } else {
+      document.body.classList.remove("no-scroll");
+    }
+  }, [open]);
+
+  
   return (
     <>
       <Button

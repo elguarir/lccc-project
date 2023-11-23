@@ -34,7 +34,6 @@ export function SideSheet() {
               <NavItems links={mainLinks} />
               <NavItems links={managementLinks} />
             </div>
-            <div></div>
           </section>
         </aside>
       </SheetContent>

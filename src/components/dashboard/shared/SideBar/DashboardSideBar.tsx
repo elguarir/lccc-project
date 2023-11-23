@@ -8,13 +8,13 @@ import { ThemeToggle } from "@/components/site/theme-toggle";
 
 async function DashboardSideBar() {
   const user = await currentUser();
-  console.log(user);
 
   return (
     <>
-      <div className="container w-full py-4 max-md:px-6 md:hidden">
+      <div className="container w-full py-4 max-md:pl-4 max-md:pr-5 md:hidden">
         <div className="flex items-center justify-between w-full">
           <SideSheet />
+          <UserButton />
         </div>
       </div>
       <aside className="relative md:flex hidden translate-x-0 overflow-hidden transition-[flex-basis] flex-col w-64 h-full min-w-0 border-r flex-[0_0_320px]">
