@@ -11,7 +11,7 @@ import ProgressBarProvider from "@/providers/ProgressBarProvider";
 
 export const metadata: Metadata = {
   title: {
-    template: `%s gaege- ${siteConfig.name}`,
+    template: `%s - ${siteConfig.name}`,
     default: siteConfig.name,
   },
   description: siteConfig.description,
