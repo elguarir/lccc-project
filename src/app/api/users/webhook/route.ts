@@ -49,8 +49,6 @@ export async function POST(req: Request) {
       status: 400,
     });
   }
-
-  // Get the ID and type
   const { id } = evt.data;
   const eventType = evt.type;
   if (eventType === "user.created") {
@@ -75,7 +73,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json("OK", { status: 200 });
   }
-
   if (eventType === "user.updated") {
     const primaryEmailAddressId = evt.data.primary_email_address_id;
     const primaryEmailAddress = evt.data.email_addresses.find(
@@ -100,7 +97,6 @@ export async function POST(req: Request) {
 
     return NextResponse.json("OK", { status: 200 });
   }
-
   if (eventType === "user.deleted") {
     await db.user
       .delete({

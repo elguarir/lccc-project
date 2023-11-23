@@ -1,3 +1,4 @@
+import NavBar from "@/components/site/NavBar";
 import React from "react";
 
 type Props = {
@@ -6,8 +7,9 @@ type Props = {
 
 function PublicLayout({ children }: Props) {
   return (
-    <div className="bg-neutral-50">
-      <div className="w-full h-full min-h-screen">
+    <div className="min-h-screen bg-background text-foreground">
+      <NavBar />
+      <div className="flex justify-center flex-1  w-full h-[calc(100vh-69px)] ">
         {children}
       </div>
     </div>
