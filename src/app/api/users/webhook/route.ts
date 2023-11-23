@@ -56,15 +56,30 @@ export async function POST(req: Request) {
     const primaryEmailAddress = evt.data.email_addresses.find(
       (email) => email.id === primaryEmailAddressId,
     );
-    await db.user
+    // create the user
+    const user = await db.user.create({
+      data: {
+        id: id,
+        email: primaryEmailAddress?.email_address!,
+        first_name: evt.data.first_name,
+        last_name: evt.data.last_name,
+        username: evt.data.username!,
+        avatar_url: evt.data.image_url,
+      },
+    });
+    if (!user) {
+      return NextResponse.json({ status: "error" }, { status: 500 });
+    }
+    // create the user's profile
+    await db.profile
       .create({
         data: {
-          id: id,
-          email: primaryEmailAddress?.email_address!,
-          first_name: evt.data.first_name,
-          last_name: evt.data.last_name,
-          username: evt.data.username!,
-          avatar_url: evt.data.image_url,
+          userId: user.id,
+          socialLinks: {
+            create: {
+              userId: user.id,
+            },
+          },
         },
       })
       .catch((err) => {

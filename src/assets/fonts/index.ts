@@ -1,7 +1,6 @@
 import {
   JetBrains_Mono as FontMono,
   Inter as FontSans,
-  Bricolage_Grotesque as FontDisplay,
   Gochi_Hand as FontHand,
 } from "next/font/google";
 
@@ -9,6 +8,7 @@ export const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
   fallback: ["Inter", "sans-serif", "system-ui", "serif"],
+  display: "swap",
 });
 
 export const fontMono = FontMono({
@@ -23,8 +23,3 @@ export const fontHand = FontHand({
   variable: "--font-hand",
 });
 
-export const fontDisplay = FontDisplay({
-  subsets: ["latin"],
-  variable: "--font-display",
-  display: "swap",
-});

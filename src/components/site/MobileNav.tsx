@@ -39,7 +39,7 @@ const MobileNav = () => {
             transition={{ duration: 0.4, type: "spring" }}
             className="fixed right-0 w-full h-full mx-auto p-0 transition-[background-color] duration-200 py-2 md:hidden bg-background top-16 z-30"
           >
-            <ul className="grid divide-y divide-gray-200 px-7">
+            <ul className="grid divide-y divide-muted dark:divide-muted/40 px-7">
               <li className="py-3">
                 <button className="flex justify-between w-full">
                   <p className="font-semibold">Articles</p>

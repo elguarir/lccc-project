@@ -1,4 +1,4 @@
-import { fontSans } from "@/assets/fonts";
+import { fontSans,fontHand } from "@/assets/fonts";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -39,6 +39,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
           className={cn(
             "min-h-screen bg-background antialiased",
             fontSans.className,
+            fontHand.variable
           )}
         >
           <ProgressBarProvider>

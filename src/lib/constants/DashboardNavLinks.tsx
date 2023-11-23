@@ -29,21 +29,15 @@ export const managementLinks: DashboardLinkProps[] = [
     ],
   },
   {
-    name: "Projects",
-    href: "/dashboard/projects",
+    name: "Categories",
+    href: "/dashboard/categories",
     type: "link",
-    icon: Icons.ProjectIcon,
+    icon: Icons.categoriesIcon,
   },
   {
-    name: "Services",
-    href: "/dashboard/services",
+    name: "Tags",
+    href: "/dashboard/tags",
     type: "link",
-    icon: Icons.ServicesIcon,
-  },
-  {
-    name: "Members",
-    href: "/dashboard/members",
-    type: "link",
-    icon: Icons.usersIcon,
+    icon: Icons.tagsIconRounded,
   }
 ];

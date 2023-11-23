@@ -8,6 +8,14 @@ export default authMiddleware({
       const url = new URL("/sign-in", req.url);
       return NextResponse.redirect(url);
     }
+    const url = new URL(req.url);
+    if (
+      auth.userId &&
+      (url.pathname.startsWith("/sign-in") ||
+        url.pathname.startsWith("/sign-up"))
+    ) {
+      return NextResponse.redirect(new URL("/dashboard", req.url));
+    }
   },
   publicRoutes: ["/api(.*)", "/", /^(?!\/dashboard).*/],
 });
