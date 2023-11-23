@@ -70,11 +70,16 @@ export async function POST(req: Request) {
     if (!user) {
       return NextResponse.json({ status: "error" }, { status: 500 });
     }
-    // create the user's profile
+
     await db.profile
       .create({
         data: {
           userId: user.id,
+          user: {
+            connect: {
+              id: user.id,
+            },
+          },
           socialLinks: {
             create: {
               userId: user.id,
