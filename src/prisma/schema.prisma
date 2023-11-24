@@ -12,6 +12,12 @@ enum Role {
   user
 }
 
+enum PostStatus {
+  draft
+  submitted
+  published
+}
+
 model User {
   id         String    @id @default(cuid())
   first_name String
@@ -53,18 +59,19 @@ model SocialLinks {
 }
 
 model Post {
-  id         String    @id @default(cuid())
+  id         String     @id @default(cuid())
   title      String
-  slug       String    @unique
+  slug       String     @unique
   excerpt    String
   content    Json
   main_image String?
-  approved   Boolean   @default(false)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  author     User      @relation(fields: [userId], references: [id])
+  status     PostStatus
+  approved   Boolean    @default(false)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  author     User       @relation(fields: [userId], references: [id])
   userId     String
-  category   Category? @relation(fields: [categoryId], references: [id])
+  category   Category?  @relation(fields: [categoryId], references: [id])
   categoryId String?
   tags       PostTag[]
   comments   Comment[]

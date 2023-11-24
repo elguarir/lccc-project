@@ -1,3 +1,4 @@
+import Editor from "@/components/editor/editor";
 import { currentUser } from "@clerk/nextjs";
 
 async function DashboardPage() {
@@ -10,7 +11,10 @@ async function DashboardPage() {
       {/* <h1 className="text-3xl mb-8 font-[550] md:font-bold font-display text-foreground">
         Dashboard
       </h1> */}
-      <div className="grid gap-4 xl:grid-cols-2"></div>
+      {/* <div className="grid gap-4 xl:grid-cols-2"></div> */}
+      <div className="mt-4">
+        <Editor />
+      </div>
     </div>
   );
 }
