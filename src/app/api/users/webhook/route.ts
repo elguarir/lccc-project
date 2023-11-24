@@ -71,25 +71,23 @@ export async function POST(req: Request) {
       return NextResponse.json({ status: "error" }, { status: 500 });
     }
 
-    await db.profile
-      .create({
-        data: {
-          userId: user.id,
-          user: {
-            connect: {
-              id: user.id,
-            },
-          },
-          socialLinks: {
-            create: {
-              userId: user.id,
+    await db.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        profile: {
+          create: {
+            userId: user.id,
+            socialLinks: {
+              create: {
+                userId: user.id,
+              },
             },
           },
         },
-      })
-      .catch((err) => {
-        return NextResponse.json({ status: "error" }, { status: 500 });
-      });
+      },
+    });
 
     return NextResponse.json("OK", { status: 200 });
   }
