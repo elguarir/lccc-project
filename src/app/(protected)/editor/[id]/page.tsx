@@ -67,7 +67,7 @@ const EditorPage = ({ params }: EditorPageProps) => {
               <input
                 type="text"
                 placeholder="Article title..."
-                className="w-full outline-none font-heading p-2 font-semibold text-3xl placeholder:font-semibold placeholder:text-3xl placeholder:text-muted-foreground rounded-[0.75rem] focus:outline-none"
+                className="w-full bg-transparent  outline-none font-heading p-2 font-semibold text-3xl placeholder:font-semibold placeholder:text-3xl placeholder:text-muted-foreground rounded-[0.75rem] focus:outline-none"
               />
             </div>
           </div>
@@ -78,7 +78,7 @@ const EditorPage = ({ params }: EditorPageProps) => {
           <h3 className="text-lg font-semibold">Article details</h3>
         </header>
         <div className="flex-1 overflow-y-auto">
-          <ScrollArea className="h-full px-6 py-4">
+          <ScrollArea scrollHideDelay={1000} className="h-full px-6 py-4">
             <ScrollBar orientation="vertical" />
             <div className="flex flex-1 h-screen"></div>
           </ScrollArea>
@@ -212,6 +212,7 @@ const CoverImageUpload = () => {
               </form>
               <RadioGroup.Root asChild>
                 <ScrollArea
+                  scrollHideDelay={1000}
                   className={`px-3 ${
                     images === null || images.length === 0 ? "h-auto" : "h-80"
                   }`}
@@ -253,7 +254,7 @@ const CoverImageUpload = () => {
                         >
                           <button className="relative w-full overflow-hidden rounded-md aspect-video">
                             <img
-                              src={image.urls.regular}
+                              src={image.urls.small_s3}
                               alt={image.alt_description ?? ""}
                               className="object-cover w-full h-full"
                             />
