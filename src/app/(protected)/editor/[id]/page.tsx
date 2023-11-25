@@ -3,7 +3,7 @@ import { Icons } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { ChevronLeft, Loader2, Subtitles, X } from "lucide-react";
+import { Check, ChevronLeft, Loader2, Subtitles, X } from "lucide-react";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
@@ -67,7 +67,7 @@ const EditorPage = ({ params }: EditorPageProps) => {
               <input
                 type="text"
                 placeholder="Article title..."
-                className="w-full bg-transparent  outline-none font-heading p-2 font-semibold text-3xl placeholder:font-semibold placeholder:text-3xl placeholder:text-muted-foreground rounded-[0.75rem] focus:outline-none"
+                className="w-full bg-transparent outline-none font-heading p-2 font-semibold text-3xl placeholder:font-semibold placeholder:text-3xl placeholder:text-muted-foreground rounded-[0.75rem] focus:outline-none"
               />
             </div>
           </div>
@@ -93,6 +93,9 @@ export default EditorPage;
 const CoverImageUpload = () => {
   let [open, setOpen] = useState(false);
   const [images, setImages] = useState<TSearchResponse["results"] | null>(null);
+  let [selectedImage, setSelectedImage] = useState<string | undefined>(
+    undefined,
+  );
 
   let formRef = React.useRef<HTMLFormElement>(null);
   const { mutate: searchImages, isLoading: isSearching } = useMutation({
@@ -210,7 +213,11 @@ const CoverImageUpload = () => {
                   Search
                 </Button>
               </form>
-              <RadioGroup.Root asChild>
+              <RadioGroup.Root
+                asChild
+                value={selectedImage}
+                onValueChange={(v) => setSelectedImage(v)}
+              >
                 <ScrollArea
                   scrollHideDelay={1000}
                   className={`px-3 ${
@@ -247,18 +254,29 @@ const CoverImageUpload = () => {
                     ) : (
                       images?.map((image) => (
                         <RadioGroup.Item
-                          className="transition-all aria-[checked=true]:border-primary border-2 border-transparent hover:border-primary"
+                          className="transition-all relative dark:outline-none aria-[checked=true]:border-primary border-2 border-transparent hover:border-primary"
                           value={image.urls.regular}
                           asChild
                           key={image.id}
                         >
-                          <button className="relative w-full overflow-hidden rounded-md aspect-video">
-                            <img
-                              src={image.urls.small_s3}
-                              alt={image.alt_description ?? ""}
-                              className="object-cover w-full h-full"
-                            />
-                          </button>
+                          <div className="relative w-full overflow-hidden rounded-md aspect-video">
+                            <button className="">
+                              <img
+                                src={image.urls.small_s3}
+                                alt={image.alt_description ?? ""}
+                                className="object-cover w-full h-full"
+                              />
+                            </button>
+                            {selectedImage === image.urls.regular && (
+                              <Button
+                                size={"xs"}
+                                className="absolute transform -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 hover:bg-primary-600 w-fit"
+                              >
+                                <Check className="w-3.5 h-3.5 mr-2" />
+                                Confirm
+                              </Button>
+                            )}
+                          </div>
                         </RadioGroup.Item>
                       ))
                     )}
