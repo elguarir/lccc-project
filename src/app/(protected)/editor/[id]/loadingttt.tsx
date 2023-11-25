@@ -38,7 +38,7 @@ const Loading = () => {
             </div>
           </div>
         </ScrollArea>
-        <EditorSideBar skelaton />
+        {/* <EditorSideBar skelaton /> */}
       </>
     </>
   );
