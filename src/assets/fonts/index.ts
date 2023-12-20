@@ -10,6 +10,7 @@ export const fontSans = FontSans({
   variable: "--font-sans",
   fallback: ["Inter", "sans-serif", "system-ui", "serif"],
   display: "swap",
+  preload: false,
 });
 
 export const fontMono = FontMono({

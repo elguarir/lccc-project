@@ -21,6 +21,7 @@ import { useMutation } from "@tanstack/react-query";
 import { TSearchResponse } from "@/types/unsplash";
 import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/lib/env/client";
+import ArticleDetails from "@/components/editor/shared/ArticleDetails";
 
 interface EditorPageProps {
   params: {
@@ -80,13 +81,16 @@ const EditorPage = ({ params }: EditorPageProps) => {
         <div className="flex-1 overflow-y-auto">
           <ScrollArea scrollHideDelay={1000} className="h-full px-6 py-4">
             <ScrollBar orientation="vertical" />
-            <div className="flex flex-1 h-screen"></div>
+            <div className="flex flex-1 h-screen">
+              <ArticleDetails />
+            </div>
           </ScrollArea>
         </div>
       </aside>
     </div>
   );
 };
+
 
 export default EditorPage;
 
