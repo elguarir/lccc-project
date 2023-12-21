@@ -59,22 +59,23 @@ model SocialLinks {
 }
 
 model Post {
-  id         String     @id @default(cuid())
-  title      String
-  slug       String     @unique
-  excerpt    String
-  content    Json
-  main_image String?
-  status     PostStatus
-  approved   Boolean    @default(false)
-  createdAt  DateTime   @default(now())
-  updatedAt  DateTime   @updatedAt
-  author     User       @relation(fields: [userId], references: [id])
-  userId     String
-  category   Category?  @relation(fields: [categoryId], references: [id])
-  categoryId String?
-  tags       PostTag[]
-  comments   Comment[]
+  id          String     @id @default(cuid())
+  title       String
+  slug        String     @unique
+  excerpt     String
+  content     Json
+  main_image  String?
+  status      PostStatus
+  publishedAt DateTime?
+  approved    Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  author      User       @relation(fields: [userId], references: [id])
+  userId      String
+  category    Category?  @relation(fields: [categoryId], references: [id])
+  categoryId  String?
+  tags        PostTag[]
+  comments    Comment[]
 }
 
 model Comment {

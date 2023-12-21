@@ -22,6 +22,7 @@ import { TSearchResponse } from "@/types/unsplash";
 import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/lib/env/client";
 import ArticleDetails from "@/components/editor/shared/ArticleDetails";
+import { Separator } from "@/components/ui/separator";
 
 interface EditorPageProps {
   params: {
@@ -74,14 +75,14 @@ const EditorPage = ({ params }: EditorPageProps) => {
           </div>
         </main>
       </div>
-      <aside className="h-screen hidden lg:flex flex-col border-l overflow-hidden min-w-[380px] z-[2] border-border">
-        <header className="sticky z-[3] top-0 p-6 py-4 border-b bg-background">
+      <aside className="h-screen hidden lg:flex flex-col border-l overflow-hidden w-full max-w-[390px] z-[2] border-border">
+        <header className="sticky shadow-sm z-[3] top-0 p-6 py-4 border-b border-border  bg-background">
           <h3 className="text-lg font-semibold">Article details</h3>
         </header>
         <div className="flex-1 overflow-y-auto">
-          <ScrollArea scrollHideDelay={1000} className="h-full px-6 py-4">
+          <ScrollArea scrollHideDelay={1000} className="h-full">
             <ScrollBar orientation="vertical" />
-            <div className="flex flex-1 h-screen">
+            <div className="flex flex-1 h-screen px-6 py-4">
               <ArticleDetails />
             </div>
           </ScrollArea>
@@ -90,7 +91,6 @@ const EditorPage = ({ params }: EditorPageProps) => {
     </div>
   );
 };
-
 
 export default EditorPage;
 
