@@ -1,8 +1,6 @@
 "use client";
-
 import EditorJS from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 
 export default function Editor() {
   const [isMounted, setIsMounted] = useState<boolean>(false);

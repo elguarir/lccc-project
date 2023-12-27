@@ -1,4 +1,4 @@
-import EditorSideBar from "@/components/editor/shared/EditorSideBar";
+import EditorSideBar from "@/components/editor/EditorSideBar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";

@@ -22,7 +22,7 @@ export const Gauge = ({
     medium: {
       width: "72",
       height: "72",
-      textSize: "text-lg",
+      textSize: "text-sm",
     },
     large: {
       width: "144",
@@ -43,7 +43,7 @@ export const Gauge = ({
         className="transform -rotate-90"
       >
         <circle
-          className="text-[#333]"
+          className="text-neutral-600"
           strokeWidth="12"
           stroke="currentColor"
           fill="transparent"
@@ -53,7 +53,7 @@ export const Gauge = ({
           cy="60"
         />
         <circle
-          className="text-[hsla(131,41%,46%,1)] animate-gauge_fill"
+          className="text-neutral-800 animate-gauge_fill"
           strokeWidth="12"
           strokeDasharray={strokeDasharray}
           strokeDashoffset={initialOffset}
@@ -71,11 +71,9 @@ export const Gauge = ({
         />
       </svg>
 
-      
-
       {showValue ? (
         <div className="absolute flex">
-          <p className={`text-white font-medium ${sizes[size].textSize}`}>
+          <p className={`text-[#e8e7e7] font-medium ${sizes[size].textSize}`}>
             {value}%
           </p>
         </div>
