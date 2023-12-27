@@ -31,43 +31,23 @@ import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Icons } from "@/assets/icons";
 import { useArticleState } from "@/lib/store/useArticleState";
+import { FormSchema } from "./FormSchema";
 
-const FormSchema = z.object({
-  slug: z.string(),
-  title: z.string().min(3).max(255),
-  coverImage: z.string().url().optional(),
-  excerpt: z
-    .string()
-    .min(3, "The excerpt is too short.")
-    .max(255, "The excerpt is too long."),
-  publishedAt: z.date().optional(),
-  tags: z.array(z.string()).optional(),
-});
-
-export default function ArticleDetails() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      slug: "my-first-article",
-      tags: ["react", "typescript"],
-    },
-  });
-
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-  }
-
+export default function ArticleDetails({
+  formState,
+  onSubmit,
+}: {
+  formState: ReturnType<typeof useForm<z.infer<typeof FormSchema>>>;
+  onSubmit: (data: z.infer<typeof FormSchema>) => void;
+}) {
   return (
-    <Form {...form}>
+    <Form {...formState}>
       <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          onSubmit(form.getValues());
-        }}
+        onSubmit={formState.handleSubmit(onSubmit)}
         className="w-full space-y-6"
       >
         <FormField
-          control={form.control}
+          control={formState.control}
           name="slug"
           render={({ field: { value, onChange, ...rest } }) => (
             <FormItem>
@@ -83,7 +63,7 @@ export default function ArticleDetails() {
         />
 
         <FormField
-          control={form.control}
+          control={formState.control}
           name="excerpt"
           render={({ field }) => (
             <FormItem>
@@ -100,7 +80,7 @@ export default function ArticleDetails() {
         />
 
         <FormField
-          control={form.control}
+          control={formState.control}
           name="coverImage"
           render={({ field }) => (
             <FormItem>
@@ -117,7 +97,7 @@ export default function ArticleDetails() {
         />
 
         <FormField
-          control={form.control}
+          control={formState.control}
           name="tags"
           render={({ field }) => (
             <FormItem>
@@ -141,7 +121,7 @@ export default function ArticleDetails() {
                       {tag}
                       <button
                         onClick={() => {
-                          form.setValue(
+                          formState.setValue(
                             "tags",
                             field?.value?.filter((_, i) => i !== index) ?? [],
                           );
@@ -161,7 +141,7 @@ export default function ArticleDetails() {
         />
 
         <FormField
-          control={form.control}
+          control={formState.control}
           name="publishedAt"
           render={({ field }) => (
             <FormItem>
@@ -208,7 +188,9 @@ export default function ArticleDetails() {
           )}
         />
         <div className="flex items-center justify-end w-full">
-          <Button size={"sm"} type="submit">Submit</Button>
+          <Button size={"sm"} type="submit">
+            Submit
+          </Button>
         </div>
       </form>
     </Form>
