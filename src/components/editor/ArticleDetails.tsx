@@ -54,19 +54,18 @@ export default function ArticleDetails() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast({
-      title: "You submitted the following values:",
-      description: (
-        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-          <code className="text-white">{JSON.stringify(data, null, 2)}</code>
-        </pre>
-      ),
-    });
+    console.log(data);
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-full space-y-6">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmit(form.getValues());
+        }}
+        className="w-full space-y-6"
+      >
         <FormField
           control={form.control}
           name="slug"
@@ -174,7 +173,7 @@ export default function ArticleDetails() {
                       <Button
                         variant={"outline"}
                         className={cn(
-                          "w-full pl-3 text-left font-normal",
+                          "w-full pl-3 h-9 text-left font-normal",
                           !field.value && "text-muted-foreground",
                         )}
                       >
@@ -209,7 +208,7 @@ export default function ArticleDetails() {
           )}
         />
         <div className="flex items-center justify-end w-full">
-          <Button type="submit">Submit</Button>
+          <Button size={"sm"} type="submit">Submit</Button>
         </div>
       </form>
     </Form>
@@ -292,6 +291,7 @@ const SlugInput = ({ value, onChange, rest }: SlugInputProps) => {
                   trim: true,
                 });
                 setInputValue(slug);
+                onChange(slug);
               }
               setEditMode(!editMode);
             }}

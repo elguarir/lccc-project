@@ -35,12 +35,12 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
       upload({
         file,
         onUploadProgress: (progress) => {
+          console.log(progress);
           setProgress(progress);
         },
         onUploadComplete: (url) => {
           onChange(url);
           setProgress(null);
-          URL.revokeObjectURL(preview ?? "");
         },
       });
     },
@@ -49,6 +49,14 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
       toast.error("The file you uploaded is not an image, try again!");
     },
   });
+
+  useEffect(() => {
+    if (progress) {
+      return () => {
+        URL.revokeObjectURL(preview ?? "");
+      };
+    }
+  }, [progress]);
 
   if (progress)
     return (
