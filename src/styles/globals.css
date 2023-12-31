@@ -280,7 +280,7 @@
   @apply transition-colors duration-200 ease-in-out hover:bg-muted;
 }
 
-.dark  .ce-block__content,
+.dark .ce-block__content,
 .dark .ce-inline-toolbar,
 .dark .codex-editor--narrow .ce-toolbox,
 .dark .ce-conversion-toolbar,
@@ -345,4 +345,11 @@
 
 .dark .cdx-block {
   width: 100% !important;
+}
+
+
+
+
+#editor blockquote {
+  @apply font-serif;
 }

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { Icons } from "@/assets/icons";
@@ -21,8 +21,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { env } from "@/lib/env/client";
 import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useArticleState } from "@/lib/store/useArticleState";
+import Editor from "./editor";
 const ArticleEditor = () => {
-  let { title, setTitle } = useArticleState((state) => state);
 
   return (
     <div className="grid w-full gap-y-8">
@@ -38,14 +38,17 @@ const ArticleEditor = () => {
           Add Subtitle
         </Button>
       </div>
-      <div className="">
-        <input
+      <div className="grid w-full gap-2">
+        {/* <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
           type="text"
           placeholder="Article title..."
-          className="w-full bg-transparent outline-none p-2 font-semibold text-4xl placeholder:font-semibold placeholder:text-4xl placeholder:text-muted-foreground rounded-[0.75rem] focus:outline-none"
-        />
+          className="w-full bg-transparent outline-none p-2 font-semibold max-sm:text-3xl max-sm:placeholder:text-3xl text-4xl placeholder:font-semibold placeholder:text-4xl placeholder:text-muted-foreground rounded-[0.75rem] focus:outline-none"
+        /> */}
+        <div className="relative w-full py-3">
+          <Editor />
+        </div>
       </div>
     </div>
   );

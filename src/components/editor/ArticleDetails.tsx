@@ -15,7 +15,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "@/components/ui/use-toast";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, X } from "lucide-react";
@@ -48,10 +47,32 @@ export default function ArticleDetails({
       >
         <FormField
           control={formState.control}
+          name="title"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>
+                Title
+                <span className="ml-1 text-red-600 opacity-70">*</span>
+              </FormLabel>
+              <FormControl>
+                <Input {...field} />
+              </FormControl>
+              <FormDescription>
+                This is the title of your article.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={formState.control}
           name="slug"
           render={({ field: { value, onChange, ...rest } }) => (
             <FormItem>
-              <FormLabel>Slug</FormLabel>
+              <FormLabel>
+                Slug
+                <span className="ml-1 text-red-600 opacity-70">*</span>
+              </FormLabel>
               <SlugInput value={value} onChange={onChange} rest={rest} />
               <FormDescription>
                 This is the slug of your article, you can generate it from the
@@ -67,7 +88,10 @@ export default function ArticleDetails({
           name="excerpt"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Excerpt</FormLabel>
+              <FormLabel>
+                Excerpt
+                <span className="ml-1 text-red-600 opacity-70">*</span>
+              </FormLabel>
               <FormControl>
                 <Textarea {...field} />
               </FormControl>
@@ -84,7 +108,10 @@ export default function ArticleDetails({
           name="coverImage"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Cover Image</FormLabel>
+              <FormLabel>
+                Cover Image
+                <span className="ml-1 text-red-600 opacity-70">*</span>
+              </FormLabel>
               <FormControl>
                 <ImageUpload value={field.value} onChange={field.onChange} />
               </FormControl>
@@ -146,7 +173,10 @@ export default function ArticleDetails({
           render={({ field }) => (
             <FormItem>
               <div className="grid w-full gap-2">
-                <FormLabel>Published At</FormLabel>
+                <FormLabel>
+                  Published At
+                  <span className="ml-1 text-red-600 opacity-70">*</span>
+                </FormLabel>
                 <Popover>
                   <PopoverTrigger asChild>
                     <FormControl>
