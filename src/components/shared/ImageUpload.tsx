@@ -8,13 +8,15 @@ import { Icons } from "@/assets/icons";
 import useUpload from "@/hooks/use-cloudinary-upload";
 import { X } from "lucide-react";
 import { Gauge } from "../ui/gauge";
+import { FormControl } from "../ui/form";
 
 interface ImageUploadProps {
   value?: string;
   onChange: (value: string) => void;
+  control?: boolean;
 }
 
-const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
+const ImageUpload = ({ value, control, onChange }: ImageUploadProps) => {
   let [progress, setProgress] = useState<null | number>(null);
   const { upload } = useUpload();
   let [preview, setPreview] = useState<string | null>(null);
@@ -96,14 +98,20 @@ const ImageUpload = ({ value, onChange }: ImageUploadProps) => {
   return (
     <div
       className={cn(
-        "w-full h-44 border-2 flex-col gap-2 transition-colors duration-200 border-dashed rounded-lg border-border flex items-center justify-center",
+        "w-full h-44  focus-visible:outline-primary border-2 flex-col gap-2 transition-colors duration-200 border-dashed rounded-lg border-border flex items-center justify-center",
         isDragActive && "border-primary",
         isDragReject && "border-destructive",
         isDragAccept && "border-green-600",
       )}
       {...getRootProps()}
     >
-      <input {...getInputProps()} />
+      {control ? (
+        <FormControl>
+          <input {...getInputProps()} />
+        </FormControl>
+      ) : (
+        <input {...getInputProps()} />
+      )}
       {isDragActive ? (
         <>
           <span className="text-lg font-medium text-center text-muted-foreground">

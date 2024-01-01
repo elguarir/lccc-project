@@ -1,6 +1,7 @@
 "use client";
 import EditorJS from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
 export default function Editor() {
   const [isMounted, setIsMounted] = useState<boolean>(false);
@@ -61,7 +62,7 @@ export default function Editor() {
     <div className="w-full max-w-full mx-auto space-y-2 prose dark:prose-neutral dark:prose-invert">
       <div
         id="editor"
-        className="min-h-[600px] w-full max-w-[calc(100vw-40px)] sm:max-w-[calc(100vw-60px)] md:max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-480px)] xl:max-w-[calc(100vw-600px)] rounded-lg px-6 p-4"
+        className="w-full max-w-[calc(100vw-40px)] sm:max-w-[calc(100vw-60px)] md:max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-480px)] xl:max-w-[calc(100vw-600px)] rounded-lg px-6 p-4"
       />
     </div>
   );

@@ -39,6 +39,8 @@ export default function ArticleDetails({
   formState: ReturnType<typeof useForm<z.infer<typeof FormSchema>>>;
   onSubmit: (data: z.infer<typeof FormSchema>) => void;
 }) {
+  let title = formState.watch("title");
+
   return (
     <Form {...formState}>
       <form
@@ -73,7 +75,12 @@ export default function ArticleDetails({
                 Slug
                 <span className="ml-1 text-red-600 opacity-70">*</span>
               </FormLabel>
-              <SlugInput value={value} onChange={onChange} rest={rest} />
+              <SlugInput
+                value={value}
+                title={title}
+                onChange={onChange}
+                rest={rest}
+              />
               <FormDescription>
                 This is the slug of your article, you can generate it from the
                 title or choose one yourself.
@@ -112,9 +119,11 @@ export default function ArticleDetails({
                 Cover Image
                 <span className="ml-1 text-red-600 opacity-70">*</span>
               </FormLabel>
-              <FormControl>
-                <ImageUpload value={field.value} onChange={field.onChange} />
-              </FormControl>
+              <ImageUpload
+                control={true}
+                value={field.value}
+                onChange={field.onChange}
+              />
               <FormDescription>
                 This is the main image of your article.
               </FormDescription>
@@ -269,13 +278,13 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
 type SlugInputProps = {
   value?: string;
   onChange: (value: string) => void;
+  title: string;
   rest: any;
 };
 
-const SlugInput = ({ value, onChange, rest }: SlugInputProps) => {
+const SlugInput = ({ value, title, onChange, rest }: SlugInputProps) => {
   let [editMode, setEditMode] = useState(false);
   let [inputValue, setInputValue] = useState(value);
-  let { title } = useArticleState((state) => state);
   return (
     <div className="relative flex items-center w-full gap-2">
       <>

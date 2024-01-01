@@ -23,7 +23,6 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 import { useArticleState } from "@/lib/store/useArticleState";
 import Editor from "./editor";
 const ArticleEditor = () => {
-
   return (
     <div className="grid w-full gap-y-8">
       <div className="flex items-center gap-3">
