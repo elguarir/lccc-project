@@ -18,6 +18,7 @@ export default function Editor() {
     const InlineCode = (await import("@editorjs/inline-code" as any)).default;
     const Checklist = (await import("@editorjs/checklist" as any)).default;
     const Quote = (await import("@editorjs/quote" as any)).default;
+    const Delimiter = (await import("@editorjs/delimiter" as any)).default;
 
     if (!ref.current) {
       const editor: EditorJS = new EditorJS({
@@ -33,6 +34,7 @@ export default function Editor() {
           quote: Quote,
           list: List,
           checklist: Checklist,
+          delimiter: Delimiter,
           code: Code,
           inlineCode: InlineCode,
           table: Table,
