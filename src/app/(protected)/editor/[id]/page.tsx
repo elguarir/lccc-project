@@ -9,6 +9,7 @@ import { notFound } from "next/navigation";
 import CoverImageUpload from "@/components/editor/CoverImageUpload";
 import Editor from "@/components/editor/editor";
 import { getArticleById } from "@/server/routers/article";
+import { auth } from "@clerk/nextjs";
 
 interface EditorPageProps {
   params: {
@@ -16,7 +17,9 @@ interface EditorPageProps {
   };
 }
 const EditorPage = async ({ params }: EditorPageProps) => {
-  let article = await getArticleById(params.id);
+  let { userId } = auth();
+  if (!userId) return notFound();
+  let article = await getArticleById({ id: params.id, userId });
 
   if (!article) notFound();
   return (

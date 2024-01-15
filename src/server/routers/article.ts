@@ -31,20 +31,27 @@ export const articleRouter = router({
           name: input.name,
           slug: slugIt(input.name),
         },
-        select:{
-          id:true,
-          name:true,
-          slug:true
-        }
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
       });
       return tag;
     }),
 });
 
-export async function getArticleById(id: string) {
+export async function getArticleById({
+  id,
+  userId,
+}: {
+  id: string;
+  userId: string;
+}) {
   let article = await db.article.findUnique({
     where: {
       id,
+      userId,
     },
     select: {
       id: true,
