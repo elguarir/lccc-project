@@ -12,11 +12,7 @@ export async function GET(req: Request) {
       id: userId,
     },
     include: {
-      profile: {
-        include: {
-          socialLinks: true,
-        },
-      },
+      profile: true,
     },
   });
   if (!user) {
