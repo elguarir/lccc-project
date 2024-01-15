@@ -8,11 +8,11 @@ const ToasterProvider = () => {
   if (!theme) return null;
   return (
     <Toaster
-    // there's some kind if ts error here that's why I used ternary operator xd, kinda weired.
+      // there's some kind if ts error here that's why I used ternary operator xd, kinda weird.
       theme={
         theme === "system" ? "system" : theme === "light" ? "light" : "dark"
       }
-      richColors
+      // richColors
       closeButton
     />
   );

@@ -1,11 +1,15 @@
 "use client";
-import EditorJS from "@editorjs/editorjs";
+import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 
-export default function Editor() {
+interface EditorProps {
+  initialValue?: OutputData;
+}
+
+export default function Editor({ initialValue }: EditorProps) {
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const ref = useRef<EditorJS>();
+  let [data, setData] = useState<OutputData | undefined>(initialValue);
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
@@ -26,6 +30,12 @@ export default function Editor() {
         onReady() {
           ref.current = editor;
         },
+        data,
+        onChange: async () => {
+          const savedData = await editor.save();
+          console.log(savedData);
+          setData(savedData);
+        },
         placeholder: "Type your page content here...",
         inlineToolbar: true,
         tools: {
@@ -43,7 +53,6 @@ export default function Editor() {
       });
     }
   }, []);
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsMounted(true);

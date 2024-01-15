@@ -79,11 +79,6 @@ export async function POST(req: Request) {
         profile: {
           create: {
             userId: user.id,
-            socialLinks: {
-              create: {
-                userId: user.id,
-              },
-            },
           },
         },
       },

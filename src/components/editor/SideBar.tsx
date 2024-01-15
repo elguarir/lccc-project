@@ -9,18 +9,31 @@ import ArticleDetails from "./ArticleDetails";
 import { ArrowBigLeftDash } from "lucide-react";
 import { FormSchema } from "./FormSchema";
 import { Button } from "../ui/button";
+import { TArticleById } from "@/server/routers/article";
+import { memo, useEffect } from "react";
 
-const SideBar = () => {
+interface SideBarProps {
+  article?: TArticleById;
+}
+
+const SideBar = ({ article }: SideBarProps) => {
   const { isMobile, isTablet } = useMediaQuery();
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      slug: "my-first-article",
-      tags: ["react", "typescript"],
+      title: article?.title ?? undefined,
+      excerpt: article?.excerpt ?? undefined,
+      coverImage: article?.main_image ?? undefined,
+      publishedAt: article?.publishedAt ?? undefined,
+      slug: article?.slug ?? undefined,
+      tags: article?.tags ?? undefined,
     },
   });
 
+  useEffect(() => {
+    console.log(article);
+  }, [article]);
+  
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
   }
@@ -72,4 +85,4 @@ const SideBar = () => {
   );
 };
 
-export default SideBar;
+export default memo(SideBar);

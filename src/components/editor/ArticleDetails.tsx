@@ -1,9 +1,6 @@
 "use client";
-
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
-import slugify from "slugify";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -29,8 +26,9 @@ import { cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Icons } from "@/assets/icons";
-import { useArticleState } from "@/lib/store/useArticleState";
 import { FormSchema } from "./FormSchema";
+import slugIt from "@/lib/helpers/slugify";
+import { trpc } from "@/server/client";
 
 export default function ArticleDetails({
   formState,
@@ -77,7 +75,7 @@ export default function ArticleDetails({
               </FormLabel>
               <SlugInput
                 value={value}
-                title={title}
+                title={title ?? ""}
                 onChange={onChange}
                 rest={rest}
               />
@@ -154,12 +152,12 @@ export default function ArticleDetails({
                       variant={"outline"}
                       key={index}
                     >
-                      {tag}
+                      {tag.name}
                       <button
                         onClick={() => {
                           formState.setValue(
                             "tags",
-                            field?.value?.filter((_, i) => i !== index) ?? [],
+                            field?.value?.filter((t, i) => t.slug !== tag.slug),
                           );
                         }}
                         type="button"
@@ -237,19 +235,51 @@ export default function ArticleDetails({
 }
 
 type TagInputProps = {
-  value?: string[];
-  onChange: (value: string[]) => void;
+  value?: {
+    id: string;
+    name: string;
+    slug: string;
+  }[];
+  onChange: (value: z.infer<typeof FormSchema>["tags"]) => void;
 };
 
 const TagInput = ({ value, onChange }: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
+  const { mutate: createTag, isLoading } = trpc.article.createTag.useMutation();
+  const handleSubmit = () => {
+    let alreadyExists = value?.find((tag) => tag.slug === slugIt(inputValue));
+    if (alreadyExists) {
+      setInputValue("");
+      return;
+    }
+    if (inputValue) {
+      createTag(
+        { name: inputValue },
+        {
+          onSuccess: (data) => {
+            onChange([...(value ?? []), data]);
+          },
+        },
+      );
+      setInputValue("");
+    }
+  };
 
   return (
     <div className="flex items-center w-full gap-2">
       <FormControl>
         <Input
           value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") {
+              e.preventDefault();
+              handleSubmit();
+            }
+          }}
+          disabled={isLoading}
+          onChange={(e) => {
+            setInputValue(e.target.value);
+          }}
           className="h-9"
           placeholder="Write a tag and press enter..."
         />
@@ -258,14 +288,10 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
         type="button"
         onClick={(e) => {
           e.preventDefault();
-          const alreadyExists = value?.includes(inputValue);
-          if (inputValue && !alreadyExists) {
-            onChange([...(value ?? []), inputValue]);
-            setInputValue("");
-          } else {
-            setInputValue("");
-          }
+          handleSubmit();
         }}
+        isLoading={isLoading}
+        loadingText="..."
         size={"sm"}
         variant={"outline"}
       >
@@ -306,11 +332,7 @@ const SlugInput = ({ value, title, onChange, rest }: SlugInputProps) => {
             type="button"
             onClick={() => {
               if (editMode) {
-                let slug = slugify(inputValue ?? "", {
-                  lower: true,
-                  strict: true,
-                  trim: true,
-                });
+                let slug = slugIt(inputValue ?? "");
                 setInputValue(slug);
                 onChange(slug);
               }
@@ -333,11 +355,7 @@ const SlugInput = ({ value, title, onChange, rest }: SlugInputProps) => {
       </>
       <Button
         onClick={() => {
-          let slug = slugify(title, {
-            lower: true,
-            strict: true,
-            trim: true,
-          });
+          let slug = slugIt(title ?? "");
           setInputValue(slug);
           onChange(slug);
         }}

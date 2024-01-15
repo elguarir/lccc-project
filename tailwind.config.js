@@ -13,9 +13,6 @@ module.exports = {
       },
     },
     extend: {
-      backgroundImage: {
-        header: "url('/images/banner-2.svg')",
-      },
       maxWidth: {
         "8xl": "85rem",
       },

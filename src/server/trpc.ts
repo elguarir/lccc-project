@@ -16,34 +16,35 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
       message: "You must be logged in to do this.",
     });
   }
-
   const dbuser = await prisma.user.findUnique({
     where: {
       id: user.id,
     },
     include: {
-      profile: {
-        include: {
-          socialLinks: true,
-        },
-      },
+      profile: true,
     },
   });
+  if (!dbuser) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You must be logged in to do this.",
+    });
+  }
+
   return next({
     ctx: {
       ...ctx,
       user: {
         id: user.id,
-        username: user.publicMetadata.username,
-        email: user.emailAddresses[0].emailAddress,
-        role: dbuser?.role,
-        profile: dbuser?.profile,
+        username: dbuser.username,
+        email: dbuser.email,
+        role: dbuser.role,
+        profile: dbuser.profile,
       },
       prisma,
     },
   });
 });
-
 
 export const router = t.router;
 export const publicProcedure = t.procedure.use((opts) => {
