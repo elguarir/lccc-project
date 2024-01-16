@@ -1,15 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { ChevronLeft, Subtitles } from "lucide-react";
-import Link from "next/link";
-import ArticleEditor from "@/components/editor/ArticleEditor";
 import SideBar from "@/components/editor/SideBar";
-import db from "@/prisma";
 import { notFound } from "next/navigation";
 import CoverImageUpload from "@/components/editor/CoverImageUpload";
 import Editor from "@/components/editor/editor";
 import { getArticleById } from "@/server/routers/article";
 import { auth } from "@clerk/nextjs";
+import ArticleStatus from "@/components/editor/ArticleStatus";
 
 interface EditorPageProps {
   params: {
@@ -36,14 +34,12 @@ const EditorPage = async ({ params }: EditorPageProps) => {
                 className="font-medium"
                 size={"sm"}
               >
-                <Link href={"/dashboard"}>
+                <a href={"/dashboard"}>
                   <ChevronLeft className="mr-2" size={16} />
                   Back
-                </Link>
+                </a>
               </Button>
-              <span className="text-sm font-medium text-muted-foreground">
-                Published
-              </span>
+              <ArticleStatus />
             </div>
           </header>
           <main className="flex flex-col flex-1 w-full h-full max-w-4xl py-6 mx-auto lg:py-16 lg:px-4">
@@ -62,7 +58,10 @@ const EditorPage = async ({ params }: EditorPageProps) => {
               </div>
               <div className="grid w-full gap-2">
                 <div className="relative w-full py-3">
-                  <Editor initialValue={article.content as any} />
+                  <Editor
+                    articleId={article.id}
+                    initialValue={article.content as any}
+                  />
                 </div>
               </div>
             </div>

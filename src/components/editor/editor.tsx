@@ -1,15 +1,23 @@
 "use client";
+import { useDebounce } from "@/hooks/use-debounce";
+import { useArticleState } from "@/lib/store/useArticleState";
+import { trpc } from "@/server/client";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface EditorProps {
   initialValue?: OutputData;
+  articleId: string;
 }
 
-export default function Editor({ initialValue }: EditorProps) {
+export default function Editor({ initialValue, articleId }: EditorProps) {
   const [isMounted, setIsMounted] = useState<boolean>(false);
   const ref = useRef<EditorJS>();
-  let [data, setData] = useState<OutputData | undefined>(initialValue);
+  const [data, setData] = useState<OutputData | undefined>(initialValue);
+  let debouncedData = useDebounce(data, 1500);
+  const setSaving = useArticleState((state) => state.setSaving);
+  const { mutate: update, isLoading } =
+    trpc.article.updateContent.useMutation();
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
@@ -33,7 +41,6 @@ export default function Editor({ initialValue }: EditorProps) {
         data,
         onChange: async () => {
           const savedData = await editor.save();
-          console.log(savedData);
           setData(savedData);
         },
         placeholder: "Type your page content here...",
@@ -53,12 +60,33 @@ export default function Editor({ initialValue }: EditorProps) {
       });
     }
   }, []);
+
+  // Update article content
+  useEffect(() => {
+    if (debouncedData) {
+      setSaving(true);
+      update(
+        { id: articleId, content: debouncedData },
+        {
+          onSettled: () => {
+            setSaving(false);
+          },
+          onError(error) {
+            console.log(error);
+          },
+        },
+      );
+    }
+  }, [debouncedData]);
+
+  // isMounted is used to prevent SSR errors
   useEffect(() => {
     if (typeof window !== "undefined") {
       setIsMounted(true);
     }
   }, []);
 
+  // Initialize editor
   useEffect(() => {
     if (isMounted) {
       initializeEditor();

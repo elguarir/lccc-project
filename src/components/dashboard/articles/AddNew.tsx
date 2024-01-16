@@ -11,7 +11,8 @@ const AddNew = () => {
   const router = useRouter();
   return (
     <Button
-      className="flex items-center justify-center px-4 h-9 md:h-10"
+      size={"sm"}
+      className="flex items-center justify-center px-4"
       onClick={() =>
         create(
           {},

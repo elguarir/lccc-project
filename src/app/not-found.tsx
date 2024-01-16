@@ -1,16 +1,14 @@
-
 import GoBackButton from "@/components/shared/GoBackButton";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import React from "react";
 
 function notFound() {
-
   return (
     <div className="absolute top-0  h-screen w-screen bg-background bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
       <div className="container flex items-center min-h-screen px-6 py-12 mx-auto">
         <div className="flex flex-col items-center max-w-sm mx-auto text-center">
-          <p className="p-3 text-sm font-medium rounded-full text-primary bg-primary-50 dark:bg-gray-800">
+          <div className="p-3 text-sm font-medium rounded-full text-primary bg-primary-50 dark:bg-gray-800">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -25,7 +23,7 @@ function notFound() {
                 d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z"
               />
             </svg>
-          </p>
+          </div>
           <h1 className="mt-3 text-2xl font-semibold text-gray-800 dark:text-white md:text-3xl">
             Page not found
           </h1>

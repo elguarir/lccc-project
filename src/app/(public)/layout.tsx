@@ -1,4 +1,5 @@
 import NavBar from "@/components/site/NavBar";
+import ProgressBarProvider from "@/providers/ProgressBarProvider";
 import React from "react";
 
 type Props = {
@@ -7,12 +8,14 @@ type Props = {
 
 function PublicLayout({ children }: Props) {
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <NavBar />
-      <div className="flex justify-center flex-1  w-full h-[calc(100vh-69px)] ">
-        {children}
+    <ProgressBarProvider>
+      <div className="min-h-screen bg-background text-foreground">
+        <NavBar />
+        <div className="flex justify-center flex-1  w-full h-[calc(100vh-69px)] ">
+          {children}
+        </div>
       </div>
-    </div>
+    </ProgressBarProvider>
   );
 }
 

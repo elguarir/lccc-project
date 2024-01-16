@@ -75,7 +75,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               strokeWidth={2}
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="w-3.5 h-3.5 mr-2 animate-spin"
+              className={cn(
+                "w-3.5 h-3.5 animate-spin",
+                loadingText ? "mr-2" : "",
+              )}
             >
               <path d="M21 12a9 9 0 1 1-6.219-8.56" />
             </svg>

@@ -40,18 +40,16 @@ export default function RootLayout({ children }: RootLayoutProps) {
             fontMono.variable,
           )}
         >
-          <ProgressBarProvider>
-            <ThemeProvider attribute="class" defaultTheme="light">
-              <ClerkThemeProvider>
-                <TrpcClientProvider>
-                  <div className="relative flex flex-col min-h-screen">
-                    {children}
-                  </div>
-                  <ToasterProvider />
-                </TrpcClientProvider>
-              </ClerkThemeProvider>
-            </ThemeProvider>
-          </ProgressBarProvider>
+          <ThemeProvider attribute="class" defaultTheme="light">
+            <ClerkThemeProvider>
+              <TrpcClientProvider>
+                <div className="relative flex flex-col min-h-screen">
+                  {children}
+                </div>
+                <ToasterProvider />
+              </TrpcClientProvider>
+            </ClerkThemeProvider>
+          </ThemeProvider>
         </body>
       </html>
     </>

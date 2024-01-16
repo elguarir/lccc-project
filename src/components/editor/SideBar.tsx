@@ -11,6 +11,7 @@ import { FormSchema } from "./FormSchema";
 import { Button } from "../ui/button";
 import { TArticleById } from "@/server/routers/article";
 import { memo, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface SideBarProps {
   article?: TArticleById;
@@ -30,10 +31,20 @@ const SideBar = ({ article }: SideBarProps) => {
     },
   });
 
+  const router = useRouter();
+
   useEffect(() => {
-    console.log(article);
-  }, [article]);
-  
+    const isDirty = form.formState.isDirty;
+    if (isDirty) {
+      window.onbeforeunload = () => true;
+    } else {
+      window.onbeforeunload = null;
+    }
+    return () => {
+      window.onbeforeunload = null;
+    };
+  }, [form.formState.isDirty]);
+
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
   }
@@ -51,7 +62,7 @@ const SideBar = ({ article }: SideBarProps) => {
           </Button>
         </SheetTrigger>
         <SheetContent className="p-0 w-full  max-w-[390px]">
-          <aside className="flex flex-col w-full h-screen pb-6">
+          <aside className="flex flex-col w-full h-screen">
             <header className="sticky top-0 p-6 py-4 border-b">
               <h3 className="text-lg font-semibold">Article details</h3>
             </header>

@@ -2,6 +2,7 @@ import initialEditorValue from "@/lib/constants/initialEditorValue";
 import slugIt from "@/lib/helpers/slugify";
 import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
+import { JsonArray } from "@prisma/client/runtime/library";
 import { z } from "zod";
 
 export const articleRouter = router({
@@ -38,6 +39,24 @@ export const articleRouter = router({
         },
       });
       return tag;
+    }),
+  updateContent: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        content: z.any(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let article = await ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          content: input.content,
+        },
+      });
+      return article;
     }),
 });
 

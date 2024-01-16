@@ -15,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { CalendarIcon, X } from "lucide-react";
-import { useState } from "react";
+import {  useState } from "react";
 import ImageUpload from "@/components/shared/ImageUpload";
 import {
   Popover,
@@ -38,7 +38,7 @@ export default function ArticleDetails({
   onSubmit: (data: z.infer<typeof FormSchema>) => void;
 }) {
   let title = formState.watch("title");
-
+  
   return (
     <Form {...formState}>
       <form
@@ -148,7 +148,7 @@ export default function ArticleDetails({
                 <div className="flex flex-wrap gap-2 mt-2">
                   {field.value.map((tag, index) => (
                     <Badge
-                      className="flex items-center gap-1"
+                      className="flex items-center gap-1 pr-2"
                       variant={"outline"}
                       key={index}
                     >
@@ -163,7 +163,7 @@ export default function ArticleDetails({
                         type="button"
                         className="focus-visible:outline-primary"
                       >
-                        <X className="w-4 h-4" />
+                        <X className="w-3 h-3" />
                       </button>
                     </Badge>
                   ))}
@@ -291,7 +291,6 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
           handleSubmit();
         }}
         isLoading={isLoading}
-        loadingText="..."
         size={"sm"}
         variant={"outline"}
       >
