@@ -24,7 +24,6 @@ const EditorPage = async ({ params }: EditorPageProps) => {
     <div className="relative flex flex-1 w-full h-screen">
       <ScrollArea className="w-full h-screen">
         <ScrollBar orientation="vertical" />
-
         <div className="container flex flex-col w-full h-screen py-8 max-sm:px-3">
           <header className="flex items-center justify-between w-full">
             <div className="flex items-center gap-4">

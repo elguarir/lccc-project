@@ -6,12 +6,11 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import ArticleDetails from "./ArticleDetails";
-import { ArrowBigLeftDash } from "lucide-react";
-import { FormSchema } from "./FormSchema";
+import { MoreVertical } from "lucide-react";
+import { FormSchema } from "../../lib/validators/ArticleDetailsValidator";
 import { Button } from "../ui/button";
 import { TArticleById } from "@/server/routers/article";
 import { memo, useEffect } from "react";
-import { useRouter } from "next/navigation";
 
 interface SideBarProps {
   article?: TArticleById;
@@ -28,10 +27,9 @@ const SideBar = ({ article }: SideBarProps) => {
       publishedAt: article?.publishedAt ?? undefined,
       slug: article?.slug ?? undefined,
       tags: article?.tags ?? undefined,
+      category: article?.category?.id ?? undefined,
     },
   });
-
-  const router = useRouter();
 
   useEffect(() => {
     const isDirty = form.formState.isDirty;
@@ -45,20 +43,15 @@ const SideBar = ({ article }: SideBarProps) => {
     };
   }, [form.formState.isDirty]);
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-  }
-
   if (isMobile || isTablet)
     return (
       <Sheet>
         <SheetTrigger asChild>
           <Button
-            variant={"outline"}
-            className="absolute w-10 p-0 right-4 top-4"
-            size={"sm"}
+            variant={"ghost"}
+            className="absolute w-9 h-9 !p-0 right-4 top-4"
           >
-            <ArrowBigLeftDash className="" size={24} />
+            <MoreVertical className="w-4 h-4" />
           </Button>
         </SheetTrigger>
         <SheetContent className="p-0 w-full  max-w-[390px]">
@@ -70,7 +63,7 @@ const SideBar = ({ article }: SideBarProps) => {
               <ScrollArea scrollHideDelay={1000} className="h-full">
                 <ScrollBar orientation="vertical" />
                 <div className="flex flex-1 px-6 py-4 pb-6">
-                  <ArticleDetails formState={form} onSubmit={onSubmit} />
+                  <ArticleDetails articleId={article!!.id} formState={form} />
                 </div>
               </ScrollArea>
             </div>
@@ -88,7 +81,7 @@ const SideBar = ({ article }: SideBarProps) => {
         <ScrollArea scrollHideDelay={1000} className="h-full">
           <ScrollBar orientation="vertical" />
           <div className="flex flex-1 px-6 py-4 pb-6">
-            <ArticleDetails formState={form} onSubmit={onSubmit} />
+            <ArticleDetails articleId={article!!.id} formState={form} />
           </div>
         </ScrollArea>
       </div>
