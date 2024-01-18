@@ -1,3 +1,4 @@
+import Footer from "@/components/site/Footer";
 import NavBar from "@/components/site/NavBar";
 import ProgressBarProvider from "@/providers/ProgressBarProvider";
 import React from "react";
@@ -11,9 +12,12 @@ function PublicLayout({ children }: Props) {
     <ProgressBarProvider>
       <div className="min-h-screen bg-background text-foreground">
         <NavBar />
-        <div className="flex justify-center flex-1  w-full h-[calc(100vh-69px)] ">
+        <div className="container py-2.5 max-md:px-6 flex flex-1  w-full min-h-[calc(100vh-69px)] ">
           {children}
         </div>
+      </div>
+      <div>
+        <Footer />
       </div>
     </ProgressBarProvider>
   );
