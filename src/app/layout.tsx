@@ -4,10 +4,9 @@ import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import "@/styles/globals.css";
 import type { Metadata } from "next";
-import ToasterProvider from "@/components/dashboard/shared/Toaster";
 import TrpcClientProvider from "@/providers/TrpcClientProvider";
 import ClerkThemeProvider from "@/providers/ClerkProvider";
-import ProgressBarProvider from "@/providers/ProgressBarProvider";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: {
@@ -46,7 +45,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <div className="relative flex flex-col min-h-screen">
                   {children}
                 </div>
-                <ToasterProvider />
+                <Toaster closeButton /> 
               </TrpcClientProvider>
             </ClerkThemeProvider>
           </ThemeProvider>

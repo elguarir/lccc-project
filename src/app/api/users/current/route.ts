@@ -11,8 +11,26 @@ export async function GET(req: Request) {
     where: {
       id: userId,
     },
-    include: {
-      profile: true,
+    select: {
+      id: true,
+      email: true,
+      first_name: true,
+      last_name: true,
+      username: true,
+      createdAt: true,
+      updatedAt: true,
+      role: true,
+      avatar_url: true,
+      profile: {
+        select: {
+          bio: true,
+          facebook: true,
+          twitter: true,
+          instagram: true,
+          github: true,
+          website: true,
+        },
+      },
     },
   });
   if (!user) {

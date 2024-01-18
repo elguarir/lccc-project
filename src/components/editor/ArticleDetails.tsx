@@ -39,7 +39,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../ui/select";
-import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 export default function ArticleDetails({
   formState,
@@ -76,7 +76,9 @@ export default function ArticleDetails({
       },
       {
         onSuccess: () => {
-          fire();
+          toast.success("Article details saved as draft!", {
+            duration: 1500,
+          });
         },
       },
     );
