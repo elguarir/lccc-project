@@ -55,7 +55,7 @@ const SideBar = ({ article }: SideBarProps) => {
           </Button>
         </SheetTrigger>
         <SheetContent className="p-0 w-full  max-w-[390px]">
-          <aside className="flex flex-col w-full h-[100dvh]">
+          <aside className="flex flex-col w-full h-[100dvh] mb-10">
             <header className="sticky top-0 p-6 py-4 border-b">
               <h3 className="text-lg font-semibold">Article details</h3>
             </header>
