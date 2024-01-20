@@ -19,7 +19,7 @@ const ArticlesPage = async () => {
         <h1 className="text-2xl font-semibold xl:text-3xl">Articles</h1>
         <AddNew />
       </header>
-
+      
       <ArticlesTable userId={userId} initialData={articles} />
     </main>
   );

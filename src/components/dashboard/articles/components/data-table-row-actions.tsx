@@ -8,18 +8,11 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
-  DropdownMenuSeparator,
   DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { articleSchema } from "../data/schema";
 import { trpc } from "@/server/client";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 interface DataTableRowActionsProps<TData> {
@@ -30,7 +23,9 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   let article = articleSchema.parse(row.original);
-  let { mutate: deleteArticle } = trpc.article.deleteArticle.useMutation();
+  let { mutateAsync: deleteArticle } = trpc.article.deleteArticle.useMutation();
+  let { mutateAsync: duplicateArticle } =
+    trpc.article.duplicateArticle.useMutation();
   let utils = trpc.useUtils();
 
   let refresh = () => {
@@ -50,20 +45,48 @@ export function DataTableRowActions<TData>({
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
         <DropdownMenuItem>Edit</DropdownMenuItem>
-        <DropdownMenuItem>Duplicate</DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => {
-            deleteArticle(
-              {
-                id: article.id,
-              },
-              {
-                onSuccess: () => {
-                  refresh();
-                  toast.success("Article deleted!", {
-                    duration: 1500,
-                  });
+          onClick={async () => {
+            toast.promise(
+              duplicateArticle(
+                {
+                  id: article.id,
                 },
+                {
+                  onSuccess: () => {
+                    refresh();
+                  },
+                },
+              ),
+              {
+                loading: "Duplicating article...",
+                success: "Article duplicated!",
+                error: "Could not duplicate article",
+                duration: 1250,
+              },
+            );
+          }}
+        >
+          Duplicate
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={async () => {
+            toast.promise(
+              deleteArticle(
+                {
+                  id: article.id,
+                },
+                {
+                  onSuccess: () => {
+                    refresh();
+                  },
+                },
+              ),
+              {
+                loading: "Deleting article...",
+                success: "Article deleted!",
+                error: "Could not delete article",
+                duration: 1250,
               },
             );
           }}

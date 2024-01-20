@@ -5,6 +5,8 @@ import { FormSchema as DraftFormSchema } from "@/lib/validators/ArticleDetailsVa
 import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
 import { z } from "zod";
+import { JsonArray } from "@prisma/client/runtime/library";
+import { TRPCError } from "@trpc/server";
 
 export const articleRouter = router({
   createTag: protectedProcedure
@@ -167,6 +169,65 @@ export const articleRouter = router({
         },
       });
       return articles;
+    }),
+  duplicateArticle: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      let article = await db.article.findUnique({
+        where: {
+          id: input.id,
+        },
+        select: {
+          id: true,
+          userId: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          content: true,
+          status: true,
+          approved: true,
+          main_image: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          tags: {
+            select: {
+              tag: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                },
+              },
+            },
+          },
+          publishedAt: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      if (!article)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "Article not found",
+        });
+      let newArticle = await ctx.prisma.article.create({
+        data: {
+          title: article.title + " (duplicated)",
+          slug: article.slug + "-duplicated",
+          excerpt: article.excerpt,
+          content: article.content as JsonArray,
+          status: "draft",
+          userId: article.userId,
+          main_image: article.main_image,
+        },
+      });
+
+      return newArticle;
     }),
   deleteArticle: protectedProcedure
     .input(z.object({ id: z.string() }))
