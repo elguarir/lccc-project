@@ -83,11 +83,7 @@ export const articleRouter = router({
           main_image: input.coverImage,
           status: "draft",
           publishedAt: input.publishedAt,
-          category: {
-            connect: {
-              id: input.category,
-            },
-          },
+          category: input.category ? { connect: { id: input.category } } : {},
         },
       });
       try {

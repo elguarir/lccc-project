@@ -12,6 +12,7 @@ import { DataTableRowActions } from "./data-table-row-actions";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { CheckCircle, X, XCircle } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import Link from "next/link";
 
 export const columns: ColumnDef<Article>[] = [
   {
@@ -76,9 +77,9 @@ export const columns: ColumnDef<Article>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[400px] truncate font-medium">
+          <Link href={`/editor/${row.getValue("id")}`}  className="max-w-[400px] truncate font-medium">
             {row.getValue("title")}
-          </span>
+          </Link>
         </div>
       );
     },
@@ -86,7 +87,7 @@ export const columns: ColumnDef<Article>[] = [
   {
     accessorKey: "status",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Status" />
+      <DataTableColumnHeader column={column} className="w-full" title="Status" />
     ),
     cell: ({ row }) => {
       const status = statuses.find(
@@ -100,7 +101,7 @@ export const columns: ColumnDef<Article>[] = [
       return (
         <div className="flex w-[100px] items-center">
           <Badge variant={status.variant}>
-            <status.icon className="w-3.5 h-3.5 mr-2" />
+            <status.icon className="w-3.5 min-w-fit h-3.5 mr-2" />
             {status.label}
           </Badge>
         </div>
@@ -119,11 +120,11 @@ export const columns: ColumnDef<Article>[] = [
       return (
         <div className="flex w-[50px] items-center">
           {row.getValue("approved") ? (
-            <div className="p-1 bg-green-400 rounded-sm w-fit h-fit">
+            <div className="p-1 bg-green-600 rounded-sm w-fit h-fit">
               <CheckCircle className="w-4 h-4 text-neutral-100" />
             </div>
           ) : (
-            <div className="p-1 bg-red-400 rounded-sm w-fit h-fit">
+            <div className="p-1 bg-red-600 rounded-sm w-fit h-fit">
               <X className="w-4 h-4 text-neutral-100" />
             </div>
           )}
