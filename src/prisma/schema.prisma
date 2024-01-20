@@ -15,7 +15,6 @@ enum Role {
 enum ArticleStatus {
   draft
   submitted
-  review
   revisions_requested
   published
 }
@@ -62,6 +61,7 @@ model Article {
   approved    Boolean       @default(false)
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+  deletedAt   DateTime?
   userId      String
   category    Category?     @relation(fields: [categoryId], references: [id])
   categoryId  String?

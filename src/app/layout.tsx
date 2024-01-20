@@ -1,4 +1,4 @@
-import { fontSans, fontHand, fontHeading, fontMono } from "@/assets/fonts";
+import { fontHand, fontHeading } from "@/assets/fonts";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -7,6 +7,8 @@ import type { Metadata } from "next";
 import TrpcClientProvider from "@/providers/TrpcClientProvider";
 import ClerkThemeProvider from "@/providers/ClerkProvider";
 import { Toaster } from "@/components/ui/sonner";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
 
 export const metadata: Metadata = {
   title: {
@@ -33,10 +35,10 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <body
           className={cn(
             "min-h-screen bg-background antialiased",
-            fontSans.className,
+            GeistSans.className,
             fontHand.variable,
             fontHeading.variable,
-            fontMono.variable,
+            GeistMono.variable,
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="light">
@@ -45,7 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <div className="relative flex flex-col min-h-screen">
                   {children}
                 </div>
-                <Toaster closeButton /> 
+                <Toaster closeButton />
               </TrpcClientProvider>
             </ClerkThemeProvider>
           </ThemeProvider>

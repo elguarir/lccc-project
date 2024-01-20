@@ -4,13 +4,16 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
-
-import { labels, priorities, statuses } from "../data/data";
-import { Task } from "../data/schema";
+import format from "date-fns/format";
+import { statuses } from "../data/data";
+import { Article } from "../data/schema";
 import { DataTableColumnHeader } from "./data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
+import { QuestionMarkIcon } from "@radix-ui/react-icons";
+import { CheckCircle, X, XCircle } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
 
-export const columns: ColumnDef<Task>[] = [
+export const columns: ColumnDef<Article>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,12 +40,33 @@ export const columns: ColumnDef<Task>[] = [
   },
   {
     accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Task" />
-    ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    header: ({ column }) => null,
+    cell: ({ row }) => null,
     enableSorting: false,
     enableHiding: false,
+    maxSize: 0,
+  },
+  {
+    accessorKey: "coverImage",
+    header: ({ column }) => null,
+    cell: ({ row }) => {
+      let imgUrl = row.getValue("coverImage") as string | undefined;
+      return (
+        <div className="flex items-center justify-center w-16">
+          {imgUrl ? (
+            <img
+              src={imgUrl}
+              className="w-full h-full rounded-[4px] aspect-video"
+            />
+          ) : (
+            <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">
+              <QuestionMarkIcon className="w-4 h-4 text-muted-foreground" />
+            </div>
+          )}
+        </div>
+      );
+    },
+    enableSorting: false,
   },
   {
     accessorKey: "title",
@@ -50,11 +74,9 @@ export const columns: ColumnDef<Task>[] = [
       <DataTableColumnHeader column={column} title="Title" />
     ),
     cell: ({ row }) => {
-      const label = labels.find((label) => label.value === row.original.label);
       return (
         <div className="flex space-x-2">
-          {label && <Badge variant="outline">{label.label}</Badge>}
-          <span className="max-w-[500px] truncate font-medium">
+          <span className="max-w-[400px] truncate font-medium">
             {row.getValue("title")}
           </span>
         </div>
@@ -77,10 +99,10 @@ export const columns: ColumnDef<Task>[] = [
 
       return (
         <div className="flex w-[100px] items-center">
-          {status.icon && (
-            <status.icon className="w-4 h-4 mr-2 text-muted-foreground" />
-          )}
-          <span>{status.label}</span>
+          <Badge variant={status.variant}>
+            <status.icon className="w-3.5 h-3.5 mr-2" />
+            {status.label}
+          </Badge>
         </div>
       );
     },
@@ -89,25 +111,47 @@ export const columns: ColumnDef<Task>[] = [
     },
   },
   {
-    accessorKey: "priority",
+    accessorKey: "approved",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Priority" />
+      <DataTableColumnHeader column={column} title="Approved" />
     ),
     cell: ({ row }) => {
-      const priority = priorities.find(
-        (priority) => priority.value === row.getValue("priority"),
-      );
-
-      if (!priority) {
-        return null;
-      }
-
       return (
-        <div className="flex items-center">
-          {priority.icon && (
-            <priority.icon className="w-4 h-4 mr-2 text-muted-foreground" />
+        <div className="flex w-[50px] items-center">
+          {row.getValue("approved") ? (
+            <div className="p-1 bg-green-400 rounded-sm w-fit h-fit">
+              <CheckCircle className="w-4 h-4 text-neutral-100" />
+            </div>
+          ) : (
+            <div className="p-1 bg-red-400 rounded-sm w-fit h-fit">
+              <X className="w-4 h-4 text-neutral-100" />
+            </div>
           )}
-          <span>{priority.label}</span>
+        </div>
+      );
+    },
+
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
+  },
+  {
+    accessorKey: "publishedAt",
+    header: ({ column }) => (
+      <DataTableColumnHeader
+        className="w-[140px]"
+        column={column}
+        title="Published At"
+      />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex w-[120px] p-0 items-center">
+          <span className="text-sm font-medium">
+            {row.getValue("publishedAt")
+              ? format(new Date(row.getValue("publishedAt")), "MMM dd, yyyy")
+              : "N/A"}
+          </span>
         </div>
       );
     },
@@ -115,6 +159,7 @@ export const columns: ColumnDef<Task>[] = [
       return value.includes(row.getValue(id));
     },
   },
+
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,

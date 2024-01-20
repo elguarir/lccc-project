@@ -113,9 +113,8 @@ export const articleRouter = router({
 
       return article;
     }),
-
   submitForApproval: protectedProcedure
-    .input(FormSchema)
+    .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
       let article = await ctx.prisma.article.update({
         where: {
@@ -127,8 +126,114 @@ export const articleRouter = router({
       });
       return article;
     }),
+  getUserArticles: protectedProcedure
+    .input(z.object({ userId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      let articles = await ctx.prisma.article.findMany({
+        where: {
+          userId: input.userId,
+          deletedAt: null,
+        },
+        select: {
+          id: true,
+          userId: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          content: true,
+          status: true,
+          approved: true,
+          main_image: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          tags: {
+            select: {
+              tag: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                },
+              },
+            },
+          },
+          publishedAt: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+      return articles;
+    }),
+  deleteArticle: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      let article = await ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          deletedAt: new Date(),
+        },
+      });
+      return article;
+    }),
 });
 
+export type TUserArticles = Awaited<ReturnType<typeof getUserArticles>>;
+export async function getUserArticles({ userId }: { userId: string }) {
+  let articles = await db.article.findMany({
+    where: {
+      userId,
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      userId: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      status: true,
+      approved: true,
+      main_image: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return articles;
+}
+
+export type TArticleById = Awaited<ReturnType<typeof getArticleById>>;
 export async function getArticleById({
   id,
   userId,
@@ -140,6 +245,7 @@ export async function getArticleById({
     where: {
       id,
       userId,
+      deletedAt: null,
     },
     select: {
       id: true,
@@ -183,5 +289,3 @@ export async function getArticleById({
 
   return formartedArticle;
 }
-
-export type TArticleById = Awaited<ReturnType<typeof getArticleById>>;

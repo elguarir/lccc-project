@@ -78,7 +78,7 @@ export default function ArticleDetails({
         onSuccess: () => {
           toast.success("Article details saved as draft!", {
             duration: 1500,
-            position: "bottom-left"
+            position: "bottom-left",
           });
         },
       },
@@ -316,7 +316,7 @@ export default function ArticleDetails({
             >
               Save as draft
             </Button>
-            <ConfirmDialog onSubmit={() => {}} />
+            <ConfirmDialog articleId={articleId} fireConfetti={fire} />
           </div>
         </fieldset>
       </form>

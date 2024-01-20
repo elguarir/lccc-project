@@ -20,19 +20,28 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-import Realistic from "react-canvas-confetti/dist/presets/realistic";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import useMediaQuery from "@/hooks/use-media-query";
 import { Icons } from "@/assets/icons";
+import { useRouter } from "next/navigation";
+import { trpc } from "@/server/client";
+import { toast } from "sonner";
 
 type TConfirmDialogProps = {
-  onSubmit: ({ onSuccess }: { onSuccess: () => void }) => void;
+  articleId: string;
+  fireConfetti: () => void;
 };
 
-const ConfirmDialog: React.FC<TConfirmDialogProps> = ({ onSubmit }) => {
+const ConfirmDialog: React.FC<TConfirmDialogProps> = ({
+  articleId,
+  fireConfetti,
+}) => {
   const { isTablet, isDesktop } = useMediaQuery();
   const [open, setOpen] = useState(false);
+  const router = useRouter();
+  const { mutate: submit, isLoading } =
+    trpc.article.submitForApproval.useMutation();
 
   if (isTablet || isDesktop) {
     return (
@@ -86,7 +95,29 @@ const ConfirmDialog: React.FC<TConfirmDialogProps> = ({ onSubmit }) => {
             >
               Cancel
             </Button>
-            <Button size={"sm"} onClick={() => {}}>
+            <Button
+              size={"sm"}
+              isLoading={isLoading}
+              loadingText="Submitting..."
+              onClick={() => {
+                submit(
+                  {
+                    id: articleId,
+                  },
+                  {
+                    onSuccess: () => {
+                      setOpen(false);
+                      toast.success("Article submitted for review!", {
+                        duration: 2000,
+                        position: "bottom-left",
+                      });
+                      fireConfetti();
+                      router.refresh();
+                    },
+                  },
+                );
+              }}
+            >
               Submit
             </Button>
           </DialogFooter>
@@ -144,7 +175,29 @@ const ConfirmDialog: React.FC<TConfirmDialogProps> = ({ onSubmit }) => {
               Cancel
             </Button>
           </DrawerClose>
-          <Button className="w-full" onClick={() => {}}>
+          <Button
+            className="w-full"
+            isLoading={isLoading}
+            loadingText="Submitting..."
+            onClick={() => {
+              submit(
+                {
+                  id: articleId,
+                },
+                {
+                  onSuccess: () => {
+                    setOpen(false);
+                    toast.success("Article submitted for review!", {
+                      duration: 2000,
+                      position: "bottom-left",
+                    });
+                    fireConfetti();
+                    router.refresh();
+                  },
+                },
+              );
+            }}
+          >
             Submit
           </Button>
         </DrawerFooter>

@@ -3,55 +3,44 @@ import {
   ArrowRightIcon,
   ArrowUpIcon,
   CheckCircledIcon,
-  CircleIcon,
-  CrossCircledIcon,
-  QuestionMarkCircledIcon,
-  StopwatchIcon,
-} from "@radix-ui/react-icons"
+  PaperPlaneIcon,
+  Pencil1Icon,
+  ReloadIcon,
+} from "@radix-ui/react-icons";
 
-export const labels = [
-  {
-    value: "bug",
-    label: "Bug",
-  },
-  {
-    value: "feature",
-    label: "Feature",
-  },
-  {
-    value: "documentation",
-    label: "Documentation",
-  },
-]
+interface Status {
+  value: string;
+  label: string;
+  variant: "default" | "outline" | "success" | "warning";
+  icon: any;
+}
 
-
-export const statuses = [
+export const statuses: Status[] = [
   {
-    value: "backlog",
-    label: "Backlog",
-    icon: QuestionMarkCircledIcon,
+    value: "draft",
+    label: "Draft",
+    variant: "outline",
+    icon: Pencil1Icon,
   },
   {
-    value: "todo",
-    label: "Todo",
-    icon: CircleIcon,
+    value: "submitted",
+    label: "Submitted",
+    variant: "success",
+    icon: PaperPlaneIcon,
   },
   {
-    value: "in progress",
-    label: "In Progress",
-    icon: StopwatchIcon,
+    value: "revisions_requested",
+    label: "Revisions Requested",
+    variant: "warning",
+    icon: ReloadIcon,
   },
   {
-    value: "done",
-    label: "Done",
+    value: "published",
+    variant: "default",
+    label: "Published",
     icon: CheckCircledIcon,
   },
-  {
-    value: "canceled",
-    label: "Canceled",
-    icon: CrossCircledIcon,
-  },
-]
+];
 
 export const priorities = [
   {
@@ -69,4 +58,4 @@ export const priorities = [
     value: "high",
     icon: ArrowUpIcon,
   },
-]
+];

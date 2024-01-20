@@ -33,7 +33,7 @@ const EditorPage = async ({ params }: EditorPageProps) => {
                 className="font-medium"
                 size={"sm"}
               >
-                <a href={"/dashboard"}>
+                <a href={"/dashboard/articles"}>
                   <ChevronLeft className="mr-2" size={16} />
                   Back
                 </a>
