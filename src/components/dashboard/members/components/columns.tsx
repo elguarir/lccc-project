@@ -2,18 +2,18 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import format from "date-fns/format";
 import { statuses } from "../data/data";
-import { Article } from "../data/schema";
-import { DataTableColumnHeader } from "../../shared/Tables/data-table-column-header";
+import { DataTableColumnHeader } from "@/components/dashboard/shared/Tables/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { CheckCircle, X } from "lucide-react";
 import Link from "next/link";
+import { Badge } from "@/components/ui/badge";
+import { User } from "../data/schema";
 
-export const columns: ColumnDef<Article>[] = [
+export const columns: ColumnDef<User>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Article>[] = [
             />
           ) : (
             <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">
-              <QuestionMarkIcon className="w-4 h-4 text-muted-foreground" />
+              <QuestionMarkIcon className="w-3.5 h-3.5 text-muted-foreground" />
             </div>
           )}
         </div>

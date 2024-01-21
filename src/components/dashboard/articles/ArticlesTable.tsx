@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { DataTable } from "./components/data-table";
+import { DataTable } from "../shared/Tables/data-table";
 import { columns } from "./components/columns";
 import { z } from "zod";
 import { trpc } from "@/server/client";
