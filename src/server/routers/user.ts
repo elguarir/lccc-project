@@ -53,32 +53,46 @@ export const userRouter = router({
           message: "You are not authorized to perform view this resource.",
         });
       }
+
+      let usernameAlreadyExists = await db.user.findUnique({
+        where: {
+          username: input.username,
+        },
+      });
+
+      let emailAlreadyExists = await db.user.findUnique({
+        where: {
+          email: input.email,
+        },
+      });
+      if (usernameAlreadyExists)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "Username already exists.",
+        });
+
+      if (emailAlreadyExists)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "An account with this email already exists.",
+        });
+
       try {
         let user = await clerkClient.users.createUser({
           firstName: input.firstName,
           lastName: input.lastName,
           emailAddress: [input.email],
-          password: input.password,
           username: input.username,
+          password: input.password,
         });
-        if (user.id) {
-          await ctx.prisma.user.update({
-            where: {
-              id: user.id,
-            },
-            data: {
-              role: input.role,
-            },
-          });
-        }
+
         return user;
       } catch (error) {
-        if (error instanceof Error) {
-          throw new TRPCError({
-            code: "BAD_REQUEST",
-            message: error.message,
-          });
-        }
+        console.log(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          message: "An error occurred while creating the user.",
+        });
       }
     }),
 });

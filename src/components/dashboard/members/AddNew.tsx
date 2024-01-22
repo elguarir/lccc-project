@@ -40,26 +40,37 @@ import { formSchema } from "@/lib/validators/UserCreationValidator";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 let AddNewUser = () => {
   let { isTablet, isDesktop } = useMediaQuery();
   let [open, setOpen] = useState(false);
-  let { mutate: createUser, isLoading } = trpc.user.createUser.useMutation();
+  let { mutateAsync: createUser, isLoading } =
+    trpc.user.createUser.useMutation();
+  let utils = trpc.useUtils();
+  let refresh = () => {
+    utils.article.getUserArticles.invalidate();
+  };
+
   let formState = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   });
 
-  let onSubmit = async (data: z.infer<typeof formSchema>) => {};
+  let onSubmit = async (data: z.infer<typeof formSchema>) => {
+    await createUser(data, {
+      onSuccess: () => {
+        setOpen(false);
+        toast.success("User created successfully!");
+        formState.reset();
+        refresh();
+      },
+      onError: (error) => {
+        toast.error(error.message);
+      },
+    });
+  };
   if (isTablet || isDesktop) {
     return (
-      <Dialog key={144554} open={open} onOpenChange={setOpen}>
+      <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button size={"sm"} className="flex items-center justify-center px-4">
             <span className="mr-2">New</span>
@@ -67,20 +78,20 @@ let AddNewUser = () => {
           </Button>
         </DialogTrigger>
         <DialogContent className="sm:max-w-[518px] outline-none">
-            <DialogHeader>
-              <DialogTitle>Add new user</DialogTitle>
-              <DialogDescription className="pt-2"></DialogDescription>
-              <ScrollArea className="max-h-[calc(100vh-50px)]">
-                <div className="px-4">
-                  <UserCreationForm
-                    isLoading={isLoading}
-                    setOpen={setOpen}
-                    formState={formState}
-                    onSubmit={onSubmit}
-                  />
-                </div>
-              </ScrollArea>
-            </DialogHeader>
+          <DialogHeader>
+            <DialogTitle>Add new user</DialogTitle>
+            <DialogDescription className="pt-2"></DialogDescription>
+            <ScrollArea className="max-h-[calc(100vh-50px)]">
+              <div className="px-4">
+                <UserCreationForm
+                  isLoading={isLoading}
+                  setOpen={setOpen}
+                  formState={formState}
+                  onSubmit={onSubmit}
+                />
+              </div>
+            </ScrollArea>
+          </DialogHeader>
         </DialogContent>
       </Dialog>
     );
@@ -183,34 +194,7 @@ let UserCreationForm = ({
               </FormItem>
             )}
           />
-          <FormField
-            control={formState.control}
-            name="role"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>
-                  Role
-                  <span className="ml-1 text-red-600 opacity-70">*</span>
-                </FormLabel>
-                <Select onValueChange={field.onChange} defaultValue={"user"}>
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a role" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="z-[100]">
-                    <SelectItem value="user">User</SelectItem>
-                    <SelectItem value="admin">Admin</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FormDescription>
-                  This will determine the user's permissions, and what they can
-                  do on the platform.
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+
           <FormField
             control={formState.control}
             name="email"
@@ -256,7 +240,11 @@ let UserCreationForm = ({
             >
               Cancel
             </Button>
-            <Button size={"sm"} loadingText="Adding user...">
+            <Button
+              size={"sm"}
+              isLoading={isLoading}
+              loadingText="Adding user..."
+            >
               Add user
             </Button>
           </DialogFooter>

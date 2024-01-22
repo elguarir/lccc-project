@@ -8,5 +8,4 @@ export const formSchema = z.object({
   password: z.string().min(8, {
     message: "Password must be at least 8 characters long.",
   }),
-  role: z.enum(["admin", "user"]),
 });
