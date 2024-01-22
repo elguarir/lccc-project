@@ -25,9 +25,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { DataTablePagination } from "./data-table-pagination";
-import { DataTableToolbar } from "../../articles/components/data-table-toolbar";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { DataTablePagination } from "../../shared/Tables/data-table-pagination";
+import { DataTableToolbar } from "./data-table-toolbar";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -112,7 +111,7 @@ export function DataTable<TData, TValue>({
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className="text-center h-28"
                 >
                   No results.
                 </TableCell>

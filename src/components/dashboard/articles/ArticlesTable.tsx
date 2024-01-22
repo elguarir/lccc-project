@@ -1,8 +1,7 @@
 "use client";
 import React from "react";
-import { DataTable } from "../shared/Tables/data-table";
+import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
-import { z } from "zod";
 import { trpc } from "@/server/client";
 import { TUserArticles } from "@/server/routers/article";
 import { Article as ArticleType } from "@/components/dashboard/articles/data/schema";

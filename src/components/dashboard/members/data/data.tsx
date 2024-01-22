@@ -7,55 +7,26 @@ import {
   Pencil1Icon,
   ReloadIcon,
 } from "@radix-ui/react-icons";
+import { UserCircle } from "lucide-react";
 
-interface Status {
+interface Role {
   value: string;
   label: string;
-  variant: "default" | "outline" | "success" | "warning";
+  variant: "default" | "outline" | "secondary";
   icon: any;
 }
 
-export const statuses: Status[] = [
+export const roles: Role[] = [
   {
-    value: "draft",
-    label: "Draft",
+    value: "user",
+    label: "Member",
     variant: "outline",
-    icon: Pencil1Icon,
+    icon: UserCircle,
   },
   {
-    value: "submitted",
-    label: "Submitted",
-    variant: "success",
+    value: "admin",
+    label: "Admin",
+    variant: "secondary",
     icon: PaperPlaneIcon,
-  },
-  {
-    value: "revisions_requested",
-    label: "Revisions Requested",
-    variant: "warning",
-    icon: ReloadIcon,
-  },
-  {
-    value: "published",
-    variant: "default",
-    label: "Published",
-    icon: CheckCircledIcon,
-  },
-];
-
-export const priorities = [
-  {
-    label: "Low",
-    value: "low",
-    icon: ArrowDownIcon,
-  },
-  {
-    label: "Medium",
-    value: "medium",
-    icon: ArrowRightIcon,
-  },
-  {
-    label: "High",
-    value: "high",
-    icon: ArrowUpIcon,
   },
 ];

@@ -1,7 +1,5 @@
 "use client";
-
 import { ColumnDef } from "@tanstack/react-table";
-
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import format from "date-fns/format";
@@ -166,7 +164,6 @@ export const columns: ColumnDef<Article>[] = [
       return value.includes(row.getValue(id));
     },
   },
-
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,

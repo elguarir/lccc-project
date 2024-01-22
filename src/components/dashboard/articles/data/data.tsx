@@ -1,3 +1,4 @@
+import { Icons } from "@/assets/icons";
 import {
   ArrowDownIcon,
   ArrowRightIcon,
@@ -20,7 +21,7 @@ export const statuses: Status[] = [
     value: "draft",
     label: "Draft",
     variant: "outline",
-    icon: Pencil1Icon,
+    icon: Icons.DraftIcon,
   },
   {
     value: "submitted",
@@ -39,23 +40,5 @@ export const statuses: Status[] = [
     variant: "default",
     label: "Published",
     icon: CheckCircledIcon,
-  },
-];
-
-export const priorities = [
-  {
-    label: "Low",
-    value: "low",
-    icon: ArrowDownIcon,
-  },
-  {
-    label: "Medium",
-    value: "medium",
-    icon: ArrowRightIcon,
-  },
-  {
-    label: "High",
-    value: "high",
-    icon: ArrowUpIcon,
   },
 ];
