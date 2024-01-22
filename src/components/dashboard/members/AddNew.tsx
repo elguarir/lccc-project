@@ -57,10 +57,11 @@ let AddNewUser = () => {
 
   let onSubmit = async (data: z.infer<typeof formSchema>) => {
     await createUser(data, {
-      onSuccess: () => {
+      onSuccess: async () => {
         setOpen(false);
         toast.success("User created successfully!");
         formState.reset();
+        await new Promise((resolve) => setTimeout(resolve, 1000));
         refresh();
       },
       onError: (error) => {
