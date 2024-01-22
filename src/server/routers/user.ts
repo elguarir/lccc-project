@@ -91,7 +91,8 @@ export const userRouter = router({
         console.log(error);
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: "An error occurred while creating the user.",
+          // @ts-ignore
+          message: error?.errors[0]?.message,
         });
       }
     }),
