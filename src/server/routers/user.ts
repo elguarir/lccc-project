@@ -54,22 +54,11 @@ export const userRouter = router({
         });
       }
 
-      let usernameAlreadyExists = await db.user.findUnique({
-        where: {
-          username: input.username,
-        },
-      });
-
       let emailAlreadyExists = await db.user.findUnique({
         where: {
           email: input.email,
         },
       });
-      if (usernameAlreadyExists)
-        throw new TRPCError({
-          code: "BAD_REQUEST",
-          message: "Username already exists.",
-        });
 
       if (emailAlreadyExists)
         throw new TRPCError({
