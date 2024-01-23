@@ -8,15 +8,13 @@ import { trpc } from "@/server/client";
 const ArticlesTable = () => {
   let { data: users, isLoading } = trpc.user.getUsersList.useQuery();
 
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return null;
   }
-  
-  
+
   return (
     <div className="flex flex-col w-full mt-8 md:p-3">
-      <DataTable  data={users as any} columns={columns} />
+      <DataTable data={users as any} columns={columns} />
     </div>
   );
 };
