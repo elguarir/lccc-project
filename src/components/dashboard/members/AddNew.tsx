@@ -86,17 +86,18 @@ let AddNewUser = () => {
             <DialogDescription className="py-2">
               Add a new user to your organization
             </DialogDescription>
-            <ScrollArea className="max-h-[calc(100vh-50px)]">
-              <div className="p-4">
-                <UserCreationForm
-                  isLoading={isLoading}
-                  setOpen={setOpen}
-                  formState={formState}
-                  onSubmit={onSubmit}
-                />
-              </div>
-            </ScrollArea>
           </DialogHeader>
+
+          <ScrollArea className="max-h-[calc(100vh-50px)]">
+            <div className="p-4">
+              <UserCreationForm
+                isLoading={isLoading}
+                setOpen={setOpen}
+                formState={formState}
+                onSubmit={onSubmit}
+              />
+            </div>
+          </ScrollArea>
         </DialogContent>
       </Dialog>
     );
@@ -114,15 +115,15 @@ let AddNewUser = () => {
         <DrawerHeader className="text-left">
           <DrawerTitle>Add new user</DrawerTitle>
           <DrawerDescription className="pt-2"></DrawerDescription>
-          <div>
-            <UserCreationForm
-              setOpen={setOpen}
-              isLoading={isLoading}
-              formState={formState}
-              onSubmit={onSubmit}
-            />
-          </div>
         </DrawerHeader>
+        <div>
+          <UserCreationForm
+            setOpen={setOpen}
+            isLoading={isLoading}
+            formState={formState}
+            onSubmit={onSubmit}
+          />
+        </div>
       </DrawerContent>
     </Drawer>
   );

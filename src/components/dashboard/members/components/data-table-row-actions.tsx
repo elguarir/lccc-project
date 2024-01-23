@@ -21,6 +21,17 @@ import { userSchema } from "../data/schema";
 import { useAuth } from "@clerk/nextjs";
 
 import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { DialogTrigger } from "@radix-ui/react-dialog";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -38,9 +49,10 @@ export function DataTableRowActions<TData>({
   };
   let { isLoaded, userId } = useAuth();
 
+
   return (
     <>
-      <DropdownMenu>
+      <DropdownMenu modal>
         <DropdownMenuTrigger asChild>
           <Button
             variant="ghost"
@@ -51,7 +63,9 @@ export function DataTableRowActions<TData>({
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
-          <DropdownMenuItem onClick={() => {}}>Edit</DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link className="outline-none focus:ring-0 ring-0 focus:outline-none" href={`/dashboard/members/${user.username}`}>Edit</Link>
+          </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger disabled={isLoaded && user.id === userId}>
               Role
