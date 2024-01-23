@@ -1,10 +1,9 @@
 import AddNewUser from "@/components/dashboard/members/AddNew";
 import MembersTable from "@/components/dashboard/members/MembersTable";
-import { trpcVanilla } from "@/server/client";
 import { getUsersList } from "@/server/routers/user";
 
 async function MembersPage() {
-  let formattedUsers = await trpcVanilla.user.getUsersList.query()
+  let formattedUsers = await getUsersList();
   return (
     <main className="flex flex-col items-center w-full py-3 md:py-5">
       <header className="flex items-center justify-between w-full">
