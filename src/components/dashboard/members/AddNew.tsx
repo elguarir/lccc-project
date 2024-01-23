@@ -41,12 +41,14 @@ import { trpc } from "@/server/client";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useRouter } from "next/navigation";
 let AddNewUser = () => {
   let { isTablet, isDesktop } = useMediaQuery();
   let [open, setOpen] = useState(false);
   let { mutateAsync: createUser, isLoading } =
     trpc.user.createUser.useMutation();
   let utils = trpc.useUtils();
+  let router = useRouter();
   let refresh = () => {
     utils.user.getUsersList.invalidate();
   };
@@ -62,6 +64,7 @@ let AddNewUser = () => {
         toast.success("User created successfully!");
         formState.reset();
         refresh();
+        router.refresh()
       },
       onError: (error) => {
         toast.error(error.message);
