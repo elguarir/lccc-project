@@ -18,7 +18,7 @@ const MemberEditModal = ({ params }: MemberEditModalProps) => {
 
   return (
     <Modal>
-      <DialogHeader>
+      <DialogHeader className="text-left">
         <DialogTitle>Edit Member</DialogTitle>
         <DialogDescription>
           {/* Suggest a description */}
