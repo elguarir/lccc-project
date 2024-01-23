@@ -46,6 +46,24 @@ const isAuthed = t.middleware(async ({ ctx, next }) => {
   });
 });
 
+const adminOnly = t.middleware(async ({ ctx, next }) => {
+  // Add type declaration for ctx object
+  const { user } = ctx as { user: { role: string } };
+
+  if (user.role !== "admin") {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "You are not authorized to perform view this resource.",
+    });
+  }
+  return next({
+    ctx: {
+      ...ctx,
+      prisma,
+    },
+  });
+});
+
 export const router = t.router;
 export const publicProcedure = t.procedure.use((opts) => {
   return opts.next({
@@ -55,5 +73,6 @@ export const publicProcedure = t.procedure.use((opts) => {
     },
   });
 });
-
 export const protectedProcedure = t.procedure.use(isAuthed);
+
+export const adminProcedure = t.procedure.use(isAuthed).use(adminOnly);

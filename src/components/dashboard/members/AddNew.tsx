@@ -48,7 +48,7 @@ let AddNewUser = () => {
     trpc.user.createUser.useMutation();
   let utils = trpc.useUtils();
   let refresh = () => {
-    utils.article.getUserArticles.invalidate();
+    utils.user.getUsersList.invalidate();
   };
 
   let formState = useForm<z.infer<typeof formSchema>>({

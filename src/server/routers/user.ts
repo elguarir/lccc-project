@@ -1,14 +1,11 @@
 import { formSchema } from "@/lib/validators/UserCreationValidator";
 import db from "@/prisma";
-import { router, publicProcedure, protectedProcedure } from "@/server/trpc";
+import { router, protectedProcedure } from "@/server/trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const userRouter = router({
-  hello: publicProcedure.query(() => {
-    return { hello: "world" };
-  }),
   getUsersList: protectedProcedure.query(async ({ ctx }) => {
     if (ctx.user.role !== "admin") {
       throw new TRPCError({
