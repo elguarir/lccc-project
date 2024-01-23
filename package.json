@@ -10,7 +10,8 @@
     "lint:fix": "next lint --fix",
     "preview": "next build && next start",
     "typecheck": "tsc --noEmit",
-    "email": "email dev"
+    "email": "email dev",
+    "knip": "knip"
   },
   "prisma": {
     "schema": "./src/prisma/schema.prisma"
@@ -148,6 +149,7 @@
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-tailwindcss": "^3.13.0",
     "eslint-plugin-unused-imports": "^3.0.0",
+    "knip": "^4.2.1",
     "postcss": "^8.4.29",
     "postcss-nesting": "^12.0.1",
     "prettier": "^3.0.3",

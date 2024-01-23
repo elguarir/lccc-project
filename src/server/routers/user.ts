@@ -82,6 +82,45 @@ export const userRouter = router({
         });
       }
     }),
+
+  updateUser: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+        role: z.enum(["admin", "user"]),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to perform view this resource.",
+        });
+      }
+
+      let user = await db.user.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!user)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User does not exist.",
+        });
+
+      let updatedUser = await db.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          role: input.role,
+        },
+      });
+
+      return updatedUser;
+    }),
 });
 
 export let getUsersList = async () => {

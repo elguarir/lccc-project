@@ -41,14 +41,13 @@ import { trpc } from "@/server/client";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useRouter } from "next/navigation";
+
 let AddNewUser = () => {
   let { isTablet, isDesktop } = useMediaQuery();
   let [open, setOpen] = useState(false);
   let { mutateAsync: createUser, isLoading } =
     trpc.user.createUser.useMutation();
   let utils = trpc.useUtils();
-  let router = useRouter();
   let refresh = () => {
     utils.user.getUsersList.invalidate();
   };
@@ -59,12 +58,13 @@ let AddNewUser = () => {
 
   let onSubmit = async (data: z.infer<typeof formSchema>) => {
     await createUser(data, {
-      onSuccess: () => {
+      onSuccess: async () => {
         setOpen(false);
         toast.success("User created successfully!");
         formState.reset();
         refresh();
-        router.refresh()
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+        refresh();
       },
       onError: (error) => {
         toast.error(error.message);
@@ -83,9 +83,11 @@ let AddNewUser = () => {
         <DialogContent className="sm:max-w-[518px] outline-none">
           <DialogHeader>
             <DialogTitle>Add new user</DialogTitle>
-            <DialogDescription className="pt-2"></DialogDescription>
+            <DialogDescription className="py-2">
+              Add a new user to your organization
+            </DialogDescription>
             <ScrollArea className="max-h-[calc(100vh-50px)]">
-              <div className="px-4">
+              <div className="p-4">
                 <UserCreationForm
                   isLoading={isLoading}
                   setOpen={setOpen}
