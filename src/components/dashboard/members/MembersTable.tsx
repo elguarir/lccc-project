@@ -5,13 +5,11 @@ import { columns } from "./components/columns";
 import { User } from "./data/schema";
 import { trpc } from "@/server/client";
 
-const ArticlesTable = ({ initialData }: { initialData: User[] }) => {
-  let { data: users } = trpc.user.getUsersList.useQuery(undefined, {
-    initialData,
-  });
+const ArticlesTable = () => {
+  let { data: users, isLoading } = trpc.user.getUsersList.useQuery();
   return (
     <div className="flex flex-col w-full mt-8 md:p-3">
-      <DataTable data={users as any} columns={columns} />
+      <DataTable isLoading={isLoading} data={users as any} columns={columns} />
     </div>
   );
 };
