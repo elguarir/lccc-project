@@ -4,6 +4,7 @@ import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
 import { clerkClient } from "@clerk/nextjs";
 import { TRPCError } from "@trpc/server";
+import { revalidatePath } from "next/cache";
 import { z } from "zod";
 
 export const userRouter = router({
@@ -172,6 +173,7 @@ export const userRouter = router({
         },
       });
 
+      revalidatePath(`/dashboard/members/${input.id}`)
       return updatedUser;
     }),
 });

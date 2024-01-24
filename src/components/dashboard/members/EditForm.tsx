@@ -56,7 +56,6 @@ const EditForm = ({ userId, user }: EditFormProps) => {
         onSuccess: () => {
           toast.success("User updated successfully!");
           refresh();
-          router.refresh()
           router.back();
         },
         onError: (err) => {
