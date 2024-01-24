@@ -1,4 +1,5 @@
 import { formSchema } from "@/lib/validators/UserCreationValidator";
+import { formSchema as userEditSchema } from "@/lib/validators/UserEditValidator";
 import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
 import { clerkClient } from "@clerk/nextjs";
@@ -83,7 +84,7 @@ export const userRouter = router({
       }
     }),
 
-  updateUser: protectedProcedure
+  updateUserRole: protectedProcedure
     .input(
       z.object({
         id: z.string(),
@@ -111,6 +112,58 @@ export const userRouter = router({
         });
 
       let updatedUser = await db.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          role: input.role,
+        },
+      });
+
+      return updatedUser;
+    }),
+  updateUser: protectedProcedure
+    .input(
+      userEditSchema.extend({
+        id: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to perform view this resource.",
+        });
+      }
+
+      let user = await db.user.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!user)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User does not exist.",
+        });
+      let updatedUser;
+      try {
+        updatedUser = await clerkClient.users.updateUser(input.id, {
+          firstName: input.firstName,
+          lastName: input.lastName,
+          username: input.username,
+        });
+      } catch (error) {
+        console.log(error);
+        throw new TRPCError({
+          code: "INTERNAL_SERVER_ERROR",
+          // @ts-ignore
+          message: error?.errors[0]?.message,
+        });
+      }
+
+      await db.user.update({
         where: {
           id: input.id,
         },

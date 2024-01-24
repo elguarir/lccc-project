@@ -42,13 +42,12 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<TData>) {
   let user = userSchema.parse(row.original);
   let { mutateAsync: deleteUser } = trpc.user.deleteUser.useMutation();
-  let { mutateAsync: updateUser } = trpc.user.updateUser.useMutation();
+  let { mutateAsync: updateUser } = trpc.user.updateUserRole.useMutation();
   let utils = trpc.useUtils();
   let refresh = () => {
     utils.user.getUsersList.invalidate();
   };
   let { isLoaded, userId } = useAuth();
-
 
   return (
     <>
@@ -64,7 +63,13 @@ export function DataTableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
-            <Link prefetch={true} className="outline-none focus:ring-0 ring-0 focus:outline-none" href={`/dashboard/members/${user.username}`}>Edit</Link>
+            <Link
+              prefetch={true}
+              className="outline-none focus:ring-0 ring-0 focus:outline-none"
+              href={`/dashboard/members/${user.id}`}
+            >
+              Edit
+            </Link>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger disabled={isLoaded && user.id === userId}>
