@@ -1,8 +1,7 @@
-import EditorSideBar from "@/components/editor/EditorSideBar";
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronLeft, Save } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
