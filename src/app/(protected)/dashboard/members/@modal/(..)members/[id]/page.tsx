@@ -3,7 +3,9 @@ import Modal from "@/components/shared/Modal";
 import { formSchema } from "@/lib/validators/UserEditValidator";
 import db from "@/prisma";
 import { clerkClient } from "@clerk/nextjs";
-import { unstable_noStore as noStore } from "next/cache";
+import { unstable_noStore as noStore} from "next/cache"
+
+export const dynamic = "force-dynamic";
 
 interface MemberEditModalProps {
   params: {
@@ -11,7 +13,7 @@ interface MemberEditModalProps {
   };
 }
 const MemberEditModal = async ({ params }: MemberEditModalProps) => {
-  noStore();
+  noStore()
   let user = await clerkClient.users.getUser(params.id);
   let dbUser = await db.user.findUnique({
     where: {

@@ -64,7 +64,6 @@ export function DataTableRowActions<TData>({
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
             <Link
-              prefetch={true}
               className="outline-none focus:ring-0 ring-0 focus:outline-none"
               href={`/dashboard/members/${user.id}`}
             >
