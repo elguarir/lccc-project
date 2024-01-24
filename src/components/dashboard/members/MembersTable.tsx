@@ -9,6 +9,7 @@ const ArticlesTable = ({ initialData }: { initialData: User[] }) => {
   let { data: users } = trpc.user.getUsersList.useQuery(undefined, {
     initialData,
   });
+  
   return (
     <div className="flex flex-col w-full mt-8 md:p-3">
       <DataTable data={users as any} columns={columns} />

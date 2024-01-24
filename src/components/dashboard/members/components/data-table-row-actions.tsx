@@ -64,7 +64,7 @@ export function DataTableRowActions<TData>({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-[160px]">
           <DropdownMenuItem asChild>
-            <Link className="outline-none focus:ring-0 ring-0 focus:outline-none" href={`/dashboard/members/${user.username}`}>Edit</Link>
+            <Link prefetch={true} className="outline-none focus:ring-0 ring-0 focus:outline-none" href={`/dashboard/members/${user.username}`}>Edit</Link>
           </DropdownMenuItem>
           <DropdownMenuSub>
             <DropdownMenuSubTrigger disabled={isLoaded && user.id === userId}>

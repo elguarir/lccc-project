@@ -18,6 +18,7 @@ interface SideBarProps {
 
 const SideBar = ({ article }: SideBarProps) => {
   const { isMobile, isTablet } = useMediaQuery();
+  
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {

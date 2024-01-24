@@ -125,7 +125,9 @@ export const userRouter = router({
 
 export let getUsersList = async () => {
   let users = await clerkClient.users.getUserList();
-  let promises = users.map(async (user) => {
+  let formattedUsers = [];
+
+  for (let user of users) {
     let formattedUser;
     let dbUser = await db.user.findUnique({
       where: {
@@ -137,19 +139,20 @@ export let getUsersList = async () => {
       formattedUser = {
         id: user.id,
         user: {
-          firstName: user.firstName,
-          lastName: user.lastName,
+          firstName: user.firstName!,
+          lastName: user.lastName!,
           email: user.emailAddresses[0].emailAddress,
           avatar: user.imageUrl,
         },
-        username: user.username,
-        role: dbUser.role,
+        username: user.username!,
+        role: dbUser.role as "admin" | "user",
         createdAt: dbUser.createdAt.toISOString(),
       };
-      return formattedUser;
+      formattedUsers.push(formattedUser);
     }
-  });
+  }
 
-  let formattedUsers = await Promise.all(promises);
-  return formattedUsers.filter((user) => user !== undefined);
+  return formattedUsers.sort((a, b) => {
+    return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+  });
 };
