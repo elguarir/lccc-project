@@ -27,29 +27,46 @@ import { formSchema } from "@/lib/validators/UserEditValidator";
 import { trpc } from "@/server/client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 
 interface EditFormProps {
   userId: string;
-  user: z.infer<typeof formSchema>;
 }
 
-const EditForm = ({ userId, user }: EditFormProps) => {
+const EditForm = ({ userId }: EditFormProps) => {
+  let { data: user, isLoading: isFetching } = trpc.user.getUser.useQuery({
+    id: userId,
+  });
+
   let form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: user,
+    disabled: isFetching,
   });
   let { mutate: updateUser, isLoading } = trpc.user.updateUser.useMutation();
   let router = useRouter();
   let utils = trpc.useUtils();
+
   let refresh = () => {
     utils.user.getUsersList.invalidate();
+    utils.user.getUser.invalidate({ id: userId });
   };
 
+  useEffect(() => {
+    if (user) {
+      form.reset({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        role: user.role,
+      });
+    }
+  }, [user]);
+
   let onSubmit = async (data: z.infer<typeof formSchema>) => {
+    console.log("data", data);
     updateUser(
       { id: userId, ...data },
       {
@@ -143,6 +160,7 @@ const EditForm = ({ userId, user }: EditFormProps) => {
                     <Select
                       onValueChange={field.onChange}
                       defaultValue={field.value}
+                      disabled={field.disabled}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select a role" />

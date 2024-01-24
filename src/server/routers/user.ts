@@ -43,6 +43,44 @@ export const userRouter = router({
       let user = await clerkClient.users.deleteUser(input.id);
       return user;
     }),
+  getUser: protectedProcedure
+    .input(
+      z.object({
+        id: z.string(),
+      }),
+    )
+    .query(async ({ input, ctx }) => {
+      if (ctx.user.role !== "admin") {
+        throw new TRPCError({
+          code: "UNAUTHORIZED",
+          message: "You are not authorized to perform view this resource.",
+        });
+      }
+
+      let user = await clerkClient.users.getUser(input.id);
+      let dbUser = await db.user.findUnique({
+        where: {
+          id: input.id,
+        },
+      });
+
+      if (!dbUser || !user) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User does not exist.",
+        });
+      }
+
+      let res = {
+        firstName: user.firstName!,
+        lastName: user.lastName!,
+        email: dbUser.email,
+        username: user.username!,
+        avatar: dbUser.avatar_url!,
+        role: dbUser.role as "admin" | "user",
+      };
+      return res;
+    }),
   createUser: protectedProcedure
     .input(formSchema)
     .mutation(async ({ input, ctx }) => {
