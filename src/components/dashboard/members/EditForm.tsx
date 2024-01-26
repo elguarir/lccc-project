@@ -159,6 +159,7 @@ const EditForm = ({ userId }: EditFormProps) => {
                     </FormLabel>
                     <Select
                       onValueChange={field.onChange}
+                      value={field.value}
                       defaultValue={field.value}
                       disabled={field.disabled}
                     >

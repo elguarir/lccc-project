@@ -42,7 +42,7 @@ import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
-let AddNewUser = () => {
+let AddNew = () => {
   let { isTablet, isDesktop } = useMediaQuery();
   let [open, setOpen] = useState(false);
   let { mutateAsync: createUser, isLoading } =
@@ -84,7 +84,7 @@ let AddNewUser = () => {
           <DialogHeader>
             <DialogTitle>Add new user</DialogTitle>
             <DialogDescription className="py-2">
-              Add a new user to your organization
+              Add a new user to the platform.
             </DialogDescription>
           </DialogHeader>
 
@@ -114,9 +114,11 @@ let AddNewUser = () => {
       <DrawerContent className="outline-none">
         <DrawerHeader className="text-left">
           <DrawerTitle>Add new user</DrawerTitle>
-          <DrawerDescription className="pt-2"></DrawerDescription>
+          <DrawerDescription>
+            Add a new user to the platform.
+          </DrawerDescription>
         </DrawerHeader>
-        <div>
+        <div className="max-sm:p-5">
           <UserCreationForm
             setOpen={setOpen}
             isLoading={isLoading}
@@ -129,7 +131,7 @@ let AddNewUser = () => {
   );
 };
 
-export default AddNewUser;
+export default AddNew;
 
 let UserCreationForm = ({
   formState,

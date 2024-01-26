@@ -1,7 +1,6 @@
 import { Icons } from "@/assets/icons";
-import { Button, buttonVariants } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { DashboardLinkProps } from "@/types/nav";
-import { Link } from "lucide-react";
 
 export const mainLinks: DashboardLinkProps[] = [
   {
@@ -23,10 +22,13 @@ export const managementLinks: DashboardLinkProps[] = [
         <Icons.add className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
       </Button>
     ),
-    items: [
-      { name: "Published", href: "/dashboard/articles?type=published" },
-      { name: "Draft", href: "/dashboard/articles?type=draft" },
-    ],
+    items: [{ name: "Submitted", href: "/dashboard/articles?type=submitted" }],
+  },
+  {
+    name: "Events",
+    href: "/dashboard/events",
+    type: "link",
+    icon: Icons.calanderIcon,
   },
   {
     name: "Members",

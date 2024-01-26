@@ -19,6 +19,25 @@ enum ArticleStatus {
   published
 }
 
+enum EventStatus {
+  draft
+  published
+}
+
+model Event {
+  id          String      @id @default(cuid())
+  title       String
+  slug        String      @unique
+  excerpt     String
+  mainImage   String
+  location    String
+  description Json
+  status      EventStatus @default(draft)
+  eventDate   DateTime
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
 model User {
   id         String    @id @default(cuid())
   first_name String
