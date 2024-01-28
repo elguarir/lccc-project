@@ -44,7 +44,7 @@ export const columns: ColumnDef<Event>[] = [
     cell: ({ row }) => {
       let event = row.getValue("event") as Event["event"];
       return (
-        <div className="flex items-center gap-5 min-w-fit">
+        <div className="flex items-center gap-5">
           <div className="flex items-center justify-center w-16">
             {event.mainImage ? (
               <img
@@ -57,10 +57,8 @@ export const columns: ColumnDef<Event>[] = [
               </div>
             )}
           </div>
-          <div>
-            <span className="text-base font-medium truncate w-28">
-              {event.title}
-            </span>
+          <div className="text-base font-medium truncate max-w-[300px]">
+            {event.title}
           </div>
         </div>
       );
@@ -87,7 +85,7 @@ export const columns: ColumnDef<Event>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div>
+        <div className="w-32">
           <span className="text-sm font-medium">
             {row.getValue("location")}
           </span>
