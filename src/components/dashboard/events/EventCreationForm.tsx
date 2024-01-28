@@ -41,27 +41,60 @@ import { formSchema } from "@/lib/validators/EventCreationValidator";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
 
-const EventCreationForm = () => {
-  let { mutate: createEvent, isLoading } = trpc.event.createEvent.useMutation();
+type EventFormProps = {
+  mode: "create" | "edit";
+  event?: {
+    id: string;
+    initialData: z.infer<typeof formSchema>;
+  };
+};
+
+const EventForm = ({ mode, event }: EventFormProps) => {
+  let { mutate: createEvent, isLoading: isCreating } =
+    trpc.event.createEvent.useMutation();
+  let { mutate: updateEvent, isLoading: isUpdating } =
+    trpc.event.updateEvent.useMutation();
   let form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+    defaultValues: event?.initialData,
   });
+  let utils = trpc.useUtils();
+  let refresh = () => {
+    utils.event.getEvents.invalidate();
+  }
   let title = form.watch("title");
   let onSubmit = (data: z.infer<typeof formSchema>) => {
-    createEvent(data, {
-      onSuccess: () => {
-        toast.success("Event created successfully");
-      },
-      onError: (error) => {
-        toast.error(error.message);
-      },
-    });
+    if (mode === "edit" && event) {
+      // TODO: Implement edit event
+      updateEvent(
+        { id: event.id, ...data },
+        {
+          onSuccess: () => {
+            toast.success("Event updated successfully!");
+            refresh()
+          },
+          onError: (error) => {
+            toast.error(error.message);
+          },
+        },
+      );
+    } else {
+      createEvent(data, {
+        onSuccess: () => {
+          toast.success("Event created successfully!");
+          refresh()
+        },
+        onError: (error) => {
+          toast.error(error.message);
+        },
+      });
+    }
   };
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <fieldset
-          disabled={isLoading}
+          disabled={isCreating || isUpdating}
           className="flex flex-col w-full space-y-4"
         >
           <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-1 lg:grid-cols-2">
@@ -262,7 +295,7 @@ const EventCreationForm = () => {
                     <RichTextEditor
                       value={field.value}
                       onChange={field.onChange}
-                      disabled={isLoading}
+                      disabled={isCreating || isUpdating}
                     />
                   </div>
                 </FormControl>
@@ -276,10 +309,20 @@ const EventCreationForm = () => {
           <div className="flex justify-end w-full pt-3">
             <Button
               type="submit"
-              isLoading={isLoading}
-              loadingText="Creating Event..."
+              isLoading={isCreating || isUpdating}
+              loadingText={
+                {
+                  create: "Creating Event...",
+                  edit: "Saving Changes...",
+                }[mode]
+              }
             >
-              Create Event
+              {
+                {
+                  create: "Create Event",
+                  edit: "Save Changes",
+                }[mode]
+              }
             </Button>
           </div>
         </fieldset>
@@ -288,4 +331,4 @@ const EventCreationForm = () => {
   );
 };
 
-export default EventCreationForm;
+export default EventForm;

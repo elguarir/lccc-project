@@ -1,4 +1,4 @@
-import EventCreationForm from "@/components/dashboard/events/EventCreationForm";
+import EventForm from "@/components/dashboard/events/EventCreationForm";
 import React from "react";
 
 const NewEventPage = () => {
@@ -15,7 +15,7 @@ const NewEventPage = () => {
       </header>
 
       <div className="w-full pt-6">
-        <EventCreationForm />
+        <EventForm mode="create" />
       </div>
     </main>
   );

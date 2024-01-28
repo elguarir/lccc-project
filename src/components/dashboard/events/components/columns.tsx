@@ -44,12 +44,12 @@ export const columns: ColumnDef<Event>[] = [
     cell: ({ row }) => {
       let event = row.getValue("event") as Event["event"];
       return (
-        <div className="flex items-center gap-4 min-w-fit">
+        <div className="flex items-center gap-5 min-w-fit">
           <div className="flex items-center justify-center w-16">
             {event.mainImage ? (
               <img
                 src={event.mainImage}
-                className="w-full h-full rounded-[4px] aspect-video"
+                className="w-full h-full object-cover rounded-[4px] aspect-video"
               />
             ) : (
               <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">
@@ -65,7 +65,12 @@ export const columns: ColumnDef<Event>[] = [
         </div>
       );
     },
-    enableSorting: false,
+    enableSorting: true,
+    sortingFn: (rowA, rowB, id) => {
+      let a = rowA.getValue(id) as Event["event"];
+      let b = rowB.getValue(id) as Event["event"];
+      return a.title.localeCompare(b.title);
+    },
     filterFn: (row, id, value) => {
       let event = row.getValue("event") as Event["event"];
       let location = row.getValue("location") as Event["location"];

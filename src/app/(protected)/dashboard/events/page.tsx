@@ -1,13 +1,16 @@
 import EventsTable from "@/components/dashboard/events/EventsTable";
 import { Button } from "@/components/ui/button";
 import db from "@/prisma";
-import { Event } from "@prisma/client";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
 const EventsPage = async () => {
-  let events = await db.event.findMany();
+  let events = await db.event.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
 
   return (
     <main className="flex flex-col items-center w-full py-3 md:py-5">
@@ -32,25 +35,3 @@ const EventsPage = async () => {
 };
 
 export default EventsPage;
-
-
-/**
- * 
- * the format wanted:
- * import { z } from "zod";
-
-const eventSchema = z.object({
-  event: z.object({
-    id: z.string(),
-    title: z.string(),
-    mainImage: z.string(),
-  }),
-  location: z.string(),
-  eventDate: z.date(),
-  status: z.enum(["draft", "published"]),
-});
-
-export type Event = z.infer<typeof eventSchema>;
-
- * 
- */

@@ -16,8 +16,8 @@ export const statuses: Status[] = [
     icon: Icons.DraftIcon,
   },
   {
-    value: "submitted",
-    label: "Submitted",
+    value: "published",
+    label: "Published",
     variant: "success",
     icon: PaperPlaneIcon,
   },
