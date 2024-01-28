@@ -14,9 +14,15 @@ interface ImageUploadProps {
   value?: string;
   onChange: (value: string) => void;
   control?: boolean;
+  aspectVideo?: boolean;
 }
 
-const ImageUpload = ({ value, control, onChange }: ImageUploadProps) => {
+const ImageUpload = ({
+  value,
+  control,
+  onChange,
+  aspectVideo,
+}: ImageUploadProps) => {
   let [progress, setProgress] = useState<null | number>(null);
   const { upload } = useUpload();
   let [preview, setPreview] = useState<string | null>(null);
@@ -62,7 +68,12 @@ const ImageUpload = ({ value, control, onChange }: ImageUploadProps) => {
 
   if (progress)
     return (
-      <div className="relative flex flex-col items-center justify-center w-full border-2 rounded-lg h-44 border-border">
+      <div
+        className={cn(
+          "relative flex flex-col items-center justify-center w-full border-2 rounded-lg border-border",
+          aspectVideo ? "aspect-video" : "h-44",
+        )}
+      >
         {preview && (
           <img
             src={preview}
@@ -77,7 +88,12 @@ const ImageUpload = ({ value, control, onChange }: ImageUploadProps) => {
 
   if (value)
     return (
-      <div className="relative flex items-center justify-center w-full border-2 rounded-lg h-44 border-border">
+      <div
+        className={cn(
+          "relative flex items-center justify-center w-full border-2 rounded-lg border-border",
+          aspectVideo ? "aspect-video" : "h-44",
+        )}
+      >
         <img
           src={value}
           alt="article image"
@@ -98,7 +114,8 @@ const ImageUpload = ({ value, control, onChange }: ImageUploadProps) => {
   return (
     <div
       className={cn(
-        "w-full h-44  focus-visible:outline-primary border-2 flex-col gap-2 transition-colors duration-200 border-dashed rounded-lg border-border flex items-center justify-center",
+        "w-full  focus-visible:outline-primary border-2 flex-col gap-2 transition-colors duration-200 border-dashed rounded-lg border-border flex items-center justify-center",
+        aspectVideo ? "aspect-video" : "h-44",
         isDragActive && "border-primary",
         isDragReject && "border-destructive",
         isDragAccept && "border-green-600",

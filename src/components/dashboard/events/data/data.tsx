@@ -1,13 +1,5 @@
 import { Icons } from "@/assets/icons";
-import {
-  ArrowDownIcon,
-  ArrowRightIcon,
-  ArrowUpIcon,
-  CheckCircledIcon,
-  PaperPlaneIcon,
-  Pencil1Icon,
-  ReloadIcon,
-} from "@radix-ui/react-icons";
+import { PaperPlaneIcon } from "@radix-ui/react-icons";
 
 interface Status {
   value: string;
@@ -28,17 +20,5 @@ export const statuses: Status[] = [
     label: "Submitted",
     variant: "success",
     icon: PaperPlaneIcon,
-  },
-  {
-    value: "revisions_requested",
-    label: "Revisions Requested",
-    variant: "warning",
-    icon: ReloadIcon,
-  },
-  {
-    value: "published",
-    variant: "default",
-    label: "Published",
-    icon: CheckCircledIcon,
   },
 ];

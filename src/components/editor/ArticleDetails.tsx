@@ -40,6 +40,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { toast } from "sonner";
+import { SlugInput } from "../shared/SlugInput";
 
 export default function ArticleDetails({
   formState,
@@ -396,70 +397,3 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
   );
 };
 
-type SlugInputProps = {
-  value?: string;
-  onChange: (value: string) => void;
-  title: string;
-  rest: any;
-};
-
-const SlugInput = ({ value, title, onChange, rest }: SlugInputProps) => {
-  let [editMode, setEditMode] = useState(false);
-  let [inputValue, setInputValue] = useState(value);
-  return (
-    <div className="relative flex items-center w-full gap-2">
-      <>
-        <div className="relative flex items-center w-full">
-          <FormControl>
-            <Input
-              {...rest}
-              placeholder="article-slug-here"
-              onChange={(e) => {
-                setInputValue(e.target.value);
-                onChange(e.target.value);
-              }}
-              value={inputValue}
-              readOnly={editMode ? false : true}
-              className="pr-8 h-9"
-            />
-          </FormControl>
-          <button
-            type="button"
-            onClick={() => {
-              if (editMode) {
-                let slug = slugIt(inputValue ?? "");
-                setInputValue(slug);
-                onChange(slug);
-              }
-              setEditMode(!editMode);
-            }}
-            className="absolute inset-y-0 translate-y-2/3 h-fit right-2 outline-primary "
-          >
-            {editMode ? (
-              <Icons.check
-                className={cn(
-                  "w-4 h-4 transition-all duration-300 hover:text-primary",
-                  editMode ? "text-primary" : "text-muted-foreground",
-                )}
-              />
-            ) : (
-              <Icons.EditIcon className="w-4 h-4 transition-all duration-300 hover:text-muted-foreground" />
-            )}
-          </button>
-        </div>
-      </>
-      <Button
-        onClick={() => {
-          let slug = slugIt(title ?? "");
-          setInputValue(slug);
-          onChange(slug);
-        }}
-        type="button"
-        size={"sm"}
-        variant={"outline"}
-      >
-        Generate
-      </Button>
-    </div>
-  );
-};

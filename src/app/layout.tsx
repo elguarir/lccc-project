@@ -47,7 +47,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
                 <div className="relative flex flex-col min-h-screen">
                   {children}
                 </div>
-                <Toaster closeButton />
+                <Toaster duration={1250} closeButton />
               </TrpcClientProvider>
             </ClerkThemeProvider>
           </ThemeProvider>

@@ -4,14 +4,14 @@ import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import format from "date-fns/format";
 import { statuses } from "../data/data";
-import { Article } from "../data/schema";
+import { Event } from "../data/schema";
 import { DataTableColumnHeader } from "../../shared/Tables/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { CheckCircle, X } from "lucide-react";
 import Link from "next/link";
 
-export const columns: ColumnDef<Article>[] = [
+export const columns: ColumnDef<Event>[] = [
   {
     id: "select",
     header: ({ table }) => (
@@ -37,49 +37,55 @@ export const columns: ColumnDef<Article>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "id",
-    header: ({ column }) => null,
-    cell: ({ row }) => null,
-    enableSorting: false,
-    enableHiding: false,
-    maxSize: 0,
-  },
-  {
-    accessorKey: "coverImage",
-    header: ({ column }) => null,
+    accessorKey: "event",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Event" />
+    ),
     cell: ({ row }) => {
-      let imgUrl = row.getValue("coverImage") as string | undefined;
+      let event = row.getValue("event") as Event["event"];
       return (
-        <div className="flex items-center justify-center w-16">
-          {imgUrl ? (
-            <img
-              src={imgUrl}
-              className="w-full h-full rounded-[4px] aspect-video"
-            />
-          ) : (
-            <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">
-              <QuestionMarkIcon className="w-4 h-4 text-muted-foreground" />
-            </div>
-          )}
+        <div className="flex items-center gap-4 min-w-fit">
+          <div className="flex items-center justify-center w-16">
+            {event.mainImage ? (
+              <img
+                src={event.mainImage}
+                className="w-full h-full rounded-[4px] aspect-video"
+              />
+            ) : (
+              <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">
+                <QuestionMarkIcon className="w-4 h-4 text-muted-foreground" />
+              </div>
+            )}
+          </div>
+          <div>
+            <span className="text-base font-medium truncate w-28">
+              {event.title}
+            </span>
+          </div>
         </div>
       );
     },
     enableSorting: false,
+    filterFn: (row, id, value) => {
+      let event = row.getValue("event") as Event["event"];
+      let location = row.getValue("location") as Event["location"];
+      return (
+        event.title.toLowerCase().includes(value.toLowerCase()) ||
+        location.toLowerCase().includes(value.toLowerCase())
+      );
+    },
   },
   {
-    accessorKey: "title",
+    accessorKey: "location",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Title" />
+      <DataTableColumnHeader column={column} title="Location" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex space-x-2">
-          <Link
-            href={`/editor/${row.getValue("id")}`}
-            className="max-w-[400px] truncate font-medium hover:text-primary"
-          >
-            {row.getValue("title")}
-          </Link>
+        <div>
+          <span className="text-sm font-medium">
+            {row.getValue("location")}
+          </span>
         </div>
       );
     },
@@ -116,45 +122,20 @@ export const columns: ColumnDef<Article>[] = [
     },
   },
   {
-    accessorKey: "approved",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Approved" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-[50px] items-center">
-          {row.getValue("approved") ? (
-            <div className="p-1 bg-green-600 rounded-sm w-fit h-fit">
-              <CheckCircle className="w-4 h-4 text-neutral-100" />
-            </div>
-          ) : (
-            <div className="p-1 bg-red-600 rounded-sm w-fit h-fit">
-              <X className="w-4 h-4 text-neutral-100" />
-            </div>
-          )}
-        </div>
-      );
-    },
-
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
-  },
-  {
-    accessorKey: "publishedAt",
+    accessorKey: "eventDate",
     header: ({ column }) => (
       <DataTableColumnHeader
         className="w-[140px]"
         column={column}
-        title="Published At"
+        title="Event Date"
       />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex w-[120px] p-0 items-center">
           <span className="text-sm font-medium">
-            {row.getValue("publishedAt")
-              ? format(new Date(row.getValue("publishedAt")), "MMM dd, yyyy")
+            {row.getValue("eventDate")
+              ? format(new Date(row.getValue("eventDate")), "MMM dd, yyyy")
               : "N/A"}
           </span>
         </div>

@@ -1,12 +1,14 @@
 import { z } from "zod";
 
-export const articleSchema = z.object({
-  id: z.string(), 
-  coverImage: z.string().optional().nullable(),
-  title: z.string().nullable(),
-  status: z.enum(["draft", "submitted", "revisions_requested", "published"]),
-  publishedAt: z.string().optional(),
-  approved: z.boolean(),
+export const eventSchema = z.object({
+  event: z.object({
+    id: z.string(),
+    title: z.string(),
+    mainImage: z.string(),
+  }),
+  location: z.string(),
+  eventDate: z.date(),
+  status: z.enum(["draft", "published"]),
 });
 
-export type Article = z.infer<typeof articleSchema>;
+export type Event = z.infer<typeof eventSchema>;
