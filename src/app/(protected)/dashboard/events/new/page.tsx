@@ -1,4 +1,4 @@
-import EventForm from "@/components/dashboard/events/EventCreationForm";
+import EventForm from "@/components/dashboard/events/EventForm";
 import React from "react";
 
 const NewEventPage = () => {

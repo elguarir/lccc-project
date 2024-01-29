@@ -8,7 +8,7 @@ interface MemberPageProps {
 }
 
 const MemberPage = ({ params }: MemberPageProps) => {
-  return redirect("/dashboard/members");
+  return redirect("/dashboard/categories");
 };
 
 export default MemberPage;

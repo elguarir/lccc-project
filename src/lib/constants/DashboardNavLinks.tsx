@@ -25,6 +25,12 @@ export const managementLinks: DashboardLinkProps[] = [
     items: [{ name: "Submitted", href: "/dashboard/articles?type=submitted" }],
   },
   {
+    name: "Categories",
+    href: "/dashboard/categories",
+    type: "link",
+    icon: Icons.categoriesIcon,
+  },
+  {
     name: "Events",
     href: "/dashboard/events",
     type: "link",

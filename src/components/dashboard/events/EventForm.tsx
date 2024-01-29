@@ -61,17 +61,17 @@ const EventForm = ({ mode, event }: EventFormProps) => {
   let utils = trpc.useUtils();
   let refresh = () => {
     utils.event.getEvents.invalidate();
-  }
+  };
+  
   let title = form.watch("title");
   let onSubmit = (data: z.infer<typeof formSchema>) => {
     if (mode === "edit" && event) {
-      // TODO: Implement edit event
       updateEvent(
         { id: event.id, ...data },
         {
           onSuccess: () => {
             toast.success("Event updated successfully!");
-            refresh()
+            refresh();
           },
           onError: (error) => {
             toast.error(error.message);
@@ -82,7 +82,7 @@ const EventForm = ({ mode, event }: EventFormProps) => {
       createEvent(data, {
         onSuccess: () => {
           toast.success("Event created successfully!");
-          refresh()
+          refresh();
         },
         onError: (error) => {
           toast.error(error.message);

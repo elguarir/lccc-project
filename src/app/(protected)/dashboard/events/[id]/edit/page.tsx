@@ -1,4 +1,4 @@
-import EventForm from "@/components/dashboard/events/EventCreationForm";
+import EventForm from "@/components/dashboard/events/EventForm";
 import db from "@/prisma";
 import { notFound } from "next/navigation";
 import React from "react";
@@ -31,7 +31,7 @@ const EventEditPage = async (props: Props) => {
         </p>
       </header>
 
-      <div className="w-full pt-6">
+      <div className="w-full py-6 pb-8">
         <EventForm
           mode="edit"
           event={{

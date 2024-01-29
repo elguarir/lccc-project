@@ -11,20 +11,19 @@ type SlugInputProps = {
   onChange: (value: string) => void;
   title: string;
   rest: any;
-  className?: string;
   size?: "sm" | "default";
 };
 
 export const SlugInput = ({
   value,
   title,
-  className,
   onChange,
   size = "sm",
   rest,
 }: SlugInputProps) => {
   let [editMode, setEditMode] = useState(false);
   let [inputValue, setInputValue] = useState(value);
+
   return (
     <div className="relative flex items-center w-full gap-2">
       <>
@@ -37,7 +36,7 @@ export const SlugInput = ({
                 onChange(e.target.value);
               }}
               value={inputValue}
-              readOnly={editMode ? false : true}
+              readOnly={editMode}
               className={cn("pr-8", size === "sm" && "h-9")}
             />
           </FormControl>
