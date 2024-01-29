@@ -40,7 +40,7 @@ export const columns: ColumnDef<Category>[] = [
       let category = row.getValue("category") as Category["category"];
       return (
         <div className="flex items-center">
-          <div className="text-base font-medium truncate max-w-[300px]">
+          <div className="text-sm font-medium truncate max-w-[300px]">
             {category.title}
           </div>
         </div>
@@ -74,11 +74,15 @@ export const columns: ColumnDef<Category>[] = [
   {
     accessorKey: "articleCount",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Number of articles" />
+      <DataTableColumnHeader
+        className="whitespace-nowrap"
+        column={column}
+        title="Number of articles"
+      />
     ),
     cell: ({ row }) => {
       return (
-        <div className="text-sm font-medium text-center w-fit">
+        <div className="text-sm font-medium w-fit">
           {row.getValue("articleCount")}
         </div>
       );
