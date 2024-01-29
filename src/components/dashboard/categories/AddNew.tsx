@@ -44,7 +44,7 @@ const AddNewDialog = ({ mode, category, children }: Props) => {
           </DialogDescription>
 
           <div className="pt-4">
-            <CategoryForm mode={mode} category={category} />
+            <CategoryForm mode={mode} categoryId={category?.id} />
           </div>
         </DialogHeader>
       </DialogContent>
