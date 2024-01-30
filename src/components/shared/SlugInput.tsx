@@ -36,7 +36,7 @@ export const SlugInput = ({
                 onChange(e.target.value);
               }}
               value={inputValue}
-              readOnly={editMode ? true:false}
+              readOnly={editMode ? false:true}
               className={cn("pr-8", size === "sm" && "h-9")}
             />
           </FormControl>
