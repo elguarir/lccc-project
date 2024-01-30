@@ -5,6 +5,13 @@ import { auth } from "@clerk/nextjs";
 import { redirect } from "next/navigation";
 import ArticlesTable from "@/components/dashboard/articles/ArticlesTable";
 
+export const metadata = {
+  title: "Articles",
+  description: "A page for displaying user articles",
+};
+
+
+
 const ArticlesPage = async () => {
   let { userId } = auth();
   if (!userId) return redirect("/sign-in");

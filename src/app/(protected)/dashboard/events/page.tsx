@@ -5,6 +5,14 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
+
+
+export const metadata = {
+  title: "Events",
+  description: "A page to display events",
+};
+
+
 const EventsPage = async () => {
   let events = await db.event.findMany({
     orderBy: {
@@ -33,5 +41,6 @@ const EventsPage = async () => {
     </main>
   );
 };
+
 
 export default EventsPage;

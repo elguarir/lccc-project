@@ -5,9 +5,14 @@ import { getCategoriesWithArticleCount } from "@/server/routers/category";
 import { Plus } from "lucide-react";
 import React from "react";
 
-type Props = {};
+export const metadata = {
+  title: "Categories",
+  description: "Page for managing categories",
+  keywords: ["categories", "management", "dashboard"],
+};
 
-const CategoriesPage = async (props: Props) => {
+
+const CategoriesPage = async () => {
   let categories = await getCategoriesWithArticleCount()
 
   return (
@@ -29,3 +34,4 @@ const CategoriesPage = async (props: Props) => {
 };
 
 export default CategoriesPage;
+

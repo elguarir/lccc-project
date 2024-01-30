@@ -4,6 +4,11 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 import { getUsersList } from "@/server/routers/user";
 import { redirect } from "next/navigation";
 
+export const metadata = {
+  title: "Members",
+  description: "A page for displaying members",
+};
+
 async function MembersPage() {
   let user = await useCurrentUser();
   let formattedUsers = await getUsersList();

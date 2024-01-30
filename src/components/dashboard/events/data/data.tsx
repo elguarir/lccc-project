@@ -1,5 +1,5 @@
 import { Icons } from "@/assets/icons";
-import { PaperPlaneIcon } from "@radix-ui/react-icons";
+import { CheckCircledIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 
 interface Status {
   value: string;
@@ -18,7 +18,7 @@ export const statuses: Status[] = [
   {
     value: "published",
     label: "Published",
-    variant: "success",
-    icon: PaperPlaneIcon,
+    variant: "default",
+    icon: CheckCircledIcon,
   },
 ];
