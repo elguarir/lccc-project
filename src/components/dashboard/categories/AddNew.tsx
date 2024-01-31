@@ -1,3 +1,4 @@
+"use client"
 import {
   Dialog,
   DialogContent,
@@ -6,7 +7,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import React from "react";
+import React, { useState } from "react";
 import CategoryForm from "./CategoryForm";
 
 type Props = {
@@ -20,8 +21,10 @@ type Props = {
 };
 
 const AddNewDialog = ({ mode, category, children }: Props) => {
+  let [open, setOpen] = useState(false);
+  
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
@@ -44,7 +47,7 @@ const AddNewDialog = ({ mode, category, children }: Props) => {
           </DialogDescription>
 
           <div className="pt-4">
-            <CategoryForm mode={mode} categoryId={category?.id} />
+            <CategoryForm onClose={() => setOpen(false)} mode={mode} categoryId={category?.id} />
           </div>
         </DialogHeader>
       </DialogContent>

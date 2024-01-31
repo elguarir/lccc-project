@@ -51,7 +51,7 @@ export const SlugInput = ({
               setEditMode(!editMode);
             }}
             className={cn(
-              "absolute inset-y-0 translate-y-2/3 h-fit right-2 outline-primary",
+              "absolute disabled:opacity-50 inset-y-0 translate-y-2/3 h-fit right-2 outline-primary",
               size === "default" && "mt-0.5",
             )}
           >

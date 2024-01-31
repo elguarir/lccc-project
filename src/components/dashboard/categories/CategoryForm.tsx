@@ -24,9 +24,10 @@ type Props = {
   mode: "create" | "edit";
   categoryId?: string;
   children?: React.ReactNode;
+  onClose?: () => void;
 };
 
-const CategoryForm = ({ mode, categoryId }: Props) => {
+const CategoryForm = ({ mode, categoryId, onClose }: Props) => {
   let form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: async () => {
@@ -35,6 +36,7 @@ const CategoryForm = ({ mode, categoryId }: Props) => {
           title: "",
           slug: "",
         };
+
       let data = await trpcVanilla.category.getCategoryById.query({
         id: categoryId,
       });
@@ -45,12 +47,17 @@ const CategoryForm = ({ mode, categoryId }: Props) => {
       };
     },
   });
+  let utils = trpc.useUtils();
+
   let { mutate: createCategory, isLoading: isCreating } =
     trpc.category.createCategory.useMutation();
   let { mutate: updateCategory, isLoading: isUpdating } =
     trpc.category.updateCategory.useMutation();
-  let title = form.watch("title");
+  let refresh = () => {
+    utils.category.getCategories.invalidate();
+  };
 
+  let title = form.watch("title");
 
   let onSubmit = (data: z.infer<typeof formSchema>) => {
     if (mode === "create") {
@@ -60,6 +67,8 @@ const CategoryForm = ({ mode, categoryId }: Props) => {
           toast.success("Category created successfully!", {
             duration: 1250,
           });
+          refresh();
+          onClose && onClose();
         },
         onError: (error) => {
           toast.error(error.message, {
@@ -81,6 +90,8 @@ const CategoryForm = ({ mode, categoryId }: Props) => {
             toast.success("Category updated successfully!", {
               duration: 1250,
             });
+            refresh();
+            onClose && onClose();
           },
           onError: (error) => {
             toast.error(error.message, {

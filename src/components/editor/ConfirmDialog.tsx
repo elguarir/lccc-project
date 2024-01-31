@@ -42,7 +42,7 @@ const ConfirmDialog: React.FC<TConfirmDialogProps> = ({
   const router = useRouter();
   const { mutate: submit, isLoading } =
     trpc.article.submitForApproval.useMutation();
-
+  let utils = trpc.useUtils();
   if (isTablet || isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
@@ -112,6 +112,9 @@ const ConfirmDialog: React.FC<TConfirmDialogProps> = ({
                         position: "bottom-left",
                       });
                       fireConfetti();
+                      utils.article.getArticleById.invalidate({
+                        id: articleId,
+                      });
                       router.refresh();
                     },
                   },
@@ -192,6 +195,9 @@ const ConfirmDialog: React.FC<TConfirmDialogProps> = ({
                       position: "bottom-left",
                     });
                     fireConfetti();
+                    utils.article.getArticleById.invalidate({
+                      id: articleId,
+                    });
                     router.refresh();
                   },
                 },

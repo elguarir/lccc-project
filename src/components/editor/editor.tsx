@@ -1,6 +1,7 @@
 "use client";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useArticleState } from "@/lib/store/useArticleState";
+import { cn } from "@/lib/utils";
 import { trpc } from "@/server/client";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -18,6 +19,10 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
   const setSaving = useArticleState((state) => state.setSaving);
   const { mutate: update, isLoading } =
     trpc.article.updateContent.useMutation();
+
+  let { data: article, isLoading: isArticleLoading } =
+    trpc.article.getArticleById.useQuery({ id: articleId });
+
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
@@ -43,6 +48,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
           const savedData = await editor.save();
           setData(savedData);
         },
+        readOnly: isArticleLoading || article?.status === "submitted",
         placeholder: "Type your page content here...",
         inlineToolbar: true,
         tools: {
@@ -102,7 +108,10 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
     <div className="w-full max-w-full mx-auto space-y-2 prose dark:prose-neutral dark:prose-invert">
       <div
         id="editor"
-        className="w-full max-w-[calc(100vw-40px)] sm:max-w-[calc(100vw-60px)] md:max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-480px)] xl:max-w-[calc(100vw-600px)] 2xl:max-w-[calc(100vw-800px)] rounded-lg px-6 p-4"
+        className={cn(
+          "w-full max-w-[calc(100vw-40px)] sm:max-w-[calc(100vw-60px)] md:max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-480px)] xl:max-w-[calc(100vw-600px)] 2xl:max-w-[calc(100vw-800px)] rounded-lg px-6 p-4",
+          (isArticleLoading || article?.status === "submitted") && "opacity-70",
+        )}
       />
     </div>
   );

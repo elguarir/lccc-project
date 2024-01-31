@@ -15,6 +15,9 @@ import { articleSchema } from "../data/schema";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import Link from "next/link";
+import useArticlePermissions from "@/hooks/use-article-permissions";
 
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
@@ -28,10 +31,12 @@ export function DataTableRowActions<TData>({
   let { mutateAsync: duplicateArticle } =
     trpc.article.duplicateArticle.useMutation();
   let utils = trpc.useUtils();
-  let router = useRouter();
   let refresh = () => {
     utils.article.getUserArticles.invalidate();
   };
+  let { canDelete, canDuplicate, isLoading } = useArticlePermissions({
+    id: article.id,
+  });
 
   return (
     <DropdownMenu>
@@ -44,15 +49,13 @@ export function DataTableRowActions<TData>({
           <span className="sr-only">Open menu</span>
         </Button>
       </DropdownMenuTrigger>
+
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem
-          onClick={() => {
-            router.push(`/editor/${article.id}`);
-          }}
-        >
-          Edit
+        <DropdownMenuItem asChild>
+          <Link href={`/editor/${article.id}`}>Edit</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
+          disabled={!canDuplicate || isLoading}
           onClick={() => {
             toast.promise(
               duplicateArticle(
@@ -77,6 +80,7 @@ export function DataTableRowActions<TData>({
           Duplicate
         </DropdownMenuItem>
         <DropdownMenuItem
+          disabled={!canDelete || isLoading}
           onClick={() => {
             toast("Are you sure you want to delete this article?", {
               action: {

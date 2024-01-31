@@ -124,6 +124,55 @@ export const articleRouter = router({
       });
       return article;
     }),
+  getArticleById: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      let article = await ctx.prisma.article.findUnique({
+        where: {
+          id: input.id,
+        },
+        select: {
+          id: true,
+          userId: true,
+          title: true,
+          slug: true,
+          excerpt: true,
+          content: true,
+          status: true,
+          approved: true,
+          main_image: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+          tags: {
+            select: {
+              tag: {
+                select: {
+                  id: true,
+                  name: true,
+                  slug: true,
+                },
+              },
+            },
+          },
+          publishedAt: true,
+          createdAt: true,
+          updatedAt: true,
+        },
+      });
+      if (!article) return null;
+
+      let formartedArticle = {
+        ...article,
+        tags: article.tags.map((tag) => tag.tag),
+      };
+      return formartedArticle;
+    }),
+
   getUserArticles: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
