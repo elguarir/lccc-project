@@ -1,4 +1,5 @@
 "use client";
+import useArticlePermissions from "@/hooks/use-article-permissions";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useArticleState } from "@/lib/store/useArticleState";
 import { cn } from "@/lib/utils";
@@ -12,17 +13,16 @@ interface EditorProps {
 }
 
 export default function Editor({ initialValue, articleId }: EditorProps) {
-  const [isMounted, setIsMounted] = useState<boolean>(false);
-  const ref = useRef<EditorJS>();
-  const [data, setData] = useState<OutputData | undefined>(initialValue);
+  let [isMounted, setIsMounted] = useState<boolean>(false);
+  let ref = useRef<EditorJS>();
+  let [data, setData] = useState<OutputData | undefined>(initialValue);
   let debouncedData = useDebounce(data, 1500);
-  const setSaving = useArticleState((state) => state.setSaving);
-  const { mutate: update, isLoading } =
-    trpc.article.updateContent.useMutation();
+  let setSaving = useArticleState((state) => state.setSaving);
+  let { mutate: update, isLoading } = trpc.article.updateContent.useMutation();
 
-  let { data: article, isLoading: isArticleLoading } =
-    trpc.article.getArticleById.useQuery({ id: articleId });
-
+  let { canEdit, isLoading: stateLoading } = useArticlePermissions({
+    id: articleId,
+  });
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
@@ -48,7 +48,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
           const savedData = await editor.save();
           setData(savedData);
         },
-        readOnly: isArticleLoading || article?.status === "submitted",
+        readOnly: !canEdit || stateLoading,
         placeholder: "Type your page content here...",
         inlineToolbar: true,
         tools: {
@@ -110,7 +110,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
         id="editor"
         className={cn(
           "w-full max-w-[calc(100vw-40px)] sm:max-w-[calc(100vw-60px)] md:max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-480px)] xl:max-w-[calc(100vw-600px)] 2xl:max-w-[calc(100vw-800px)] rounded-lg px-6 p-4",
-          (isArticleLoading || article?.status === "submitted") && "opacity-70",
+          (!canEdit || stateLoading) && "opacity-70",
         )}
       />
     </div>
