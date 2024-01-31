@@ -18,7 +18,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
   let [data, setData] = useState<OutputData | undefined>(initialValue);
   let debouncedData = useDebounce(data, 1500);
   let setSaving = useArticleState((state) => state.setSaving);
-  let { mutate: update, isLoading } = trpc.article.updateContent.useMutation();
+  let { mutate: update } = trpc.article.updateContent.useMutation();
 
   let { canEdit, isLoading: stateLoading } = useArticlePermissions({
     id: articleId,
@@ -70,6 +70,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
   // Update article content
   useEffect(() => {
     if (debouncedData) {
+      if (!canEdit) return;
       setSaving(true);
       update(
         { id: articleId, content: debouncedData },
