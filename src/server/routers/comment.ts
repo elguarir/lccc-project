@@ -25,7 +25,7 @@ export const commentsRouter = router({
       if (!user) {
         throw new Error("Not authenticated");
       }
-
+  
       const comment = await db.comment.create({
         data: {
           body: input.body,
@@ -62,6 +62,26 @@ export const commentsRouter = router({
         },
       });
       return newReply;
+    }),
+  editComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+        body: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const comment = await ctx.prisma.comment.update({
+        where: {
+          id: input.commentId,
+        },
+        data: {
+          body: input.body,
+          edited: true,
+        },
+      });
+
+      return comment;
     }),
 });
 
