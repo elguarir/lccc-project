@@ -25,7 +25,7 @@ export const commentsRouter = router({
       if (!user) {
         throw new Error("Not authenticated");
       }
-  
+
       const comment = await db.comment.create({
         data: {
           body: input.body,
@@ -83,6 +83,21 @@ export const commentsRouter = router({
 
       return comment;
     }),
+  deleteComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const comment = await ctx.prisma.comment.delete({
+        where: {
+          id: input.commentId,
+        },
+      });
+
+      return comment;
+    }),
 });
 
 export type TGetComments = Awaited<ReturnType<typeof getComments>>;
@@ -99,7 +114,6 @@ async function getComments({ slug }: { slug: string }) {
           edited: true,
           createdAt: true,
           updatedAt: true,
-
           user: {
             select: {
               id: true,
@@ -129,10 +143,15 @@ async function getComments({ slug }: { slug: string }) {
           },
         },
       },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
     },
   });
 
-  return (comments?.comments ?? []).map((comment) => ({
+  let formattedComments = (comments?.comments ?? []).map((comment) => ({
     id: comment.id,
     body: comment.body,
     edited: comment.edited,
@@ -158,4 +177,9 @@ async function getComments({ slug }: { slug: string }) {
       updatedAt: reply.updatedAt,
     })),
   }));
+
+  return {
+    comments: formattedComments,
+    count: comments?._count.comments ?? 0,
+  };
 }
