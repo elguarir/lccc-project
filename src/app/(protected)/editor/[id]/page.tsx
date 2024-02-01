@@ -8,6 +8,11 @@ import Editor from "@/components/editor/editor";
 import { getArticleById } from "@/server/routers/article";
 import { auth } from "@clerk/nextjs";
 import ArticleStatus from "@/components/editor/ArticleStatus";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 interface EditorPageProps {
   params: {
@@ -68,6 +73,9 @@ const EditorPage = async ({ params }: EditorPageProps) => {
         </div>
       </ScrollArea>
       <SideBar article={article} />
+      <Popover>
+        <PopoverTrigger className="absolute bottom-4 left-4"></PopoverTrigger>
+      </Popover>
     </div>
   );
 };
