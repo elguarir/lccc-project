@@ -54,7 +54,7 @@ export const columns: ColumnDef<Article>[] = [
           {imgUrl ? (
             <img
               src={imgUrl}
-              className="w-full h-full object-cover rounded-[4px] aspect-video"
+              className="w-full h-full object-cover rounded-[4px] border aspect-video"
             />
           ) : (
             <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">
@@ -76,7 +76,7 @@ export const columns: ColumnDef<Article>[] = [
         <div className="flex space-x-2">
           <Link
             href={`/editor/${row.getValue("id")}`}
-            className="max-w-[400px] truncate font-medium hover:text-primary"
+            className="max-w-[310px] truncate font-medium hover:text-primary"
           >
             {row.getValue("title")}
           </Link>

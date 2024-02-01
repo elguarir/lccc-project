@@ -87,6 +87,21 @@ model Article {
   tags        ArticleTag[]
   comments    Comment[]
   author      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  Revision    Revision[]
+}
+
+// add a model for revisions in which the admin can request changes to an article and leave notes for the author
+
+model Revision {
+  id        String   @id @default(cuid())
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId String
+  body      String
+  resolved  Boolean  @default(false)
+  // any additional fields that we want to add to the revision
+  // suggest some
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Comment {

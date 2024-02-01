@@ -1,7 +1,6 @@
 import { LucideProps } from "lucide-react";
 import React from "react";
 
-
 export interface NavItem {
   title: string;
   href?: string;
@@ -12,6 +11,7 @@ export interface NavItem {
 export interface AccordianLink {
   name: string;
   href: string;
+  endContent?: () => React.ReactNode;
 }
 
 export interface DashboardLinkProps {

@@ -1,4 +1,5 @@
 import { Icons } from "@/assets/icons";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DashboardLinkProps } from "@/types/nav";
 
@@ -22,7 +23,13 @@ export const managementLinks: DashboardLinkProps[] = [
         <Icons.add className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
       </Button>
     ),
-    items: [{ name: "Submitted", href: "/dashboard/articles?type=submitted" }],
+    items: [
+      {
+        name: "Submitted",
+        href: "/dashboard/articles?type=submitted",
+        endContent: () => <Badge variant={"default"} className="px-1.5">2</Badge>,
+      },
+    ],
   },
   {
     name: "Categories",
