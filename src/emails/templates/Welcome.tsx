@@ -16,7 +16,6 @@ import {
 } from "@react-email/components";
 import { Tailwind } from "@react-email/tailwind";
 import { logoUrl, baseUrl } from "../constants";
-import { render } from "@react-email/render";
 type Props = {
   name: string;
   email: string;
@@ -118,7 +117,7 @@ export const WelcomeEmail = ({ email, name }: Props) => {
             alt="LCC Club"
             className="mx-auto my-20"
           />
-          <Container className="bg-white p-45">
+          <Container className="px-10 bg-white py-45">
             <Heading className="my-0 leading-8 text-center">
               Welcome to LCC Club!
             </Heading>
