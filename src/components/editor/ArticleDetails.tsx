@@ -224,6 +224,11 @@ export default function ArticleDetails({
                           {category.name}
                         </SelectItem>
                       ))}
+                      {categories && categories.length === 0 && (
+                        <div className="flex items-center justify-center text-sm font-medium py-14">
+                          No categories found
+                        </div>
+                      )}
                     </SelectContent>
                   </Select>
                   <FormDescription></FormDescription>

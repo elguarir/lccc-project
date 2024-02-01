@@ -1,5 +1,6 @@
 import { articleRouter } from "./routers/article";
 import { categoryRouter } from "./routers/category";
+import { commentsRouter } from "./routers/comment";
 import { emailRouter } from "./routers/emails";
 import { eventRouter } from "./routers/event";
 import { userRouter } from "./routers/user";
@@ -10,7 +11,8 @@ export const appRouter = router({
   article: articleRouter,
   event: eventRouter,
   category: categoryRouter,
-  email: emailRouter
+  email: emailRouter,
+  comment: commentsRouter,
 });
 
 // export type definition of API
