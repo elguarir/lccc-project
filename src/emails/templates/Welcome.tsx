@@ -139,7 +139,10 @@ export const WelcomeEmail = ({ email, name }: Props) => {
             <ul>{steps?.map(({ Description }) => Description)}</ul>
 
             <Section className="text-center">
-              <Button className="!px-[20px] !py-[10px] text-white rounded-lg bg-primary">
+              <Button
+                href={`${baseUrl}/dashboard`}
+                className="!px-[20px] !py-[10px] text-white rounded-lg bg-primary"
+              >
                 Go to your dashboard
               </Button>
             </Section>
