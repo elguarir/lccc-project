@@ -43,6 +43,8 @@ export function DataTableRowActions<TData>({
   let user = userSchema.parse(row.original);
   let { mutateAsync: deleteUser } = trpc.user.deleteUser.useMutation();
   let { mutateAsync: updateUser } = trpc.user.updateUserRole.useMutation();
+  let { mutateAsync: sendWelcomeEmail } =
+    trpc.email.sendWelcomeEmail.useMutation();
   let utils = trpc.useUtils();
   let refresh = () => {
     utils.user.getUsersList.invalidate();
@@ -61,7 +63,25 @@ export function DataTableRowActions<TData>({
             <span className="sr-only">Open menu</span>
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="end" className="w-[160px]">
+        <DropdownMenuContent align="end" className="w-[180px]">
+          <DropdownMenuItem
+            onClick={() => {
+              toast.promise(
+                sendWelcomeEmail({
+                  email: user.user.email,
+                  name: user.user.firstName + " " + user.user.lastName,
+                }),
+                {
+                  loading: "Sending welcome email...",
+                  success: "Welcome email sent!",
+                  error: "Could not send welcome email",
+                  duration: 1250,
+                },
+              );
+            }}
+          >
+            Send Welcome Email
+          </DropdownMenuItem>
           <DropdownMenuItem asChild>
             <Link
               className="outline-none focus:ring-0 ring-0 focus:outline-none"
