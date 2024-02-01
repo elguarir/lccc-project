@@ -1,4 +1,3 @@
-import { fontHand, fontHeading } from "@/assets/fonts";
 import { siteConfig } from "@/config/site";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "@/providers/ThemeProvider";
@@ -36,8 +35,6 @@ export default function RootLayout({ children }: RootLayoutProps) {
           className={cn(
             "min-h-screen bg-background antialiased",
             GeistSans.className,
-            fontHand.variable,
-            fontHeading.variable,
             GeistMono.variable,
           )}
         >

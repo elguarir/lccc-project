@@ -89,8 +89,8 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-geist-sans)"],
         mono: ["var(--font-geist-mono)"],
-        hand: ["var(--font-hand)", ...fontFamily.sans],
-        heading: ["var(--font-heading)", ...fontFamily.sans],
+        // hand: ["var(--font-hand)", ...fontFamily.sans],
+        // heading: ["var(--font-heading)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

@@ -4,7 +4,6 @@ import { Resend } from "resend";
 import { env } from "@/lib/env/server";
 import { fromEmail } from "@/emails/constants";
 import { WelcomeEmail } from "@/emails/templates/Welcome";
-console.log(env.RESEND_API_KEY);
 const resend = new Resend(env.RESEND_API_KEY);
 
 export const emailRouter = router({
@@ -27,7 +26,7 @@ type props = {
 
 export async function sendWelcomeEmail({ email, name }: props) {
   await resend.emails.send({
-    from: `LCC Club<${fromEmail}>`,
+    from: fromEmail,
     to: email,
     subject: "Welcome to Language, Culture and Creativity Club!",
     react: <WelcomeEmail name={name} email={email} />,
