@@ -29,8 +29,8 @@ export async function sendWelcomeEmail({ email, name }: props) {
   await resend.emails.send({
     from: `LCC Club<${fromEmail}>`,
     to: email,
-    subject: "Welcome to Language, Communication, Creativity Club!",
+    subject: "Welcome to Language, Culture and Creativity Club!",
     react: <WelcomeEmail name={name} email={email} />,
-    text: "Welcome to Language, Communication, Creativity Club!",
+    text: "Welcome to Language, Culture and Creativity Club!",
   });
 }
