@@ -20,9 +20,9 @@ const useArticlePermissions = ({ id }: Props) => {
   let isAdmin = currentUser?.role === "admin";
   let isAuthor = currentUser?.id === article?.userId;
 
-  let canEdit = isDraft || isRevisionsRequested;
+  let canEdit = isDraft || isRevisionsRequested || isAdmin;
   let canDelete = isDraft || isRevisionsRequested || isAdmin;
-  let canDuplicate = isDraft || isRevisionsRequested;
+  let canDuplicate = isDraft || isRevisionsRequested || isAdmin;
   let canUnpublish = isPublished && (isAdmin || isAuthor);
 
   return {

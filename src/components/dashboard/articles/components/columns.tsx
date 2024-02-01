@@ -54,7 +54,7 @@ export const columns: ColumnDef<Article>[] = [
           {imgUrl ? (
             <img
               src={imgUrl}
-              className="w-full h-full rounded-[4px] aspect-video"
+              className="w-full h-full object-cover rounded-[4px] aspect-video"
             />
           ) : (
             <div className="flex border items-center justify-center w-full h-full rounded-[4px] aspect-video bg-muted">

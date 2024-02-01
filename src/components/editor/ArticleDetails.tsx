@@ -42,6 +42,7 @@ import { toast } from "sonner";
 import { SlugInput } from "../shared/SlugInput";
 import { Alert, AlertDescription, AlertTitle } from "../ui/alert";
 import { InfoCircledIcon } from "@radix-ui/react-icons";
+import useArticlePermissions from "@/hooks/use-article-permissions";
 
 export default function ArticleDetails({
   formState,
@@ -52,12 +53,13 @@ export default function ArticleDetails({
 }) {
   const title = formState.watch("title");
   const [conductor, setConductor] = useState<TConductorInstance>();
-  const { mutate: saveDraft, isLoading } = trpc.article.saveDraft.useMutation();
+  const { mutate: saveDraft, isLoading: savingDraft } =
+    trpc.article.saveDraft.useMutation();
   const { data: categories, isLoading: categoriesLoading } =
     trpc.article.getArticleCategories.useQuery();
-  let { data: article, isLoading: articleLoading } =
-    trpc.article.getArticleById.useQuery({ id: articleId });
-
+  let { canEdit, isLoading, articleStatus } = useArticlePermissions({
+    id: articleId,
+  });
   const fire = () => {
     if (conductor) {
       conductor.shoot();
@@ -91,10 +93,9 @@ export default function ArticleDetails({
       },
     );
   };
-
   return (
     <div className="flex flex-col gap-2">
-      {article?.status === "submitted" && (
+      {articleStatus === "submitted" && (
         <Alert variant={"warning"} className="px-2 py-3 space-x-2.5 space-y-0">
           <InfoCircledIcon className="w-4 h-4 text-warning-600" />
           <AlertTitle className="text-sm font-semibold">Heads up!</AlertTitle>
@@ -108,9 +109,7 @@ export default function ArticleDetails({
         <form onSubmit={formState.handleSubmit(onSubmit)}>
           <fieldset
             className="w-full space-y-6"
-            disabled={
-              isLoading || article?.status === "submitted" || articleLoading
-            }
+            disabled={savingDraft || !canEdit || isLoading}
           >
             <FormField
               control={formState.control}
@@ -249,27 +248,32 @@ export default function ArticleDetails({
                   {field.value && field.value.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
                       {field.value.map((tag, index) => (
-                        <Badge
-                          className="flex items-center gap-1 pr-2"
-                          variant={"outline"}
-                          key={index}
+                        <button
+                          type="button"
+                          className="rounded-full cursor-default focus-visible:outline-primary disabled:opacity-60"
                         >
-                          {tag.name}
-                          <button
-                            onClick={() => {
-                              formState.setValue(
-                                "tags",
-                                field?.value?.filter(
-                                  (t, i) => t.slug !== tag.slug,
-                                ),
-                              );
-                            }}
-                            type="button"
-                            className="focus-visible:outline-primary"
+                          <Badge
+                            className="flex items-center gap-1 pr-2"
+                            variant={"outline"}
+                            key={index}
                           >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </Badge>
+                            {tag.name}
+                            <button
+                              onClick={() => {
+                                formState.setValue(
+                                  "tags",
+                                  field?.value?.filter(
+                                    (t, i) => t.slug !== tag.slug,
+                                  ),
+                                );
+                              }}
+                              type="button"
+                              className="focus-visible:outline-primary"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </Badge>
+                        </button>
                       ))}
                     </div>
                   )}
@@ -331,7 +335,7 @@ export default function ArticleDetails({
 
             <div className="flex items-center justify-end w-full gap-2">
               <Button
-                isLoading={isLoading}
+                isLoading={savingDraft}
                 loadingText="Saving..."
                 size={"sm"}
                 variant={"outline"}
@@ -366,24 +370,25 @@ type TagInputProps = {
 const TagInput = ({ value, onChange }: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
   let inputRef = useRef<HTMLInputElement>(null);
-  const { mutate: createTag, isLoading } = trpc.article.createTag.useMutation();
-  const handleSubmit = () => {
+  const { mutateAsync: createTag, isLoading } =
+    trpc.article.createTag.useMutation();
+  const handleSubmit = async () => {
     let alreadyExists = value?.find((tag) => tag.slug === slugIt(inputValue));
     if (alreadyExists) {
       setInputValue("");
       return;
     }
     if (inputValue) {
-      createTag(
+      await createTag(
         { name: inputValue },
         {
           onSuccess: (data) => {
             onChange([...(value ?? []), data]);
+            setInputValue("");
+            inputRef.current?.focus();
           },
         },
       );
-      setInputValue("");
-      inputRef.current?.focus();
     }
   };
 
@@ -393,10 +398,10 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
         <Input
           ref={inputRef}
           value={inputValue}
-          onKeyDown={(e) => {
+          onKeyDown={async (e) => {
             if (e.key === "Enter") {
               e.preventDefault();
-              handleSubmit();
+              await handleSubmit();
             }
           }}
           disabled={isLoading}
