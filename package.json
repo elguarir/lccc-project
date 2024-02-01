@@ -132,6 +132,9 @@
     "zod": "^3.22.2",
     "zustand": "^4.4.1"
   },
+  "resolutions": {
+    "@react-email/render": "^0.0.9"
+  },
   "overrides": {
     "@radix-ui/react-dismissable-layer": "^1.0.5",
     "@radix-ui/react-focus-scope": "^1.0.4"
