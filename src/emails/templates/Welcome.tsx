@@ -90,8 +90,8 @@ export const WelcomeEmail = ({ email, name }: Props) => {
     <Html>
       <Head />
       <Preview>
-        Hello {name} 👋, we're excited to have you on board. We're here to help you
-        get started with your first article.
+        Hello {name} 👋, we're excited to have you on board. We're here to help
+        you get started with your first article.
       </Preview>
       <Tailwind
         config={{
@@ -102,6 +102,8 @@ export const WelcomeEmail = ({ email, name }: Props) => {
               },
               spacing: {
                 0: "0px",
+                5: "5px",
+                10: "10px",
                 20: "20px",
                 45: "45px",
               },
@@ -109,7 +111,7 @@ export const WelcomeEmail = ({ email, name }: Props) => {
           },
         }}
       >
-        <Body className="font-sans text-base bg-offwhite">
+        <Body className="font-sans text-base">
           <Img
             src={logoUrl}
             width={304.5}
@@ -117,7 +119,7 @@ export const WelcomeEmail = ({ email, name }: Props) => {
             alt="LCC Club"
             className="mx-auto my-20"
           />
-          <Container className="px-10 bg-white py-45">
+          <Container className="px-2 bg-white py-45">
             <Heading className="my-0 leading-8 text-center">
               Welcome to LCC Club!
             </Heading>
@@ -137,7 +139,7 @@ export const WelcomeEmail = ({ email, name }: Props) => {
             <ul>{steps?.map(({ Description }) => Description)}</ul>
 
             <Section className="text-center">
-              <Button className="bg-brand text-white rounded-lg py-3 px-[18px]">
+              <Button className="bg-primary text-white rounded-lg py-3 px-[18px]">
                 Go to your dashboard
               </Button>
             </Section>
