@@ -1,7 +1,7 @@
 datasource db {
   provider     = "mysql"
   url          = env("DATABASE_URL")
-  relationMode = "foreignKeys"
+  relationMode = "prisma"
 }
 
 generator client {
@@ -53,6 +53,8 @@ model User {
   profileId  String?
   articles   Article[]
   comments   Comment[]
+
+  @@index([profileId])
 }
 
 model Profile {
@@ -89,6 +91,9 @@ model Article {
   comments    Comment[]
   author      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   Revision    Revision[]
+
+  @@index([categoryId])
+  @@index([userId])
 }
 
 // add a model for revisions in which the admin can request changes to an article and leave notes for the author
@@ -103,6 +108,8 @@ model Revision {
   // suggest some
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([articleId])
 }
 
 model Comment {
@@ -115,9 +122,13 @@ model Comment {
   userId    String
   Article   Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   articleId String
-  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: Cascade)
+  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parentId  String?
   children  Comment[] @relation("CommentToComment")
+
+  @@index([parentId])
+  @@index([userId])
+  @@index([articleId])
 }
 
 model Tag {
@@ -136,6 +147,8 @@ model ArticleTag {
   tagId     String
 
   @@id([articleId, tagId])
+  @@index([articleId])
+  @@index([tagId])
 }
 
 model Category {
