@@ -34,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background antialiased 2xl:zoom-110",
+            "min-h-screen bg-background antialiased",
             GeistSans.className,
             GeistMono.variable,
             fontHeading.variable,

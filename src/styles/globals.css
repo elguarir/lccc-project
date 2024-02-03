@@ -70,8 +70,13 @@
   .text-balance {
     text-wrap: balance;
   }
+
   .zoom-110 {
     zoom: 110%;
+  }
+
+  .heading-underline {
+    @apply transition-all duration-200 hover:underline hover:underline-offset-2 decoration-primary hover:decoration-2;
   }
 }
 

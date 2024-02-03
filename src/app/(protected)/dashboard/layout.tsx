@@ -6,7 +6,9 @@ type Props = {
 };
 
 async function layout({ children }: Props) {
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+      <DashboardLayout>{children}</DashboardLayout>
+  );
 }
 
 export default layout;

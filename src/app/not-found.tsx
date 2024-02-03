@@ -5,8 +5,8 @@ import React from "react";
 
 function notFound() {
   return (
-    <div className="absolute top-0  h-screen w-screen bg-background bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
-      <div className="container flex items-center min-h-screen px-6 py-12 mx-auto">
+    <div className="absolute top-0 h-screen w-full bg-background bg-[radial-gradient(ellipse_80%_80%_at_50%_-20%,rgba(120,119,198,0.3),rgba(255,255,255,0))]">
+      <div className="flex items-center min-h-screen px-6 py-12 mx-auto">
         <div className="flex flex-col items-center max-w-sm mx-auto text-center">
           <div className="p-3 text-sm font-medium rounded-full text-primary bg-primary-50 dark:bg-gray-800">
             <svg

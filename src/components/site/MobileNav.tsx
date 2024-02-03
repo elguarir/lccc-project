@@ -63,9 +63,9 @@ const MobileNav = () => {
                 <Link
                   onClick={() => setOpen(false)}
                   className="flex w-full font-semibold capitalize"
-                  href="/lessons"
+                  href="/events"
                 >
-                  Lessons
+                  Events
                 </Link>
               </li>
               <li className="py-3">

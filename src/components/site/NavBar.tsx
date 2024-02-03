@@ -34,7 +34,7 @@ const NavBar = () => {
 							<Link href={"/articles"}>Articles</Link>
 						</li>
 						<li className="text-base font-medium hover:text-[#657dcc] transition-colors duration-300">
-							<Link href={"/lessons"}>Lessons</Link>
+							<Link href={"/events"}>Events</Link>
 						</li>
 						<li className="text-base font-medium hover:text-[#657dcc] transition-colors duration-300">
 							<Link href={"/about"}>About</Link>
