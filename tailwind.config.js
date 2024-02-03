@@ -16,7 +16,6 @@ module.exports = {
       maxWidth: {
         "8xl": "85rem",
       },
-
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -89,8 +88,7 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-geist-sans)"],
         mono: ["var(--font-geist-mono)"],
-        // hand: ["var(--font-hand)", ...fontFamily.sans],
-        // heading: ["var(--font-heading)", ...fontFamily.sans],
+        heading: ["var(--font-heading)", ...fontFamily.sans],
       },
       keyframes: {
         "accordion-down": {

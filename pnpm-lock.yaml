@@ -221,6 +221,9 @@ dependencies:
   date-fns:
     specifier: ^2.30.0
     version: 2.30.0
+  editorjs-react-renderer:
+    specifier: ^3.5.1
+    version: 3.5.1
   eslint-plugin-prettier:
     specifier: ^5.0.0
     version: 5.0.1(eslint-config-prettier@9.0.0)(eslint@8.54.0)(prettier@3.1.0)
@@ -7351,6 +7354,13 @@ packages:
       commander: 10.0.1
       minimatch: 9.0.1
       semver: 7.5.4
+    dev: false
+
+  /editorjs-react-renderer@3.5.1:
+    resolution: {integrity: sha512-WeFNeLDxuVyc2s7AZpAB8bfqylLXNmPxvFFgeQ8W8M95+e5QNpvpvd/JCubXYL01JDtYjFab7pTyrZva5QeF2Q==}
+    dependencies:
+      html-react-parser: 3.0.9(react@18.2.0)
+      react: 18.2.0
     dev: false
 
   /electron-to-chromium@1.4.588:

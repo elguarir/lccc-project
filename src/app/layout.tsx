@@ -8,7 +8,7 @@ import ClerkThemeProvider from "@/providers/ClerkProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-
+import { fontHeading } from "@/assets/fonts";
 export const metadata: Metadata = {
   title: {
     template: `%s - ${siteConfig.name}`,
@@ -36,6 +36,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
             "min-h-screen bg-background antialiased",
             GeistSans.className,
             GeistMono.variable,
+            fontHeading.variable,
           )}
         >
           <ThemeProvider attribute="class" defaultTheme="light">
