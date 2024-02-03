@@ -17,31 +17,31 @@ export const fontSans = FontSans({
 export const fontHeading = localFont({
   src: [
     {
-      path: "/CabinetGrotesk-Thin.otf",
+      path: "./CabinetGrotesk-Thin.otf",
       weight: "100",
     },
     {
-      path: "/CabinetGrotesk-Light.otf",
+      path: "./CabinetGrotesk-Light.otf",
       weight: "300",
     },
     {
-      path: "/CabinetGrotesk-Regular.otf",
+      path: "./CabinetGrotesk-Regular.otf",
       weight: "400",
     },
     {
-      path: "/CabinetGrotesk-Medium.otf",
+      path: "./CabinetGrotesk-Medium.otf",
       weight: "500",
     },
     {
-      path: "/CabinetGrotesk-Bold.otf",
+      path: "./CabinetGrotesk-Bold.otf",
       weight: "700",
     },
     {
-      path: "/CabinetGrotesk-ExtraBold.otf",
+      path: "./CabinetGrotesk-ExtraBold.otf",
       weight: "800",
     },
     {
-      path: "/CabinetGrotesk-Black.otf",
+      path: "./CabinetGrotesk-Black.otf",
       weight: "900",
     },
   ],
