@@ -70,6 +70,9 @@
   .text-balance {
     text-wrap: balance;
   }
+  .zoom-110 {
+    zoom: 110%;
+  }
 }
 
 

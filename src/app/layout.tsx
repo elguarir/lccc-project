@@ -27,7 +27,6 @@ interface RootLayoutProps {
   children: React.ReactNode;
 }
 
-
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <>
@@ -35,7 +34,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
         <head />
         <body
           className={cn(
-            "min-h-screen bg-background antialiased",
+            "min-h-screen bg-background antialiased 2xl:zoom-110",
             GeistSans.className,
             GeistMono.variable,
             fontHeading.variable,

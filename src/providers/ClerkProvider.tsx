@@ -2,11 +2,30 @@
 
 import { ClerkProvider } from "@clerk/nextjs";
 import { useTheme } from "next-themes";
-import type { PropsWithChildren } from "react";
+import { useEffect, type PropsWithChildren, useState } from "react";
 import { dark } from "@clerk/themes";
 
 export default function ClerkThemeProvider({ children }: PropsWithChildren) {
-  const { resolvedTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
+  const [themeResolved, setThemeResolved] = useState(false);
+
+  // Function to handle theme resolution
+  const resolveTheme = () => {
+    if (!themeResolved && resolvedTheme !== "system") {
+      setThemeResolved(true);
+    }
+  };
+
+  useEffect(() => {
+    resolveTheme();
+  }, [resolvedTheme]);
+
+  useEffect(() => {
+    if (themeResolved) {
+      setTheme(resolvedTheme || "");
+    }
+  }, [themeResolved, setTheme, resolvedTheme]);
+
   return (
     <ClerkProvider
       signInUrl="/sign-in"
