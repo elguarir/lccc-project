@@ -8,8 +8,7 @@ import ClerkThemeProvider from "@/providers/ClerkProvider";
 import { Toaster } from "@/components/ui/sonner";
 import { GeistSans } from "geist/font/sans";
 import { GeistMono } from "geist/font/mono";
-// import { fontHeading } from "@/assets/fonts";
-import localFont from "next/font/local";
+import { fontHeading } from "@/assets/fonts";
 
 export const metadata: Metadata = {
   title: {
@@ -27,12 +26,7 @@ export const metadata: Metadata = {
 interface RootLayoutProps {
   children: React.ReactNode;
 }
-const fontHeading = localFont({
-  src: "./fonts/CabinetGrotesk-Variable.woff2",
-  fallback: ["Cabinet Grotesk", "sans-serif"],
-  display: "swap",
-  variable: "--font-heading",
-});
+
 
 export default function RootLayout({ children }: RootLayoutProps) {
   return (
