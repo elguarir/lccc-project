@@ -1,13 +1,76 @@
 import Link from "next/link";
 import React from "react";
-import { mainLinks, managementLinks } from "@/lib/constants/DashboardNavLinks";
+import { mainLinks } from "@/lib/constants/DashboardNavLinks";
 import NavItems from "./NavItems";
 import { SideSheet } from "./SideSheet";
 import { UserButton, currentUser } from "@clerk/nextjs";
 import { ThemeToggle } from "@/components/site/theme-toggle";
+import { useCurrentUser } from "@/hooks/use-current-user";
+import { DashboardLinkProps } from "@/types/nav";
+import { Icons } from "@/assets/icons";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 
 async function DashboardSideBar() {
-  const user = await currentUser();
+  let user = await useCurrentUser();
+  let adminLinks: DashboardLinkProps[] = [
+    {
+      name: "Articles",
+      href: "/dashboard/articles",
+      type: "accordion",
+      icon: Icons.articleIcon,
+      endContent: () => (
+        <Button variant={"ghost"} size={"xs"}>
+          <Icons.add className="w-4 h-4 text-muted-foreground group-hover:text-foreground" />
+        </Button>
+      ),
+      items: [
+        {
+          name: "Submitted",
+          href: "/dashboard/articles?type=submitted",
+          endContent: () => (
+            <Badge variant={"default"} className="px-1.5">
+              2
+            </Badge>
+          ),
+        },
+      ],
+    },
+    {
+      name: "Categories",
+      href: "/dashboard/categories",
+      type: "link",
+      icon: Icons.categoriesIcon,
+    },
+    {
+      name: "Events",
+      href: "/dashboard/events",
+      type: "link",
+      icon: Icons.calanderIcon,
+    },
+    {
+      name: "Members",
+      href: "/dashboard/members",
+      type: "link",
+      icon: Icons.usersIcon,
+    },
+  ];
+
+  let regularLinks: DashboardLinkProps[] = [
+    {
+      name: "Articles",
+      href: "/dashboard/articles",
+      type: "link",
+      icon: Icons.articleIcon,
+    },
+    {
+      name: "Settings",
+      href: "/dashboard/settings",
+      type: "link",
+      // @ts-ignore
+      icon: Icons.settings,
+    },
+  ];
 
   return (
     <>
@@ -33,7 +96,9 @@ async function DashboardSideBar() {
         <section className="flex flex-col justify-between flex-1 w-full overflow-y-auto">
           <div className="flex flex-col w-full gap-6">
             <NavItems links={mainLinks} />
-            <NavItems links={managementLinks} />
+            <NavItems
+              links={user?.role === "admin" ? adminLinks : regularLinks}
+            />
           </div>
           <div className="flex items-center gap-3 px-6 py-4">
             <div className="w-8">

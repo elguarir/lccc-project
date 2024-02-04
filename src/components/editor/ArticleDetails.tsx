@@ -98,7 +98,7 @@ export default function ArticleDetails({
   };
   return (
     <div className="flex flex-col gap-2">
-      {articleStatus === "submitted" && (
+      {!isLoading && !canEdit && (
         <Alert variant={"warning"} className="px-2 py-3 space-x-2.5 space-y-0">
           <InfoCircledIcon className="w-4 h-4 text-warning-600" />
           <AlertTitle className="text-sm font-semibold">Heads up!</AlertTitle>
@@ -259,9 +259,12 @@ export default function ArticleDetails({
                   {field.value && field.value.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
                       {field.value.map((tag, index) => (
-                        <button
-                          type="button"
-                          className="rounded-full cursor-default focus-visible:outline-primary disabled:opacity-60"
+                        <div
+                          className={cn(
+                            "rounded-full cursor-default focus-visible:outline-primary disabled:opacity-60",
+                            (savingDraft || !canEdit || isLoading) &&
+                              "opacity-60",
+                          )}
                         >
                           <Badge
                             className="flex items-center gap-1 pr-2"
@@ -284,7 +287,7 @@ export default function ArticleDetails({
                               <X className="w-3 h-3" />
                             </button>
                           </Badge>
-                        </button>
+                        </div>
                       ))}
                     </div>
                   )}

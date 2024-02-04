@@ -89,7 +89,7 @@ export const columns: ColumnDef<Article>[] = [
   {
     accessorKey: "author",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Author" />
+      <DataTableColumnHeader column={column} title="Submitted By" />
     ),
     cell: ({ row }) => {
       let author = row.getValue("author") as Article["author"];
@@ -122,6 +122,7 @@ export const columns: ColumnDef<Article>[] = [
         </div>
       );
     },
+    enableSorting: false,
   },
   {
     accessorKey: "category",

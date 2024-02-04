@@ -28,6 +28,7 @@ const useArticlePermissions = ({ id }: Props) => {
   return {
     articleStatus: article?.status,
     isApproved,
+    isSubmitted,
     isLoading: articleLoading || userLoading,
     canEdit,
     canUnpublish,

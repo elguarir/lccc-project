@@ -16,7 +16,7 @@ type Props = {
 function NavItems({ links }: Props) {
   return (
     <ul className="relative">
-      {links.map((link) => (
+      {links?.map((link) => (
         <>
           {link.type === "link" ? (
             <NavLink href={link.href}>

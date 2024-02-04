@@ -18,6 +18,8 @@ export const useCurrentUser = async () => {
     let result = {
       id: userId,
       username: dbuser.username,
+      firstName: dbuser.first_name,
+      lastName: dbuser.last_name,
       email: dbuser.email,
       role: dbuser.role,
     };

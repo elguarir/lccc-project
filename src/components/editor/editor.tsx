@@ -23,6 +23,10 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
   let { canEdit, isLoading: stateLoading } = useArticlePermissions({
     id: articleId,
   });
+  useEffect(() => {
+    console.log("canEdit", canEdit);
+  }, [canEdit]);
+
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
@@ -48,7 +52,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
           const savedData = await editor.save();
           setData(savedData);
         },
-        readOnly: !canEdit || stateLoading,
+
         placeholder: "Type your page content here...",
         inlineToolbar: true,
         tools: {
@@ -66,6 +70,8 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
       });
     }
   }, []);
+
+  
 
   // Update article content
   useEffect(() => {
@@ -111,7 +117,7 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
         id="editor"
         className={cn(
           "w-full max-w-[calc(100vw-40px)] sm:max-w-[calc(100vw-60px)] md:max-w-[calc(100vw-100px)] lg:max-w-[calc(100vw-480px)] xl:max-w-[calc(100vw-600px)] 2xl:max-w-[calc(100vw-800px)] rounded-lg px-6 p-4",
-          (!canEdit || stateLoading) && "opacity-70",
+          (!canEdit || stateLoading) && "opacity-70 pointer-events-none",
         )}
       />
     </div>
