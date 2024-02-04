@@ -53,6 +53,8 @@ const CategoryForm = ({ mode, categoryId, onClose }: Props) => {
     trpc.category.createCategory.useMutation();
   let { mutate: updateCategory, isLoading: isUpdating } =
     trpc.category.updateCategory.useMutation();
+  let { mutateAsync: checkSlug, isLoading: isChecking } =
+    trpc.category.checkSlug.useMutation();
   let refresh = () => {
     utils.category.getCategories.invalidate();
   };
@@ -142,6 +144,9 @@ const CategoryForm = ({ mode, categoryId, onClose }: Props) => {
                 </FormLabel>
                 <FormControl>
                   <SlugInput
+                    checkSlug={async () => {
+                      return await checkSlug({ slug: value });
+                    }}
                     title={title}
                     onChange={onChange}
                     value={value}

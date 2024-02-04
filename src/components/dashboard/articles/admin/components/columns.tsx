@@ -81,7 +81,8 @@ export const columns: ColumnDef<Article>[] = [
         (author.first_name + " " + author.last_name)
           .toLowerCase()
           .includes(value.toLowerCase()) ||
-        author.username.toLowerCase().includes(value.toLowerCase())
+        author.username.toLowerCase().includes(value.toLowerCase()) ||
+        author.email.toLowerCase().includes(value.toLowerCase())
       );
     },
   },

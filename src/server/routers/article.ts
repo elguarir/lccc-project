@@ -438,6 +438,7 @@ export async function getArticleById({
 
   return formartedArticle;
 }
+
 export type TSubmittedArticles = Awaited<
   ReturnType<typeof getSubmittedArticles>
 >;
@@ -445,6 +446,7 @@ export async function getSubmittedArticles() {
   let articles = await db.article.findMany({
     where: {
       status: "submitted",
+      approved: false,
       deletedAt: null,
     },
     select: {

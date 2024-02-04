@@ -58,7 +58,7 @@ export function DataTableRowActions<TData>({
           <Link href={`/editor/${article.article.id}`}>Edit</Link>
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="font-medium text-primary focus:text-primary"
+          className="font-medium text-primary focus:bg-primary-600 focus:text-primary-100"
           disabled={!canEdit || isLoading}
           onClick={() => {
             toast.promise(
@@ -84,6 +84,7 @@ export function DataTableRowActions<TData>({
           Approve
         </DropdownMenuItem>
         <DropdownMenuItem
+          className="font-medium text-destructive focus:bg-destructive focus:text-primary-100"
           disabled={!canDelete || isLoading}
           onClick={() => {
             toast("Are you sure you want to delete this article?", {
