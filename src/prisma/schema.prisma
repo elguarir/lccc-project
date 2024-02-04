@@ -74,7 +74,7 @@ model Profile {
 model Article {
   id          String        @id @default(cuid())
   title       String?
-  slug        String?
+  slug        String?       @unique
   excerpt     String?
   content     Json?
   main_image  String?

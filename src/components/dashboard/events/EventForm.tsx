@@ -54,15 +54,18 @@ const EventForm = ({ mode, event }: EventFormProps) => {
     trpc.event.createEvent.useMutation();
   let { mutate: updateEvent, isLoading: isUpdating } =
     trpc.event.updateEvent.useMutation();
+  let { mutateAsync: checkSlug } = trpc.event.checkSlug.useMutation();
+
   let form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: event?.initialData,
   });
+
   let utils = trpc.useUtils();
   let refresh = () => {
     utils.event.getEvents.invalidate();
   };
-  
+
   let title = form.watch("title");
   let onSubmit = (data: z.infer<typeof formSchema>) => {
     if (mode === "edit" && event) {
@@ -128,6 +131,10 @@ const EventForm = ({ mode, event }: EventFormProps) => {
                     <SlugInput
                       title={title}
                       onChange={onChange}
+                      checkSlug={async (slug) => {
+                        if (!slug) return "";
+                        return await checkSlug({ slug });
+                      }}
                       value={value}
                       size="default"
                       rest={rest}

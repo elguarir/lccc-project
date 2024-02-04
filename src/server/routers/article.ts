@@ -53,6 +53,32 @@ export const articleRouter = router({
       });
       return aritcle;
     }),
+  checkSlug: protectedProcedure
+    .input(z.object({ slug: z.string().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.slug) {
+        return undefined;
+      }
+      let article = await ctx.prisma.article.findFirst({
+        where: {
+          slug: input.slug,
+        },
+      });
+
+      if (article) {
+        let count = 1;
+        let newSlug = `${input.slug}-${count}`;
+        while (
+          await ctx.prisma.article.findFirst({ where: { slug: newSlug } })
+        ) {
+          count++;
+          newSlug = `${input.slug}-${count}`;
+        }
+        return newSlug;
+      }
+
+      return input.slug;
+    }),
   updateContent: protectedProcedure
     .input(
       z.object({

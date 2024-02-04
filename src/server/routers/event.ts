@@ -21,6 +21,30 @@ export const eventRouter = router({
       });
       return event;
     }),
+  checkSlug: protectedProcedure
+    .input(z.object({ slug: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.slug) {
+        return "";
+      }
+      let event = await ctx.prisma.event.findFirst({
+        where: {
+          slug: input.slug,
+        },
+      });
+
+      if (event) {
+        let count = 1;
+        let newSlug = `${input.slug}-${count}`;
+        while (await ctx.prisma.event.findFirst({ where: { slug: newSlug } })) {
+          count++;
+          newSlug = `${input.slug}-${count}`;
+        }
+        return newSlug;
+      }
+
+      return input.slug;
+    }),
   updateEvent: protectedProcedure
     .input(formSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {

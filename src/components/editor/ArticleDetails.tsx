@@ -60,6 +60,9 @@ export default function ArticleDetails({
   let { canEdit, isLoading, articleStatus } = useArticlePermissions({
     id: articleId,
   });
+
+  let { mutateAsync: checkSlug } = trpc.article.checkSlug.useMutation();
+
   const fire = () => {
     if (conductor) {
       conductor.shoot();
@@ -142,6 +145,9 @@ export default function ArticleDetails({
                   <SlugInput
                     value={value}
                     title={title ?? ""}
+                    checkSlug={async (slug) => {
+                      return await checkSlug({ slug });
+                    }}
                     onChange={onChange}
                     rest={rest}
                   />
