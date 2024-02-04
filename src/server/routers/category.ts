@@ -49,6 +49,32 @@ export const categoryRouter = router({
       }
       return category;
     }),
+  checkSlug: protectedProcedure
+    .input(z.object({ slug: z.string().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      if (!input.slug) {
+        return undefined;
+      }
+      let category = await ctx.prisma.category.findFirst({
+        where: {
+          slug: slugIt(input.slug),
+        },
+      });
+
+      if (category) {
+        let count = 1;
+        let newSlug = `${slugIt(input.slug)}-${count}`;
+        while (
+          await ctx.prisma.category.findFirst({ where: { slug: newSlug } })
+        ) {
+          count++;
+          newSlug = `${input.slug}-${count}`;
+        }
+        return newSlug;
+      }
+
+      return input.slug;
+    }),
   updateCategory: protectedProcedure
     .input(formSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
