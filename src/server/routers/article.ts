@@ -97,6 +97,19 @@ export const articleRouter = router({
       });
       return article;
     }),
+  approveArticle: protectedProcedure
+    .input(z.object({ id: z.string(), notify: z.boolean().optional() }))
+    .mutation(async ({ ctx, input }) => {
+      let article = await ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          approved: true,
+        },
+      });
+      return article;
+    }),
   saveDraft: protectedProcedure
     .input(DraftFormSchema.extend({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -245,6 +258,10 @@ export const articleRouter = router({
       });
       return articles;
     }),
+  getSumbittedArticles: protectedProcedure.query(async ({ ctx }) => {
+    let articles = await getSubmittedArticles();
+    return articles;
+  }),
   duplicateArticle: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -420,4 +437,60 @@ export async function getArticleById({
   };
 
   return formartedArticle;
+}
+export type TSubmittedArticles = Awaited<
+  ReturnType<typeof getSubmittedArticles>
+>;
+export async function getSubmittedArticles() {
+  let articles = await db.article.findMany({
+    where: {
+      status: "submitted",
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      status: true,
+      approved: true,
+      main_image: true,
+      author: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar_url: true,
+          username: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return articles;
 }

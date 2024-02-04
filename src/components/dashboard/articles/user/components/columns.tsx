@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import format from "date-fns/format";
 import { statuses } from "../data/data";
 import { Article } from "../data/schema";
-import { DataTableColumnHeader } from "../../shared/Tables/data-table-column-header";
+import { DataTableColumnHeader } from "../../../shared/Tables/data-table-column-header";
 import { DataTableRowActions } from "./data-table-row-actions";
 import { QuestionMarkIcon } from "@radix-ui/react-icons";
 import { CheckCircle, X } from "lucide-react";

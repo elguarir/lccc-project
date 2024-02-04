@@ -12,9 +12,7 @@ export const useCurrentUser = async () => {
     where: {
       id: userId,
     },
-    include: {
-      profile: true,
-    },
+
   });
   if (dbuser) {
     let result = {
@@ -22,7 +20,6 @@ export const useCurrentUser = async () => {
       username: dbuser.username,
       email: dbuser.email,
       role: dbuser.role,
-      profile: dbuser.profile,
     };
 
     return result;

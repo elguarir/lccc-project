@@ -4,7 +4,7 @@ import { DataTable } from "./components/data-table";
 import { columns } from "./components/columns";
 import { trpc } from "@/server/client";
 import { TUserArticles } from "@/server/routers/article";
-import { Article as ArticleType } from "@/components/dashboard/articles/data/schema";
+import { Article as ArticleType } from "@/components/dashboard/articles/user/data/schema";
 
 const ArticlesTable = ({
   initialData,
