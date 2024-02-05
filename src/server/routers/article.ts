@@ -150,6 +150,14 @@ export const articleRouter = router({
 
       return article;
     }),
+  getSumbittedArticlesCount: protectedProcedure.query(async ({ ctx }) => {
+    let articles = await getSubmittedArticlesCount();
+    return articles;
+  }),
+  getApprovedArticles: protectedProcedure.query(async ({ ctx }) => {
+    let articles = await getApprovedArticles();
+    return articles;
+  }),
   submitForApproval: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -447,6 +455,75 @@ export async function getSubmittedArticles() {
     where: {
       status: "submitted",
       approved: false,
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      status: true,
+      approved: true,
+      main_image: true,
+      author: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar_url: true,
+          username: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return articles;
+}
+
+export type TSubmittedArticlesCount = Awaited<
+  ReturnType<typeof getSubmittedArticlesCount>
+>;
+export async function getSubmittedArticlesCount() {
+  let articles = await db.article.count({
+    where: {
+      status: "submitted",
+      approved: false,
+      deletedAt: null,
+    },
+  });
+  return articles;
+}
+
+export type TApprovedArticles = Awaited<ReturnType<typeof getApprovedArticles>>;
+export async function getApprovedArticles() {
+  let articles = await db.article.findMany({
+    where: {
+      approved: true,
       deletedAt: null,
     },
     select: {

@@ -16,7 +16,7 @@ export const metadata = {
 
 type ArticlesPageProps = {
   searchParams: {
-    type: "all" | "submitted" | "yours";
+    type: "all" | "submitted" | "approved";
   };
 };
 
@@ -40,7 +40,7 @@ const ArticlesPage = async ({ searchParams }: ArticlesPageProps) => {
       </main>
     );
   }
-  
+
   let ownerArticles = await getUserArticles({
     userId: user.id,
   });

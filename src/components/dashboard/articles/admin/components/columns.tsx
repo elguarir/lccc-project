@@ -160,7 +160,7 @@ export const columns: ColumnDef<Article>[] = [
       <DataTableColumnHeader
         className="w-[140px]"
         column={column}
-        title="Published At"
+        title="Published Date"
       />
     ),
     cell: ({ row }) => {
