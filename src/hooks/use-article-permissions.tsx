@@ -32,6 +32,7 @@ const useArticlePermissions = ({ id }: Props) => {
     isLoading: articleLoading || userLoading,
     canEdit,
     canUnpublish,
+    isAdmin,
     canDelete,
     canDuplicate,
   };

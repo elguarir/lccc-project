@@ -10,13 +10,13 @@ import { DashboardLinkProps } from "@/types/nav";
 import { Icons } from "@/assets/icons";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { getSubmittedArticles, getSubmittedArticlesCount } from "@/server/routers/article";
-import SubmitttedArticlesCount from "./SubmitttedArticlesCount";
+import { getSubmittedArticlesCount } from "@/server/routers/article";
+import UsersArticlesCount from "./UsersArticlesCount";
 
 async function DashboardSideBar() {
   let user = await useCurrentUser();
-  let submittedArticlesCount = await getSubmittedArticlesCount();
-  
+  let usersArticlesCount = await getSubmittedArticlesCount();
+
   let adminLinks: DashboardLinkProps[] = [
     {
       name: "Articles",
@@ -30,11 +30,11 @@ async function DashboardSideBar() {
       ),
       items: [
         {
-          name: "Submitted",
-          href: "/dashboard/articles?type=submitted",
+          name: "Member Articles",
+          href: "/dashboard/articles?type=members",
           endContent: () => (
-            <Badge variant={"default"} className="px-1.5">
-              <SubmitttedArticlesCount initialCount={submittedArticlesCount} />
+            <Badge variant={"success"} className="px-1.5">
+              <UsersArticlesCount initialCount={usersArticlesCount} />
             </Badge>
           ),
         },

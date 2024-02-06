@@ -1,12 +1,12 @@
 import initialEditorValue from "@/lib/constants/initialEditorValue";
 import slugIt from "@/lib/helpers/slugify";
-import { FormSchema } from "@/lib/validators/ArticleValidator";
 import { FormSchema as DraftFormSchema } from "@/lib/validators/ArticleDetailsValidator";
 import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
 import { z } from "zod";
 import { JsonArray } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const articleRouter = router({
   createTag: protectedProcedure
@@ -106,9 +106,58 @@ export const articleRouter = router({
         },
         data: {
           approved: true,
+          status: "published",
         },
       });
       return article;
+    }),
+  changeArticleStatus: protectedProcedure
+    .input(
+      z.object({ id: z.string(), action: z.enum(["publish", "unpublish"]) }),
+    )
+    .mutation(async ({ ctx, input }) => {
+      let article = await ctx.prisma.article.findUnique({
+        where: {
+          id: input.id,
+        },
+        select: {
+          id: true,
+          author: {
+            select: {
+              role: true,
+              id: true,
+            },
+          },
+          status: true,
+          approved: true,
+        },
+      });
+      if (!article)
+        throw new TRPCError({
+          code: "NOT_FOUND",
+          message: "This article does not exists!",
+        });
+      if (input.action === "publish") {
+        await ctx.prisma.article.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            approved: true,
+            status: "published",
+          },
+        });
+      } else {
+        await ctx.prisma.article.update({
+          where: {
+            id: input.id,
+          },
+          data: {
+            approved: article.author.role === "admin" ? true : false,
+            status: "draft",
+          },
+        });
+      }
     }),
   saveDraft: protectedProcedure
     .input(DraftFormSchema.extend({ id: z.string() }))
@@ -154,9 +203,9 @@ export const articleRouter = router({
     let articles = await getSubmittedArticlesCount();
     return articles;
   }),
-  getApprovedArticles: protectedProcedure.query(async ({ ctx }) => {
-    let articles = await getApprovedArticles();
-    return articles;
+  getUsersArticlesCount: protectedProcedure.query(async ({ ctx }) => {
+    let articlesCount = await getUsersArticlesCount();
+    return articlesCount;
   }),
   submitForApproval: protectedProcedure
     .input(z.object({ id: z.string() }))
@@ -219,53 +268,16 @@ export const articleRouter = router({
       };
       return formartedArticle;
     }),
-
   getUserArticles: protectedProcedure
     .input(z.object({ userId: z.string() }))
     .query(async ({ ctx, input }) => {
-      let articles = await ctx.prisma.article.findMany({
-        where: {
-          userId: input.userId,
-          deletedAt: null,
-        },
-        select: {
-          id: true,
-          userId: true,
-          title: true,
-          slug: true,
-          excerpt: true,
-          content: true,
-          status: true,
-          approved: true,
-          main_image: true,
-          category: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
-            },
-          },
-          tags: {
-            select: {
-              tag: {
-                select: {
-                  id: true,
-                  name: true,
-                  slug: true,
-                },
-              },
-            },
-          },
-          publishedAt: true,
-          createdAt: true,
-          updatedAt: true,
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
+      let articles = await getUserArticles({ userId: input.userId });
       return articles;
     }),
+  getUsersArticles: protectedProcedure.query(async ({ ctx }) => {
+    let articles = await getUsersArticles();
+    return articles;
+  }),
   getSumbittedArticles: protectedProcedure.query(async ({ ctx }) => {
     let articles = await getSubmittedArticles();
     return articles;
@@ -344,6 +356,7 @@ export const articleRouter = router({
     }),
 });
 
+// get user's articles by id
 export type TUserArticles = Awaited<ReturnType<typeof getUserArticles>>;
 export async function getUserArticles({ userId }: { userId: string }) {
   let articles = await db.article.findMany({
@@ -390,6 +403,83 @@ export async function getUserArticles({ userId }: { userId: string }) {
   return articles;
 }
 
+// get all articles
+export type TUsersArticles = Awaited<ReturnType<typeof getUsersArticles>>;
+export async function getUsersArticles() {
+  let user = await useCurrentUser();
+  if (!user) return [];
+
+  let articles = await db.article.findMany({
+    where: {
+      deletedAt: null,
+      OR: [
+        { status: "submitted" || "published" || "revisions_requested" },
+        {
+          approved: true,
+        },
+      ],
+      NOT: {
+        userId: user?.id,
+      },
+    },
+    select: {
+      id: true,
+      userId: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      status: true,
+      approved: true,
+      main_image: true,
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar_url: true,
+          username: true,
+          role: true,
+        },
+      },
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  let formartedArticles = articles.map((article) => {
+    return {
+      ...article,
+      tags: article.tags.map((tag) => tag.tag),
+    };
+  });
+
+  return formartedArticles;
+}
+
+// get article by id
 export type TArticleById = Awaited<ReturnType<typeof getArticleById>>;
 export async function getArticleById({
   id,
@@ -447,6 +537,7 @@ export async function getArticleById({
   return formartedArticle;
 }
 
+// get only submitted articles
 export type TSubmittedArticles = Awaited<
   ReturnType<typeof getSubmittedArticles>
 >;
@@ -505,9 +596,7 @@ export async function getSubmittedArticles() {
   return articles;
 }
 
-export type TSubmittedArticlesCount = Awaited<
-  ReturnType<typeof getSubmittedArticlesCount>
->;
+// get submitted articles count
 export async function getSubmittedArticlesCount() {
   let articles = await db.article.count({
     where: {
@@ -519,57 +608,24 @@ export async function getSubmittedArticlesCount() {
   return articles;
 }
 
-export type TApprovedArticles = Awaited<ReturnType<typeof getApprovedArticles>>;
-export async function getApprovedArticles() {
-  let articles = await db.article.findMany({
+// get user's articles count
+export async function getUsersArticlesCount() {
+  let user = await useCurrentUser();
+
+  if (!user) return 0;
+  let articlesCount = await db.article.count({
     where: {
-      approved: true,
       deletedAt: null,
-    },
-    select: {
-      id: true,
-      title: true,
-      slug: true,
-      excerpt: true,
-      content: true,
-      status: true,
-      approved: true,
-      main_image: true,
-      author: {
-        select: {
-          id: true,
-          first_name: true,
-          last_name: true,
-          email: true,
-          avatar_url: true,
-          username: true,
+      OR: [
+        { status: "submitted" || "published" || "revisions_requested" },
+        {
+          approved: true,
         },
+      ],
+      NOT: {
+        userId: user?.id,
       },
-      category: {
-        select: {
-          id: true,
-          name: true,
-          slug: true,
-        },
-      },
-      tags: {
-        select: {
-          tag: {
-            select: {
-              id: true,
-              name: true,
-              slug: true,
-            },
-          },
-        },
-      },
-      publishedAt: true,
-      createdAt: true,
-      updatedAt: true,
-    },
-    orderBy: {
-      createdAt: "desc",
     },
   });
-  return articles;
+  return articlesCount;
 }

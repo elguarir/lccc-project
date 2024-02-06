@@ -6,7 +6,7 @@ type Props = {
   initialCount: number;
 };
 
-const SubmitttedArticlesCount = (props: Props) => {
+const UsersArticlesCount = (props: Props) => {
   let { data: count } = trpc.article.getSumbittedArticlesCount.useQuery(
     undefined,
     {
@@ -16,4 +16,4 @@ const SubmitttedArticlesCount = (props: Props) => {
   return <span>{count}</span>;
 };
 
-export default SubmitttedArticlesCount;
+export default UsersArticlesCount;

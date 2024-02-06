@@ -3,11 +3,13 @@ import React from "react";
 import {
   getSubmittedArticles,
   getUserArticles,
+  getUsersArticles,
 } from "@/server/routers/article";
 import { redirect } from "next/navigation";
 import ArticlesTable from "@/components/dashboard/articles/user/ArticlesTable";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import SubmittedArticlesTable from "@/components/dashboard/articles/admin/SubmittedArticlesTable";
+import MemberArticlesTable from "@/components/dashboard/articles/admin/MemberArticlesTable";
 
 export const metadata = {
   title: "Articles",
@@ -16,7 +18,7 @@ export const metadata = {
 
 type ArticlesPageProps = {
   searchParams: {
-    type: "all" | "submitted" | "approved";
+    type: "yours" | "members";
   };
 };
 
@@ -24,19 +26,16 @@ const ArticlesPage = async ({ searchParams }: ArticlesPageProps) => {
   let user = await useCurrentUser();
   if (!user) return redirect("/sign-in");
 
-  if (searchParams.type === "submitted" && user.role === "admin") {
-    let submittedArticles = await getSubmittedArticles();
+  if (searchParams.type === "members" && user.role === "admin") {
+    let memberArticles = await getUsersArticles();
     return (
       <main className="flex flex-col items-center w-full py-3 md:py-5">
         <header className="flex items-center justify-between w-full">
           <h1 className="text-3xl font-[550] md:font-semibold text-foreground ">
-            Articles
-            <span className="text-muted-foreground"> - Submitted</span>
+            Members Articles
           </h1>
-          <AddNew />
         </header>
-
-        <SubmittedArticlesTable initialData={submittedArticles} />
+        <MemberArticlesTable initialData={memberArticles} />
       </main>
     );
   }

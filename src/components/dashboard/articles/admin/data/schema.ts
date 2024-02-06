@@ -21,6 +21,8 @@ export const articleSchema = z.object({
       name: z.string(),
     })
     .optional(),
+  approved: z.boolean(),
+  status: z.enum(["draft", "submitted", "revisions_requested", "published"]),
   publishedAt: z.string(),
 });
 

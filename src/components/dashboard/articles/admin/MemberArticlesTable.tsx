@@ -1,22 +1,20 @@
 "use client";
 import React from "react";
 import { trpc } from "@/server/client";
-import { TSubmittedArticles } from "@/server/routers/article";
+import { TSubmittedArticles, TUsersArticles } from "@/server/routers/article";
 import { Article } from "./data/schema";
 import { columns } from "./components/columns";
 import { DataTable } from "./components/data-table";
 
-const SubmittedArticlesTable = ({
+const MemberArticlesTable = ({
   initialData,
 }: {
-  initialData: TSubmittedArticles;
+  initialData: TUsersArticles;
 }) => {
-  let { data: articles } = trpc.article.getSumbittedArticles.useQuery(
-    undefined,
-    {
-      initialData: initialData,
-    },
-  );
+  let { data: articles } = trpc.article.getUsersArticles.useQuery(undefined, {
+    initialData: initialData,
+  });
+  
   return (
     <div className="flex flex-col w-full mt-8 md:p-3">
       <DataTable data={formatArticles(articles)} columns={columns} />
@@ -24,9 +22,9 @@ const SubmittedArticlesTable = ({
   );
 };
 
-export default SubmittedArticlesTable;
+export default MemberArticlesTable;
 
-let formatArticles = (articles: TSubmittedArticles) => {
+let formatArticles = (articles: TUsersArticles) => {
   return articles.map((article) => {
     return {
       article: {
@@ -47,30 +45,9 @@ let formatArticles = (articles: TSubmittedArticles) => {
         ? { id: article.category.id, name: article.category.name }
         : undefined,
       publishedAt: article.publishedAt?.toISOString(),
+      approved: article.approved,
+      status: article.status as "draft" | "submitted" | "revisions_requested" | "published",
     } as Article;
   });
 };
 
-/**
- * 
- * const articleSchema = z.object({
-  article: z.object({
-    id: z.string(),
-    title: z.string(),
-    coverImage: z.string().nullish(),
-  }),
-  author: z.object({
-    id: z.string(),
-    username: z.string(),
-    first_name: z.string(),
-    last_name: z.string(),
-    email: z.string(),
-    avatar: z.string(),
-  }),
-  category: z.object({
-    id: z.string(),
-    name: z.string(),
-  }),
-  publishedAt: z.string(),
-});
- */

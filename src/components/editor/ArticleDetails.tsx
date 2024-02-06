@@ -52,14 +52,20 @@ export default function ArticleDetails({
   articleId: string;
 }) {
   const title = formState.watch("title");
+  const slug = formState.watch("slug");
   const [conductor, setConductor] = useState<TConductorInstance>();
   const { mutate: saveDraft, isLoading: savingDraft } =
     trpc.article.saveDraft.useMutation();
+  const { mutate: unpublish, isLoading: unpublishing } =
+    trpc.article.changeArticleStatus.useMutation();
+  const { mutate: publish, isLoading: publishing } =
+    trpc.article.changeArticleStatus.useMutation();
   const { data: categories, isLoading: categoriesLoading } =
     trpc.article.getArticleCategories.useQuery();
-  let { canEdit, isLoading, articleStatus } = useArticlePermissions({
-    id: articleId,
-  });
+  let { canEdit, isLoading, articleStatus, isAdmin, isApproved } =
+    useArticlePermissions({
+      id: articleId,
+    });
 
   let { mutateAsync: checkSlug } = trpc.article.checkSlug.useMutation();
 
@@ -94,6 +100,120 @@ export default function ArticleDetails({
           utils.article.getArticleById.invalidate({ id: articleId });
         },
       },
+    );
+  };
+
+  let ArticleActions = () => {
+    if (isAdmin) {
+      if (articleStatus === "published")
+        return (
+          <Button
+            loadingText="Unpublishing..."
+            size={"sm"}
+            isLoading={unpublishing}
+            variant={"outline"}
+            type="button"
+            onClick={() => {
+              unpublish(
+                { id: articleId, action: "unpublish" },
+                {
+                  onSuccess: () => {
+                    toast.success("Article has been unpublished.", {
+                      duration: 1500,
+                      position: "bottom-left",
+                    });
+                    utils.article.getArticleById.invalidate({
+                      id: articleId,
+                    });
+                  },
+                },
+              );
+            }}
+          >
+            Unpublish
+          </Button>
+        );
+      else
+        return (
+          <>
+            <Button
+              isLoading={savingDraft}
+              loadingText="Saving..."
+              size={"sm"}
+              variant={"outline"}
+              type="submit"
+            >
+              Save as draft
+            </Button>
+            <Button
+              loadingText="Publishing..."
+              size={"sm"}
+              isLoading={publishing}
+              variant={"default"}
+              type="button"
+              onClick={() => {
+                if (!slug) {
+                  formState.setFocus("slug");
+                  toast.error(
+                    "You need to set a slug for this article before publishing it!",
+                    {
+                      position: "bottom-left",
+                    },
+                  );
+                  return;
+                }
+                publish(
+                  { id: articleId, action: "publish" },
+                  {
+                    onSuccess: () => {
+                      toast.success("Article has been published.", {
+                        duration: 1500,
+                        position: "bottom-left",
+                      });
+                      fire();
+                      utils.article.getArticleById.invalidate({
+                        id: articleId,
+                      });
+                    },
+                  },
+                );
+              }}
+            >
+              Publish
+            </Button>
+          </>
+        );
+    }
+
+    if (isApproved && articleStatus === "published")
+      return (
+        <Button
+          loadingText="Unpublishing..."
+          size={"sm"}
+          isLoading={unpublishing}
+          variant={"outline"}
+          type="submit"
+          onClick={() => {
+            unpublish({ id: articleId, action: "unpublish" });
+          }}
+        >
+          Unpublish
+        </Button>
+      );
+
+    return (
+      <>
+        <Button
+          isLoading={savingDraft}
+          loadingText="Saving..."
+          size={"sm"}
+          variant={"outline"}
+          type="submit"
+        >
+          Save as draft
+        </Button>
+        <ConfirmDialog articleId={articleId} fireConfetti={fire} />
+      </>
     );
   };
   return (
@@ -348,16 +468,7 @@ export default function ArticleDetails({
             />
 
             <div className="flex items-center justify-end w-full gap-2">
-              <Button
-                isLoading={savingDraft}
-                loadingText="Saving..."
-                size={"sm"}
-                variant={"outline"}
-                type="submit"
-              >
-                Save as draft
-              </Button>
-              <ConfirmDialog articleId={articleId} fireConfetti={fire} />
+              <ArticleActions />
             </div>
           </fieldset>
         </form>

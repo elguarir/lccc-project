@@ -21,7 +21,7 @@ function NavLink({ href, children, className, ...props }: NavLinkProps) {
   
   
   return (
-    <li className="relative">
+    <li className="relative" key={href}>
       <Link
         {...props}
         className={cn(
