@@ -23,7 +23,7 @@ export const articleSchema = z.object({
     .optional(),
   approved: z.boolean(),
   status: z.enum(["draft", "submitted", "revisions_requested", "published"]),
-  publishedAt: z.string(),
+  publishedAt: z.string().optional(),
 });
 
 export type Article = z.infer<typeof articleSchema>;
