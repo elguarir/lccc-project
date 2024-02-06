@@ -8,7 +8,6 @@ import {
 import { redirect } from "next/navigation";
 import ArticlesTable from "@/components/dashboard/articles/user/ArticlesTable";
 import { useCurrentUser } from "@/hooks/use-current-user";
-import SubmittedArticlesTable from "@/components/dashboard/articles/admin/SubmittedArticlesTable";
 import MemberArticlesTable from "@/components/dashboard/articles/admin/MemberArticlesTable";
 
 export const metadata = {
