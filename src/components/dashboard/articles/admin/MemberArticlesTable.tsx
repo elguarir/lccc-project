@@ -40,6 +40,7 @@ let formatArticles = (articles: TUsersArticles) => {
         last_name: article.author.last_name,
         email: article.author.email,
         avatar: article.author.avatar_url,
+        role: article.author.role,
       },
       category: article.category
         ? { id: article.category.id, name: article.category.name }

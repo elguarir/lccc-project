@@ -1,7 +1,6 @@
 import AddNew from "@/components/dashboard/articles/AddNew";
 import React from "react";
 import {
-  getSubmittedArticles,
   getUserArticles,
   getUsersArticles,
 } from "@/server/routers/article";

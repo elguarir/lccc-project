@@ -108,12 +108,18 @@ export const columns: ColumnDef<Article>[] = [
             </span>
           </Avatar>
           <div className="flex flex-col gap-0">
-            <span className="text-sm font-medium whitespace-nowrap">
-              {String(author?.first_name + " " + author?.last_name).slice(
-                0,
-                20,
-              )}
-            </span>
+            <div className="inline-flex gap-2">
+              <span className="text-sm font-medium whitespace-nowrap">
+                {String(author?.first_name + " " + author?.last_name).slice(
+                  0,
+                  20,
+                )}
+              </span>
+              <Badge variant="outline" className="h-[1.1rem] text-xs">
+                {author?.role === "admin" ? "Admin" : "Member"}
+              </Badge>
+            </div>
+
             <span className="text-xs text-muted-foreground">
               {author?.email}
             </span>

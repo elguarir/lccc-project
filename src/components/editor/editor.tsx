@@ -6,7 +6,6 @@ import { cn } from "@/lib/utils";
 import { trpc } from "@/server/client";
 import EditorJS, { OutputData } from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
-
 interface EditorProps {
   initialValue?: OutputData;
   articleId: string;
@@ -30,7 +29,8 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
-    const Header = (await import("@editorjs/header")).default;
+    const Header = (await import("@editorjs/header" as any)).default;
+    const Image = (await import("@editorjs/image" as any)).default;
     const Embed = (await import("@editorjs/embed" as any)).default;
     const Table = (await import("@editorjs/table" as any)).default;
     const List = (await import("@editorjs/list" as any)).default;
@@ -70,8 +70,6 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
       });
     }
   }, []);
-
-  
 
   // Update article content
   useEffect(() => {

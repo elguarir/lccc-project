@@ -36,6 +36,7 @@ export function DataTableRowActions<TData>({
     utils.article.getUserArticles.invalidate({ userId: article.author.id });
     utils.article.getSumbittedArticles.invalidate();
     utils.article.getSumbittedArticlesCount.invalidate();
+    utils.article.getUsersArticles.invalidate();
   };
 
   let { canDelete, canEdit, isLoading } = useArticlePermissions({
