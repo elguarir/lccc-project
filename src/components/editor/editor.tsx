@@ -1,5 +1,6 @@
 "use client";
 import useArticlePermissions from "@/hooks/use-article-permissions";
+import { upload } from "@/hooks/use-cloudinary-upload";
 import { useDebounce } from "@/hooks/use-debounce";
 import { useArticleState } from "@/lib/store/useArticleState";
 import { cn } from "@/lib/utils";
@@ -22,13 +23,9 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
   let { canEdit, isLoading: stateLoading } = useArticlePermissions({
     id: articleId,
   });
-  useEffect(() => {
-    console.log("canEdit", canEdit);
-  }, [canEdit]);
 
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
-    // @ts-ignore
     const Header = (await import("@editorjs/header" as any)).default;
     const Image = (await import("@editorjs/image" as any)).default;
     const Embed = (await import("@editorjs/embed" as any)).default;
@@ -50,17 +47,42 @@ export default function Editor({ initialValue, articleId }: EditorProps) {
         data,
         onChange: async () => {
           const savedData = await editor.save();
+          console.log("data", savedData);
           setData(savedData);
         },
 
         placeholder: "Type your page content here...",
         inlineToolbar: true,
         tools: {
-          header: Header,
+          header: {
+            class: Header,
+            config: {
+              levels: [1, 2, 3, 4],
+              defaultLevel: 3,
+            },
+          },
           linkTool: LinkTool,
-          quote: Quote,
           list: List,
           checklist: Checklist,
+          image: {
+            class: Image,
+            config: {
+              uploader: {
+                async uploadByFile(file: File) {
+                  return await upload(file);
+                },
+                async uploadByUrl(url: string) {
+                  return {
+                    success: 1,
+                    file: {
+                      url,
+                    },
+                  };
+                },
+              },
+            },
+          },
+          quote: Quote,
           delimiter: Delimiter,
           code: Code,
           inlineCode: InlineCode,

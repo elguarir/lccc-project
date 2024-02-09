@@ -626,6 +626,7 @@ export async function getUsersArticlesCount() {
         userId: user?.id,
       },
     },
+
   });
   return articlesCount;
 }

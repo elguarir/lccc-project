@@ -206,6 +206,9 @@ dependencies:
   '@trpc/server':
     specifier: ^10.38.5
     version: 10.43.6
+  '@types/editorjs__header':
+    specifier: ^2.6.3
+    version: 2.6.3
   axios:
     specifier: ^1.5.1
     version: 1.6.2
@@ -6260,6 +6263,10 @@ packages:
       '@types/express': 4.17.14
       '@types/keygrip': 1.0.5
       '@types/node': 20.9.2
+    dev: false
+
+  /@types/editorjs__header@2.6.3:
+    resolution: {integrity: sha512-Z6xroWfklSjsiJhaqZd/94lV7h31T2894GCvUjqB8C7UjOn/1yHfTnv1teBIyEjRxmGo5DB0nLyDwyRnhD587A==}
     dev: false
 
   /@types/express-serve-static-core@4.17.41:
