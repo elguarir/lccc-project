@@ -85,6 +85,32 @@
   max-width: unset;
 }
 
+.cdx-attaches {
+  --color-line: hsl(var(--input)) !important;
+  --color-bg: hsl(var(--background)) !important;
+  --color-bg-secondary: hsl(var(--muted)) !important;
+  --color-bg-secondary--hover: hsl(var(--muted)) !important;
+  --color-text-secondary: hsl(var(--muted-foreground)) !important;
+}
+
+
+.cdx-input.cdx-quote__text, .cdx-input.cdx-quote__caption {
+  @apply rounded-md border-border;
+}
+.ce-code__textarea.cdx-input {
+  @apply font-mono rounded-md dark:bg-background border-border text-foreground;
+}
+.cdx-block.cdx-quote {
+  @apply mt-8;
+}
+.cdx-block.ce-code {
+  @apply mt-8;
+
+}
+.rxpm-code__selector {
+  @apply !bg-background !text-foreground !border-border;
+}
+
 .react-aria-DateInput {
   --field-border: hsl(var(--input));
   --field-background: var(--spectrum-global-color-gray-50);
@@ -149,7 +175,7 @@
   --text-color-invalid: var(--spectrum-global-color-red-600);
 
   [slot=description] {
-    font-size: 12px;
+    font-ze: 12px;
   }
 
   [slot=errorMessage] {

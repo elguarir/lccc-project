@@ -7,9 +7,13 @@ import { mainLinks } from "@/lib/constants/DashboardNavLinks";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { DashboardLinkProps } from "@/types/nav";
 import { Badge } from "@/components/ui/badge";
+import UsersArticlesCount from "./UsersArticlesCount";
+import { getSubmittedArticlesCount } from "@/server/routers/article";
 
 export async function SideSheet() {
   let user = await useCurrentUser();
+  let usersArticlesCount = await getSubmittedArticlesCount();
+
   let adminLinks: DashboardLinkProps[] = [
     {
       name: "Articles",
@@ -23,11 +27,11 @@ export async function SideSheet() {
       ),
       items: [
         {
-          name: "Submitted",
-          href: "/dashboard/articles?type=submitted",
+          name: "Member Articles",
+          href: "/dashboard/articles?type=members",
           endContent: () => (
-            <Badge variant={"default"} className="px-1.5">
-              2
+            <Badge variant={"success"} className="px-1.5">
+              <UsersArticlesCount initialCount={usersArticlesCount} />
             </Badge>
           ),
         },
@@ -68,7 +72,7 @@ export async function SideSheet() {
       icon: Icons.settings,
     },
   ];
-  
+
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -95,7 +99,9 @@ export async function SideSheet() {
           <section className="flex flex-col justify-between flex-1 w-full overflow-y-auto">
             <div className="flex flex-col w-full gap-6">
               <NavItems links={mainLinks} />
-              <NavItems links={user?.role === "admin" ? adminLinks : regularLinks} />
+              <NavItems
+                links={user?.role === "admin" ? adminLinks : regularLinks}
+              />
             </div>
           </section>
         </aside>

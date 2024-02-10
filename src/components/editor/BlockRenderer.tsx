@@ -93,7 +93,7 @@ export const BlockRenderer = ({
       );
     case "checklist":
       return (
-        <div className="flex flex-col">
+        <div className="flex flex-col pl-3">
           {block.data.items.map(
             (item: { text: string; checked: boolean }, index: number) => (
               <label className="flex items-center gap-2" key={index}>

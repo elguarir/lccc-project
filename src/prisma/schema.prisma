@@ -150,7 +150,7 @@ model ArticleTag {
 model Category {
   id        String    @id @default(cuid())
   name      String    @unique
-  slug      String    @unique
+  slug      String    @unique 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   article   Article[]
