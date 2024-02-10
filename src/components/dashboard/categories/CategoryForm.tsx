@@ -12,6 +12,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import slugIt from "@/lib/helpers/slugify";
 import { formSchema } from "@/lib/validators/CategoryCreationValidator";
 import { trpc, trpcVanilla } from "@/server/client";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -145,7 +146,7 @@ const CategoryForm = ({ mode, categoryId, onClose }: Props) => {
                 <FormControl>
                   <SlugInput
                     checkSlug={async () => {
-                      return await checkSlug({ slug: value });
+                      return await checkSlug({ slug: slugIt(title) });
                     }}
                     title={title}
                     onChange={onChange}

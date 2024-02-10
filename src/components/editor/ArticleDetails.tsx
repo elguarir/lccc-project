@@ -374,7 +374,11 @@ export default function ArticleDetails({
                       (optional)
                     </span>
                   </FormLabel>
-                  <TagInput value={field.value} onChange={field.onChange} />
+                  <TagInput
+                    focus={() => formState.setFocus("tags")}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
 
                   {field.value && field.value.length > 0 && (
                     <div className="flex flex-wrap gap-2 mt-2">
@@ -489,12 +493,12 @@ type TagInputProps = {
     name: string;
     slug: string;
   }[];
+  focus: () => void;
   onChange: (value: z.infer<typeof FormSchema>["tags"]) => void;
 };
 
-const TagInput = ({ value, onChange }: TagInputProps) => {
+const TagInput = ({ value, onChange, focus }: TagInputProps) => {
   const [inputValue, setInputValue] = useState("");
-  let inputRef = useRef<HTMLInputElement>(null);
   const { mutateAsync: createTag, isLoading } =
     trpc.article.createTag.useMutation();
   const handleSubmit = async () => {
@@ -510,10 +514,10 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
           onSuccess: (data) => {
             onChange([...(value ?? []), data]);
             setInputValue("");
-            inputRef.current?.focus();
           },
         },
       );
+      focus();
     }
   };
 
@@ -521,7 +525,6 @@ const TagInput = ({ value, onChange }: TagInputProps) => {
     <div className="flex items-center w-full gap-2">
       <FormControl>
         <Input
-          ref={inputRef}
           value={inputValue}
           onKeyDown={async (e) => {
             if (e.key === "Enter") {

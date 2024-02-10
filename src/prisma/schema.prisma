@@ -60,7 +60,7 @@ model User {
 model Profile {
   id        String   @id @default(cuid())
   userId    String
-  bio       String?
+  bio       String?  @db.Text
   website   String?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -75,9 +75,9 @@ model Article {
   id          String        @id @default(cuid())
   title       String?
   slug        String?       @unique
-  excerpt     String?
+  excerpt     String?       @db.Text
   content     Json?
-  main_image  String?
+  main_image  String?       @db.Text
   status      ArticleStatus @default(draft)
   publishedAt DateTime?
   approved    Boolean       @default(false)
@@ -96,16 +96,12 @@ model Article {
   @@index([userId])
 }
 
-// add a model for revisions in which the admin can request changes to an article and leave notes for the author
-
 model Revision {
   id        String   @id @default(cuid())
   article   Article  @relation(fields: [articleId], references: [id])
   articleId String
-  body      String
+  body      String   @db.Text
   resolved  Boolean  @default(false)
-  // any additional fields that we want to add to the revision
-  // suggest some
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 

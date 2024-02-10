@@ -1,6 +1,6 @@
 import { createImageUrl } from "@/lib/helpers/CreateImageUrl";
 import { useState, useCallback } from "react";
-
+import axios from "axios";
 /**
  * Custom hook for uploading a single file and tracking its upload state.
  * @param {Function} onUploadComplete - Callback function to execute when the upload is complete.
@@ -13,6 +13,26 @@ interface UploadHookProps {
   onUploadComplete?: (url: string) => void;
   onError?: (error: string) => void;
 }
+
+const getUploadUrl = async (file: File) => {
+  try {
+    const res = await fetch("/api/upload/generate", {
+      method: "POST",
+      body: JSON.stringify({
+        filename: file.name,
+        filetype: file.type,
+      }),
+    });
+    if (!res.ok) {
+      throw new Error("Failed to generate upload URL");
+    }
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error("Error generating upload URL:", error);
+    return null;
+  }
+};
 
 export const useUpload = (props: UploadHookProps) => {
   const [progress, setProgress] = useState<number>(0);
@@ -28,29 +48,6 @@ export const useUpload = (props: UploadHookProps) => {
       setIsUploaded(false);
       setKey(undefined);
       setUrl(undefined);
-
-      const getUploadUrl = async (file: File) => {
-        try {
-          const res = await fetch("/api/upload/generate", {
-            method: "POST",
-            body: JSON.stringify({
-              filename: file.name,
-              filetype: file.type,
-            }),
-          });
-          if (!res.ok) {
-            throw new Error("Failed to generate upload URL");
-          }
-          const data = await res.json();
-          return data;
-        } catch (error) {
-          console.error("Error generating upload URL:", error);
-          if (onError) {
-            onError(error as string); // Execute the onError callback
-          }
-          return null;
-        }
-      };
 
       const uploadToS3 = async (url: string, file: File) => {
         const xhr = new XMLHttpRequest();
@@ -112,4 +109,23 @@ export const useUpload = (props: UploadHookProps) => {
     url,
     uploadFile,
   };
+};
+
+export const uploadFile = async (file: File) => {
+  try {
+    const res = await axios.post("/api/upload/generate", {
+      filename: file.name,
+      filetype: file.type,
+    });
+    const { url, key } = res.data;
+    await axios.put(url, file, {
+      headers: {
+        "Content-Type": file.type,
+      },
+    });
+    return createImageUrl(key);
+  } catch (error) {
+    console.error("Error generating upload URL:", error);
+    return null;
+  }
 };

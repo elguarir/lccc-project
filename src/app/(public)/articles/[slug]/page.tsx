@@ -12,119 +12,153 @@ const ArticlePage = (props: Props) => {
   console.log(props.params.slug);
 
   let data: OutputData = {
-    time: 1707439579409,
+    time: 1707512543099,
     blocks: [
       {
-        id: "x3Ku21j32q",
+        id: "0uMkRiNfvI",
         type: "paragraph",
         data: {
-          text: "Next.js just released its latest version, 14.1. It’s packed with exciting features that significantly enhance the developer experience",
+          text: `The best quotes contain messages that provide wisdom we can carry with us every day and inspire us to be our best selves. Let these words fill you with hope and give you the motivation to keep going, even when things are hard.<br>When life gets tough, it's easy to give up hope. These famous quotes are a reminder that life is beautiful and we should live it to the fullest.`,
         },
       },
       {
-        id: "czUCd-LODM",
+        id: "2NPtSXwZuY",
+        type: "checklist",
+        data: {
+          items: [
+            {
+              text: "First thing to do",
+              checked: false,
+            },
+            {
+              text: "Second thing",
+              checked: false,
+            },
+          ],
+        },
+      },
+      {
+        id: "bMC5TBS1gK",
+        type: "delimiter",
+        data: {},
+      },
+      {
+        id: "HpYhwFzcoL",
+        type: "table",
+        data: {
+          withHeadings: true,
+          content: [
+            ["", "React", "Next.js"],
+            ["has SSR", "no", "yes"],
+            ["has CSR", "yes", "yes"],
+          ],
+        },
+      },
+      {
+        id: "ctCRrLTbMl",
+        type: "attaches",
+        data: {
+          file: {
+            url: "https://lccc-project.s3.amazonaws.com/78f04913-40eb-4955-b9ef-47ee04e0305a/Internship Presentation.pptx",
+            name: "Internship Presentation.pdf",
+            size: 3027467,
+            extension: "sql",
+          },
+          title: "Internship presentation",
+        },
+      },
+      {
+        id: "eQJWNXk0lY",
+        type: "attaches",
+        data: {
+          file: {
+            url: "https://lccc-project.s3.amazonaws.com/d1c90517-9cf8-45d7-b0ff-a227efd066b9.e-services presentation.pptx",
+            name: "e-services presentation.pptx",
+            size: 1792998,
+            extension: "pptx",
+          },
+          title: "e-services presentation.pptx",
+        },
+      },
+      {
+        id: "eo7Zbc6KNY",
+        type: "quote",
+        data: {
+          text: "When you change your thoughts, remember to also change your world.",
+          caption: "Norman Vincent Peale",
+          alignment: "left",
+        },
+      },
+      {
+        id: "WxmnZeVo9d",
+        type: "paragraph",
+        data: {
+          text: "Life quotes can turn around the feeling&nbsp; of being disconnected or need a positive note to help you through a particularly tough time, quotes about life can help put things into <i>perspective</i>.",
+        },
+      },
+      {
+        id: "FxgwZZnz5d",
+        type: "paragraph",
+        data: {
+          text: "Life quotes can turn around the heaviest of days. Whether you’re feeling disconnected or need a positive note to help you through a particularly tough time, quotes about life can help put things into perspective.",
+        },
+      },
+      {
+        id: "jISrir7nVJ",
+        type: "paragraph",
+        data: {
+          text: "Maybe you’re looking for motivation to get you through a tough work week, or you want to send friends words of encouragement to let them know you care. Quotes about life are perfect for these situations. Or perhaps you, yourself, will want to bookmark these words of wisdom to read at the start of your day to help set you up for success. If you’re more of an evening person, maybe reading some life quotes before bed will yield more pleasant dreams.&nbsp;",
+        },
+      },
+      {
+        id: "s5CXrg5J7d",
+        type: "paragraph",
+        data: {
+          text: 'From trailblazing icons like&nbsp;<a href="https://www.prevention.com/life/g30392216/dolly-parton-facts/" target="_blank">Dolly Parton</a>&nbsp;and&nbsp;<a href="https://www.prevention.com/health/a43529833/oprah-winfrey-surprising-first-menopause-symptoms-never-had-a-hot-flash/" target="_blank">Oprah Winfrey</a>&nbsp;to actresses like&nbsp;<a href="https://www.prevention.com/beauty/style/a44076332/sofia-vergara-sofia-jeans-womens-crossover-neck-halter-midi-dress/" target="_blank">Sofia Vergara</a>&nbsp;and&nbsp;<a href="https://www.prevention.com/beauty/skin-care/a43988771/drew-barrymore-aloe-infusion-organic-aloe-vera-gel/" target="_blank">Drew Barrymore</a>, these amazing sayings offer a fresh look at life. Read on and make sure to share these with friends, family, or even a stranger to brighten their day. And if you’re looking for something specific, check out our&nbsp;<a href="https://www.prevention.com/life/a38847116/loneliness-quotes/" target="_blank">loneliness quotes</a>,&nbsp;<a href="https://www.prevention.com/life/a43541874/friendship-quotes/" target="_blank">friendship quotes</a>, and&nbsp;<a href="https://www.prevention.com/life/a42827694/self-love-quotes/" target="_blank">self-love quotes</a>.&nbsp;&nbsp;',
+        },
+      },
+      {
+        id: "A3YeVD-_Ky",
         type: "image",
         data: {
           file: {
-            url: "https://miro.medium.com/v2/resize:fit:1100/format:webp/1*6z2it2S4nCl5OfVPdFhSxA.png",
+            url: "https://res.cloudinary.com/dpkgcizt7/image/upload/v1707511134/a8z8vp8hikexkashnuub.jpg",
           },
-          caption: "https://nextjs.org/blog/next-14-1",
+          caption: "KLAUS VEDFELT//GETTY IMAGES",
           withBorder: false,
           stretched: false,
           withBackground: false,
         },
       },
       {
-        id: "ogj_mzTrbp",
-        type: "paragraph",
+        id: "xTf8hW87Pk",
+        type: "list",
         data: {
-          text: "Next.js just released its latest version, 14.1.",
+          style: "ordered",
+          items: [
+            "“Success is falling nine times and getting up 10.” —Jon Bon Jovi",
+            "“Develop success from failures. Discouragement and failures are two of the surest stepping stones to success.” —Dale Carnegie",
+            "“Start where you are. Use what you have. Do what you can.” —Arthur Ashe",
+          ],
         },
       },
       {
-        id: "zWBqIIRLgP",
-        type: "paragraph",
+        id: "MNIDCzwueK",
+        type: "embed",
         data: {
-          text: "It’s packed with exciting features that significantly enhance the developer experience.",
-        },
-      },
-      {
-        id: "JbBqDm1xhh",
-        type: "paragraph",
-        data: {
-          text: "&nbsp; This version focuses on several key areas: improved self-hosting, advancements in Turbopack, enhanced error messages, new capabilities for parallel and intercepted routes, and significant improvements in the&nbsp;<code>next/image</code>&nbsp;component.&nbsp;&nbsp;",
-        },
-      },
-      {
-        id: "2MdDSpHzCv",
-        type: "header",
-        data: {
-          text: "Self-Hosting Made Easier",
-          level: 2,
-        },
-      },
-      {
-        id: "KZOxeqw_jD",
-        type: "paragraph",
-        data: {
-          text: "Next.js 14.1 offers clearer guidelines for self-hosting with a Node.js server, Docker container, or static export.",
-        },
-      },
-      {
-        id: "f8il9U2mmw",
-        type: "paragraph",
-        data: {
-          text: 'The documentation overhaul provides extensive details on runtime&nbsp;<a href="https://nextjs.org/docs/app/building-your-application/deploying#environment-variables" target="_blank">environment variables</a>,&nbsp;<a href="https://nextjs.org/docs/app/building-your-application/deploying#caching-and-isr" target="_blank">custom cache configuration for Incremental Static Regeneration (ISR)</a>,&nbsp;<a href="https://nextjs.org/docs/app/building-your-application/deploying#image-optimization" target="_blank">image optimization</a>, and&nbsp;<a href="https://nextjs.org/docs/app/building-your-application/deploying#middleware" target="_blank">middleware</a>.',
-        },
-      },
-      {
-        id: "rQk-HEO3uP",
-        type: "paragraph",
-        data: {
-          text: "A standout feature is the ability to provide custom cache handlers for ISR, crucial for consistency in container orchestration platforms like Kubernetes.",
-        },
-      },
-      {
-        id: "D761qilDrE",
-        type: "paragraph",
-        data: {
-          text: 'You can now integrate&nbsp;<a href="https://github.com/vercel/next.js/tree/canary/examples/cache-handler-redis" target="_blank">external caching solutions</a>&nbsp;like Redis or Memcached easily.',
-        },
-      },
-      {
-        id: "Vrxb7TwfCB",
-        type: "header",
-        data: {
-          text: "Turbopack: The Future of Development Performance",
-          level: 4,
-        },
-      },
-      {
-        id: "E9QP-_k5fW",
-        type: "paragraph",
-        data: {
-          text: "Turbopack continues to revolutionize local Next.js development with its focus on reliability, performance, and memory usage.",
-        },
-      },
-      {
-        id: "uvpZtb5eh9",
-        type: "paragraph",
-        data: {
-          text: "Passing an impressive 94% of Next.js development tests, Turbopack is proving to be a reliable tool.",
-        },
-      },
-      {
-        id: "QNP3qC0q3Y",
-        type: "paragraph",
-        data: {
-          text: "Notably, improvements have been observed in initial compile times and Fast Refresh speeds, with up to 76.7% faster local server startups and 96.3% faster code updates.",
+          service: "youtube",
+          source: "https://www.youtube.com/watch?v=DrCQeI3WqF0",
+          embed: "https://www.youtube.com/embed/DrCQeI3WqF0",
+          width: 580,
+          height: 320,
+          caption: "This a video embed",
         },
       },
     ],
     version: "2.28.2",
   };
   return (
-    <main className="flex prose-base dark:prose-code:bg-gray-600/80 prose-code:bg-gray-200/80 prose-a:text-foreground prose-a:transition-colors hover:prose-a:text-primary prose-code:rounded-[2px] prose-code:px-px prose-code:py-px prose-code:font-mono  flex-col py-6 prose marker:text-muted-foreground text-foreground md:max-w-3xl md:mx-auto lg:py-12 prose-violet dark:prose-invert prose-p:!mt-0 prose-p:!mb-3">
+    <main className="flex prose-base dark:prose-code:bg-gray-600/80 prose-code:bg-gray-200/80 prose-a:text-foreground prose-a:transition-colors hover:prose-a:text-primary prose-code:rounded-[2px] prose-code:px-px prose-code:py-px prose-code:font-mono prose-neutral flex-col py-6 prose marker:text-muted-foreground text-foreground md:max-w-3xl md:mx-auto lg:py-12 dark:prose-invert prose-p:!mt-0 prose-p:!mb-3">
       {data.blocks.map((block) => (
         <BlockRenderer key={block.id} block={block} />
       ))}
