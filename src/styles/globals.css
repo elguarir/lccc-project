@@ -94,19 +94,24 @@
 }
 
 
-.cdx-input.cdx-quote__text, .cdx-input.cdx-quote__caption {
+.cdx-input.cdx-quote__text,
+.cdx-input.cdx-quote__caption {
   @apply rounded-md border-border;
 }
+
 .ce-code__textarea.cdx-input {
   @apply font-mono rounded-md dark:bg-background border-border text-foreground;
 }
+
 .cdx-block.cdx-quote {
   @apply mt-8;
 }
+
 .cdx-block.ce-code {
   @apply mt-8;
 
 }
+
 .rxpm-code__selector {
   @apply !bg-background !text-foreground !border-border;
 }
@@ -175,7 +180,7 @@
   --text-color-invalid: var(--spectrum-global-color-red-600);
 
   [slot=description] {
-    font-ze: 12px;
+    font-size: 12px;
   }
 
   [slot=errorMessage] {
@@ -390,9 +395,17 @@
   width: 100% !important;
 }
 
-
-
-
 #editor blockquote {
   @apply font-serif;
+}
+
+.details-separator {
+  display: none;
+  @apply h-6;
+}
+
+@media screen and (min-width: 422px) {
+  .details-separator {
+    display: inline-block;
+  }
 }

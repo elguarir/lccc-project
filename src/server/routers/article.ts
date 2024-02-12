@@ -626,7 +626,128 @@ export async function getUsersArticlesCount() {
         userId: user?.id,
       },
     },
-
   });
   return articlesCount;
+}
+
+export type TPublishedArticles = Awaited<
+  ReturnType<typeof getPublishedArticles>
+>;
+export async function getPublishedArticles() {
+  let articles = await db.article.findMany({
+    where: {
+      status: "published",
+      approved: true,
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      status: true,
+      approved: true,
+      main_image: true,
+      author: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar_url: true,
+          username: true,
+        },
+      },
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  let formartedArticles = articles.map((article) => {
+    return {
+      ...article,
+      tags: article.tags.map((tag) => tag.tag),
+    };
+  });
+
+  return formartedArticles;
+}
+
+export type TArticleBySlug = Awaited<ReturnType<typeof getArticleBySlug>>;
+
+export async function getArticleBySlug(slug: string) {
+  let article = await db.article.findFirst({
+    where: {
+      slug,
+      status: "published",
+      approved: true,
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+      title: true,
+      slug: true,
+      excerpt: true,
+      content: true,
+      status: true,
+      approved: true,
+      main_image: true,
+
+      category: {
+        select: {
+          id: true,
+          name: true,
+          slug: true,
+        },
+      },
+
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+              slug: true,
+            },
+          },
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar_url: true,
+          username: true,
+        },
+      },
+      publishedAt: true,
+      createdAt: true,
+      updatedAt: true,
+    },
+  });
+  return article;
 }
