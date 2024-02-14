@@ -749,5 +749,12 @@ export async function getArticleBySlug(slug: string) {
       updatedAt: true,
     },
   });
-  return article;
+
+  if(!article) return null
+  let formattedarticle = {
+    ...article,
+    tags: article.tags.map((tag) => tag.tag),
+  };
+
+  return formattedarticle;
 }

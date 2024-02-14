@@ -63,10 +63,15 @@ const ArticlesSection = async () => {
           />
         </svg>
         <div className="flex items-center justify-between w-full">
-          <h2 className="text-3xl lg:text-4xl font-extrabold tracking-[-0.01em] font-heading">
+          <h2 className="text-[1.6rem] sm:text-3xl lg:text-4xl font-extrabold tracking-[-0.01em] font-heading">
             Latest Articles
           </h2>
-          <Button asChild size={"sm"} variant={"secondary"} className="px-4 w-fit">
+          <Button
+            asChild
+            size={"sm"}
+            variant={"secondary"}
+            className="px-3 max-sm:h-9 sm:px-4"
+          >
             <Link href="/articles">
               View All
               <ArrowUpRight className="w-4 h-4 ml-2" />

@@ -1,7 +1,10 @@
 import { BlockRenderer } from "@/components/editor/BlockRenderer";
+import ArticleComments from "@/components/site/articles/ArticleComments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
 import { getArticleBySlug } from "@/server/routers/article";
 import { OutputData } from "@editorjs/editorjs";
 import { format } from "date-fns";
@@ -78,6 +81,20 @@ const ArticlePage = async (props: Props) => {
           <BlockRenderer key={block.id} block={block} />
         ))}
       </div>
+
+      <div className="flex flex-wrap items-center gap-2 mt-6">
+        Tags:
+        {article.tags.map((tag) => (
+          <Badge
+            className="px-3 font-medium transition-colors hover:text-muted-foreground/90"
+            variant={"outline"}
+          >
+            <Link href={`/tag/${tag.slug}`}>{tag.name}</Link>
+          </Badge>
+        ))}
+      </div>
+      <Separator orientation="horizontal" className="w-full my-10" />
+      <ArticleComments />
     </main>
   );
 };
