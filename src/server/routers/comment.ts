@@ -6,11 +6,11 @@ export const commentsRouter = router({
   getComments: protectedProcedure
     .input(
       z.object({
-        slug: z.string(),
+        id: z.string(),
       }),
     )
     .query(async ({ input }) => {
-      return await getComments(input);
+      return await getComments({ id: input.id });
     }),
 
   createComment: protectedProcedure
@@ -34,7 +34,7 @@ export const commentsRouter = router({
               id: user.id,
             },
           },
-          Article: {
+          article: {
             connect: {
               id: input.articleId,
             },
@@ -98,13 +98,67 @@ export const commentsRouter = router({
 
       return comment;
     }),
+  likeComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const user = ctx.user;
+      if (!user) {
+        throw new Error("Not authenticated");
+      }
+
+      const comment = await ctx.prisma.comment.findUnique({
+        where: {
+          id: input.commentId,
+        },
+        select: {
+          likes: {
+            where: {
+              userId: user.id,
+            },
+          },
+        },
+      });
+
+      if (comment?.likes.length) {
+        await ctx.prisma.like.deleteMany({
+          where: {
+            commentId: input.commentId,
+            userId: user.id,
+          },
+        });
+      } else {
+        await ctx.prisma.like.create({
+          data: {
+            commentId: input.commentId,
+            userId: user.id,
+          },
+        });
+      }
+
+      return await ctx.prisma.comment.findUnique({
+        where: {
+          id: input.commentId,
+        },
+        select: {
+          likes: {
+            select: {
+              userId: true,
+            },
+          },
+        },
+      });
+    }),
 });
 
 export type TGetComments = Awaited<ReturnType<typeof getComments>>;
-async function getComments({ slug }: { slug: string }) {
+async function getComments({ id }: { id: string }) {
   let comments = await db.article.findFirst({
     where: {
-      slug,
+      id,
     },
     select: {
       comments: {
@@ -139,6 +193,16 @@ async function getComments({ slug }: { slug: string }) {
                   avatar_url: true,
                 },
               },
+              // likes: {
+              //   select: {
+              //     id: true,
+              //   },
+              // },
+            },
+          },
+          likes: {
+            select: {
+              id: true,
             },
           },
         },
@@ -149,6 +213,9 @@ async function getComments({ slug }: { slug: string }) {
         },
       },
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   let formattedComments = (comments?.comments ?? []).map((comment) => ({
@@ -157,7 +224,8 @@ async function getComments({ slug }: { slug: string }) {
     edited: comment.edited,
     user: {
       id: comment.user.id,
-      name: `${comment.user.first_name} ${comment.user.last_name}`,
+      first_name: comment.user.first_name,
+      last_name: comment.user.last_name,
       username: comment.user.username,
       avatar: comment.user.avatar_url,
     },
@@ -169,13 +237,16 @@ async function getComments({ slug }: { slug: string }) {
       edited: reply.edited,
       user: {
         id: reply.user.id,
-        name: `${reply.user.first_name} ${reply.user.last_name}`,
+        first_name: reply.user.first_name,
+        last_name: reply.user.last_name,
         username: reply.user.username,
         avatar: reply.user.avatar_url,
       },
+      // likesCount: reply.likes.length,
       createdAt: reply.createdAt,
       updatedAt: reply.updatedAt,
     })),
+    likesCount: comment.likes.length,
   }));
 
   return {

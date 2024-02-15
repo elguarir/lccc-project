@@ -10,7 +10,7 @@ import { OutputData } from "@editorjs/editorjs";
 import { format } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import React from "react";
+import React, { cache } from "react";
 
 type Props = {
   params: {
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const ArticlePage = async (props: Props) => {
-  let article = await getArticleBySlug(props.params.slug);
+  let article = await getArticle(props.params.slug);
   console.log("article", article);
   if (!article) {
     return notFound();
@@ -94,9 +94,14 @@ const ArticlePage = async (props: Props) => {
         ))}
       </div>
       <Separator orientation="horizontal" className="w-full my-10" />
-      <ArticleComments />
+      <ArticleComments articleId={article.id} />
     </main>
   );
 };
 
 export default ArticlePage;
+
+export const getArticle = cache(async (slug: string) => {
+  let article = await getArticleBySlug(slug);
+  return article;
+});

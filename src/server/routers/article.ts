@@ -750,7 +750,7 @@ export async function getArticleBySlug(slug: string) {
     },
   });
 
-  if(!article) return null
+  if (!article) return null;
   let formattedarticle = {
     ...article,
     tags: article.tags.map((tag) => tag.tag),

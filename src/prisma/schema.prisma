@@ -53,6 +53,7 @@ model User {
   profileId  String?
   articles   Article[]
   comments   Comment[]
+  likes      Like[]
 
   @@index([profileId])
 }
@@ -108,19 +109,34 @@ model Revision {
   @@index([articleId])
 }
 
-model Comment {
-  id        String    @id @default(cuid())
-  body      String
-  edited    Boolean   @default(false)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+model Like {
+  id        String   @id @default(cuid())
+  user      User     @relation(fields: [userId], references: [id])
   userId    String
-  Article   Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  commentId String
+  
+  comment   Comment  @relation(fields: [commentId], references: [id])
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
+  @@index([commentId])
+  @@index([userId])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  body      String
+  edited    Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String
   articleId String
-  parent    Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   parentId  String?
-  children  Comment[] @relation("CommentToComment")
+
+  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  article  Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+  children Comment[] @relation("CommentToComment")
+  likes     Like[]
 
   @@index([parentId])
   @@index([userId])
@@ -150,7 +166,7 @@ model ArticleTag {
 model Category {
   id        String    @id @default(cuid())
   name      String    @unique
-  slug      String    @unique 
+  slug      String    @unique
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   article   Article[]
