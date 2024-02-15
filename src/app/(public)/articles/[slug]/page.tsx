@@ -101,7 +101,7 @@ const ArticlePage = async (props: Props) => {
 
 export default ArticlePage;
 
-export const getArticle = cache(async (slug: string) => {
+const getArticle = cache(async (slug: string) => {
   let article = await getArticleBySlug(slug);
   return article;
 });
