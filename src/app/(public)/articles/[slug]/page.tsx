@@ -2,28 +2,30 @@ import { BlockRenderer } from "@/components/editor/BlockRenderer";
 import ArticleComments from "@/components/site/articles/ArticleComments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
 import { getArticleBySlug } from "@/server/routers/article";
+import { getComments } from "@/server/routers/comment";
 import { OutputData } from "@editorjs/editorjs";
 import { format } from "date-fns";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { cache } from "react";
-
+// import {getComments} = "@/"
 type Props = {
   params: {
     slug: string;
   };
 };
 
+export const revalidate = 3600;
+
 const ArticlePage = async (props: Props) => {
   let article = await getArticle(props.params.slug);
-  console.log("article", article);
+
   if (!article) {
     return notFound();
   }
+  let comments = await getComments({ id: article.id });
   return (
     <main className="flex flex-col w-full py-16 md:max-w-3xl md:mx-auto lg:py-24">
       <div className="flex flex-col pb-8 space-y-6">
@@ -94,7 +96,7 @@ const ArticlePage = async (props: Props) => {
         ))}
       </div>
       <Separator orientation="horizontal" className="w-full my-10" />
-      <ArticleComments articleId={article.id} />
+      <ArticleComments initialData={comments} articleId={article.id} />
     </main>
   );
 };

@@ -8,9 +8,9 @@ import {
   SelectTrigger,
   SelectItem,
 } from "@/components/ui/select";
-import React from "react";
+import React, { useEffect } from "react";
 import { formatDistance, subDays } from "date-fns";
-import { DotsVerticalIcon } from "@radix-ui/react-icons";
+import { DotsVerticalIcon, HeartFilledIcon } from "@radix-ui/react-icons";
 import { Heart, ReplyIcon } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -24,41 +24,21 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { trpc } from "@/server/client";
+import { useAuth } from "@clerk/nextjs";
 import { TGetComments } from "@/server/routers/comment";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 type Props = {
   articleId: string;
+  initialData: TGetComments;
 };
 
-const ArticleComments = ({ articleId }: Props) => {
-  // let comments: CommentProps[] = [
-  //   {
-  //     id: "1",
-  //     content:
-  //       "I agree with the article. Just one more point:\n\n Fundamental Maths and Statistics just to be precise 😉",
-  //     user: {
-  //       id: "1",
-  //       first_name: "John",
-  //       last_name: "Doe",
-  //       username: "johndoe",
-  //       avatar: "https://i.pravatar.cc/300",
-  //     },
-  //     createdAt: "2024-01-01",
-  //   },
-  //   {
-  //     id: "2",
-  //     content:
-  //       "Yup, very true. This is something I’ve had to explain to interns at my job, as well as non tech people. They assume more complex=better and that’s really not the case! I’m actually working on an article talking about this too.",
-  //     user: {
-  //       id: "2",
-  //       first_name: "Jane",
-  //       last_name: "Smith",
-  //       username: "janesmith",
-  //       avatar: "https://i.pravatar.cc/300",
-  //     },
-  //     createdAt: "2024-02-02",
-  //   },
-  // ];
+const ArticleComments = ({ articleId, initialData }: Props) => {
   let formSchema = z.object({
     content: z
       .string()
@@ -73,10 +53,19 @@ const ArticleComments = ({ articleId }: Props) => {
       content: "",
     },
   });
+  let utils = trpc.useUtils();
+  let refresh = () => {
+    utils.comment.getComments.invalidate({ id: articleId });
+  };
 
-  let { data, isLoading: commentsLoading } = trpc.comment.getComments.useQuery({
-    id: articleId,
-  });
+  let { data } = trpc.comment.getComments.useQuery(
+    {
+      id: articleId,
+    },
+    {
+      initialData,
+    },
+  );
 
   let onSubmit = async (data: z.infer<typeof formSchema>) => {
     await createComment({
@@ -84,6 +73,7 @@ const ArticleComments = ({ articleId }: Props) => {
       body: data.content,
     });
     form.setValue("content", "");
+    refresh();
   };
 
   return (
@@ -145,20 +135,7 @@ const ArticleComments = ({ articleId }: Props) => {
       </div>
       <div className="flex flex-col pt-6 space-y-3">
         {data?.comments.map((comment) => (
-          <Comment
-            key={comment.id}
-            id={comment.id}
-            articleId={articleId}
-            content={comment.body}
-            createdAt={comment.createdAt}
-            user={{
-              id: comment.user.id,
-              first_name: comment.user.first_name,
-              last_name: comment.user.last_name,
-              username: comment.user.username,
-              avatar: comment.user.avatar,
-            }}
-          />
+          <Comment key={comment.id} comment={comment} articleId={articleId} />
         ))}
       </div>
     </section>
@@ -168,23 +145,18 @@ const ArticleComments = ({ articleId }: Props) => {
 export default ArticleComments;
 
 type CommentProps = {
-  id: string;
-  content: string;
-  user: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    username: string;
-    avatar: string | null;
-  };
-  createdAt: Date;
+  comment: TGetComments["comments"][0];
   articleId: string;
 };
 
-let Comment = ({ id, content, user, createdAt, articleId }: CommentProps) => {
+let Comment = ({
+  comment: { id, body: content, user, createdAt, likedBy },
+  articleId,
+}: CommentProps) => {
   let { mutate: like, isLoading } = trpc.comment.likeComment.useMutation();
+  let { userId } = useAuth();
+  let hasLiked = likedBy.some((like) => userId === userId);
   let utils = trpc.useUtils();
-
   let refresh = () => {
     utils.comment.getComments.invalidate({ id: articleId });
   };
@@ -201,16 +173,26 @@ let Comment = ({ id, content, user, createdAt, articleId }: CommentProps) => {
           <div>
             <p className="text-sm font-semibold">{`${user.first_name} ${user.last_name}`}</p>
             <p className="text-xs text-muted-foreground">
-              {formatDistance(subDays(new Date(createdAt), 3), new Date(), {
+              {formatDistance(new Date(createdAt), new Date(), {
                 addSuffix: true,
               })}
             </p>
           </div>
         </div>
         <div>
-          <Button size={"xs"} variant={"ghost"}>
-            <DotsVerticalIcon className="w-4 h-4" />
-          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button size={"xs"} variant={"ghost"}>
+                <DotsVerticalIcon className="w-4 h-4" />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent side="bottom" align="end">
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem className="font-medium text-red-500 focus:bg-red-500 focus:text-white">
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
       <div className="py-2">
@@ -221,6 +203,7 @@ let Comment = ({ id, content, user, createdAt, articleId }: CommentProps) => {
           <Button
             variant={"ghost"}
             size={"xs"}
+            disabled={isLoading}
             className="focus-visible:outline-primary"
             onClick={() => {
               like(
@@ -233,7 +216,11 @@ let Comment = ({ id, content, user, createdAt, articleId }: CommentProps) => {
               );
             }}
           >
-            <Heart className={`w-4 h-4 ${isLoading ? "animate-ping" : ""}`} />
+            {hasLiked ? (
+              <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+            ) : (
+              <Heart className="w-4 h-4" />
+            )}
           </Button>
           <div className="flex items-center gap-2">
             <Button

@@ -155,7 +155,7 @@ export const commentsRouter = router({
 });
 
 export type TGetComments = Awaited<ReturnType<typeof getComments>>;
-async function getComments({ id }: { id: string }) {
+export async function getComments({ id }: { id: string }) {
   let comments = await db.article.findFirst({
     where: {
       id,
@@ -193,16 +193,20 @@ async function getComments({ id }: { id: string }) {
                   avatar_url: true,
                 },
               },
-              // likes: {
-              //   select: {
-              //     id: true,
-              //   },
-              // },
+              likes: {
+                select: {
+                  id: true,
+                  commentId: true,
+                  userId: true,
+                },
+              },
             },
           },
           likes: {
             select: {
               id: true,
+              commentId: true,
+              userId: true,
             },
           },
         },
@@ -213,41 +217,44 @@ async function getComments({ id }: { id: string }) {
         },
       },
     },
-    orderBy: {
-      createdAt: "desc",
-    },
   });
 
-  let formattedComments = (comments?.comments ?? []).map((comment) => ({
-    id: comment.id,
-    body: comment.body,
-    edited: comment.edited,
-    user: {
-      id: comment.user.id,
-      first_name: comment.user.first_name,
-      last_name: comment.user.last_name,
-      username: comment.user.username,
-      avatar: comment.user.avatar_url,
-    },
-    createdAt: comment.createdAt,
-    updatedAt: comment.updatedAt,
-    replies: comment.children.map((reply) => ({
-      id: reply.id,
-      body: reply.body,
-      edited: reply.edited,
+  let formattedComments = (comments?.comments ?? [])
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+    .map((comment) => ({
+      id: comment.id,
+      body: comment.body,
+      edited: comment.edited,
       user: {
-        id: reply.user.id,
-        first_name: reply.user.first_name,
-        last_name: reply.user.last_name,
-        username: reply.user.username,
-        avatar: reply.user.avatar_url,
+        id: comment.user.id,
+        first_name: comment.user.first_name,
+        last_name: comment.user.last_name,
+        username: comment.user.username,
+        avatar: comment.user.avatar_url,
       },
-      // likesCount: reply.likes.length,
-      createdAt: reply.createdAt,
-      updatedAt: reply.updatedAt,
-    })),
-    likesCount: comment.likes.length,
-  }));
+      createdAt: comment.createdAt,
+      updatedAt: comment.updatedAt,
+      replies: comment.children
+        .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+        .map((reply) => ({
+          id: reply.id,
+          body: reply.body,
+          edited: reply.edited,
+          user: {
+            id: reply.user.id,
+            first_name: reply.user.first_name,
+            last_name: reply.user.last_name,
+            username: reply.user.username,
+            avatar: reply.user.avatar_url,
+          },
+          // likesCount: reply.likes.length,
+          likedBy: reply.likes.map((like) => like.userId),
+          createdAt: reply.createdAt,
+          updatedAt: reply.updatedAt,
+        })),
+      likesCount: comment.likes.length,
+      likedBy: comment.likes.map((like) => like.userId),
+    }));
 
   return {
     comments: formattedComments,
