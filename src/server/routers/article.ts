@@ -758,3 +758,105 @@ export async function getArticleBySlug(slug: string) {
 
   return formattedarticle;
 }
+
+type getUserArticlesProps = {
+  id?: string;
+  username?: string;
+};
+
+export type TgetUserArticles = Awaited<ReturnType<typeof getUser>>;
+export let getUser = async ({ id, username }: getUserArticlesProps) => {
+  let articles;
+  if (username && !id) {
+    articles = await db.article.findMany({
+      where: {
+        author: {
+          username,
+        },
+        status: "published",
+        deletedAt: null,
+      },
+      select: {
+        id: true,
+        userId: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        content: true,
+        status: true,
+        approved: true,
+        main_image: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              },
+            },
+          },
+        },
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+
+  if (id && !username) {
+    articles = await db.article.findMany({
+      where: {
+        userId: id,
+        deletedAt: null,
+        status: "published",
+      },
+      select: {
+        id: true,
+        userId: true,
+        title: true,
+        slug: true,
+        excerpt: true,
+        content: true,
+        status: true,
+        approved: true,
+        main_image: true,
+        category: {
+          select: {
+            id: true,
+            name: true,
+            slug: true,
+          },
+        },
+        tags: {
+          select: {
+            tag: {
+              select: {
+                id: true,
+                name: true,
+                slug: true,
+              },
+            },
+          },
+        },
+        publishedAt: true,
+        createdAt: true,
+        updatedAt: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+  }
+  return articles ?? [];
+};

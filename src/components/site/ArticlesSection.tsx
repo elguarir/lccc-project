@@ -192,7 +192,7 @@ let ArticleCard = (props: ArticleCardProps) => {
           {props.excerpt}
         </p>
         <footer className="flex items-center mt-4 text-sm">
-          <Link href={`/author/${props.author.username}`}>
+          <Link href={`/authors/${props.author.username}`}>
             <img
               src={props.author.avatar}
               alt={props.author.name}
@@ -203,7 +203,7 @@ let ArticleCard = (props: ArticleCardProps) => {
             <span>By</span>
             <Link
               className="ml-1 font-medium heading-underline"
-              href={`/author/${props.author.username}`}
+              href={`/authors/${props.author.username}`}
             >
               {props.author.name}
             </Link>

@@ -53,7 +53,7 @@ const ArticlePage = async (props: Props) => {
               <div>
                 By{" "}
                 <Link
-                  href={`/author/${article.author.username}`}
+                  href={`/authors/${article.author.username}`}
                   className="font-semibold transition-colors hover:text-primary dark:hover:text-primary-400"
                 >
                   {article.author.first_name} {article.author.last_name}

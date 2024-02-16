@@ -252,3 +252,68 @@ export let getUsersList = async () => {
     return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
   });
 };
+
+type getUserProps = {
+  id?: string;
+  username?: string;
+};
+export type TgetUser = Awaited<ReturnType<typeof getUser>>;
+export let getUser = async ({ id, username }: getUserProps) => {
+  let user = null;
+  if (username && !id) {
+    user = db.user.findUnique({
+      where: {
+        username: username,
+      },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        avatar_url: true,
+        role: true,
+        createdAt: true,
+        profile: {
+          select: {
+            bio: true,
+            facebook: true,
+            twitter: true,
+            instagram: true,
+            github: true,
+            website: true,
+          },
+        },
+        username: true,
+      },
+    });
+  }
+
+  if (id && !username) {
+    user = await db.user.findUnique({
+      where: {
+        id: id,
+      },
+      select: {
+        id: true,
+        first_name: true,
+        last_name: true,
+        email: true,
+        avatar_url: true,
+        role: true,
+        createdAt: true,
+        profile: {
+          select: {
+            bio: true,
+            facebook: true,
+            twitter: true,
+            instagram: true,
+            github: true,
+            website: true,
+          },
+        },
+        username: true,
+      },
+    });
+  }
+  return user;
+};

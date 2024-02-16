@@ -44,7 +44,8 @@ const ArticleComments = ({ articleId, initialData }: Props) => {
   let formSchema = z.object({
     content: z
       .string()
-      .min(10, "Comment too short")
+      .min(1, "Required")
+      .min(8, "Comment too short")
       .max(500, "Comment too long"),
   });
   let { mutateAsync: createComment, isLoading } =
@@ -83,6 +84,7 @@ const ArticleComments = ({ articleId, initialData }: Props) => {
       <h4 className="text-2xl font-bold tracking-tight md:text-3xl">
         Member discussion
       </h4>
+      {/* comment form */}
       <div className="py-5">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
@@ -121,25 +123,40 @@ const ArticleComments = ({ articleId, initialData }: Props) => {
           </form>
         </Form>
       </div>
-      <div className="flex flex-col space-y-3">
-        <div className="flex justify-start w-full">
-          <Select defaultValue="newest">
-            <SelectTrigger className="max-w-[128px] h-9">
-              <SelectValue placeholder="Select a fruit" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="newest">Newest</SelectItem>
-              <SelectItem value="oldest">Oldest</SelectItem>
-              <SelectItem value="most-liked">Most liked</SelectItem>
-            </SelectContent>
-          </Select>
+      {/* comments */}
+      {data?.comments.length === 0 ? (
+        <div className="py-5">
+          <p className="text-sm text-muted-foreground">
+            No comments yet. Be the first to comment!
+          </p>
         </div>
-      </div>
-      <div className="flex flex-col pt-6 space-y-3">
-        {data?.comments.map((comment) => (
-          <Comment key={comment.id} comment={comment} articleId={articleId} />
-        ))}
-      </div>
+      ) : (
+        <>
+          <div className="flex flex-col space-y-3">
+            <div className="flex justify-start w-full">
+              <Select defaultValue="newest">
+                <SelectTrigger className="max-w-[128px] h-9">
+                  <SelectValue placeholder="Select a fruit" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="newest">Newest</SelectItem>
+                  <SelectItem value="oldest">Oldest</SelectItem>
+                  <SelectItem value="most-liked">Most liked</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+          <div className="flex flex-col pt-6 space-y-3">
+            {data?.comments.map((comment) => (
+              <Comment
+                key={comment.id}
+                comment={comment}
+                articleId={articleId}
+              />
+            ))}
+          </div>
+        </>
+      )}
     </section>
   );
 };
@@ -174,7 +191,7 @@ let Comment = ({
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
           <Link
-            href={`/author/${user.username}`}
+            href={`/authors/${user.username}`}
             className="rounded-full focus-visible:outline-primary"
           >
             <Avatar className="w-8 h-8">
@@ -187,7 +204,7 @@ let Comment = ({
 
           <div>
             <Link
-              href={`/author/${user.username}`}
+              href={`/authors/${user.username}`}
               className="text-sm font-semibold transition-colors rounded-full focus-visible:outline-primary hover:text-primary dark:hover:text-primary-400"
             >
               {`${user.first_name} ${user.last_name}`}
@@ -293,9 +310,7 @@ let Comment = ({
                 <>
                   <span className="ml-2">{likedBy.length}</span>
                 </>
-              ) : (
-                ""
-              )}
+              ) : null}
             </Button>
             <div className="flex items-center gap-2">
               <Button
