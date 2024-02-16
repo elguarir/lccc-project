@@ -1,5 +1,6 @@
 import db from "@/prisma";
 import { protectedProcedure, router } from "@/server/trpc";
+import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const commentsRouter = router({
@@ -83,6 +84,25 @@ export const commentsRouter = router({
 
       return comment;
     }),
+  updateComment: protectedProcedure
+    .input(
+      z.object({
+        commentId: z.string(),
+        body: z.string(),
+      }),
+    )
+    .mutation(async ({ input, ctx }) => {
+      const comment = await ctx.prisma.comment.update({
+        where: {
+          id: input.commentId,
+        },
+        data: {
+          body: input.body,
+          edited: true,
+        },
+      });
+      return comment;
+    }),
   deleteComment: protectedProcedure
     .input(
       z.object({
@@ -90,6 +110,42 @@ export const commentsRouter = router({
       }),
     )
     .mutation(async ({ input, ctx }) => {
+      let existingComment = await ctx.prisma.comment.findUnique({
+        where: {
+          id: input.commentId,
+        },
+        select: {
+          userId: true,
+          children: {
+            select: {
+              id: true,
+            },
+          },
+        },
+      });
+
+      if (existingComment?.userId !== ctx.user.id) {
+        throw new TRPCError({
+          code: "FORBIDDEN",
+          message: "You don't have permission to delete this comment",
+        });
+      }
+
+      // Delete likes associated with the comment
+      await ctx.prisma.like.deleteMany({
+        where: {
+          commentId: input.commentId,
+        },
+      });
+
+      if (existingComment?.children.length) {
+        await ctx.prisma.comment.deleteMany({
+          where: {
+            parentId: input.commentId,
+          },
+        });
+      }
+
       const comment = await ctx.prisma.comment.delete({
         where: {
           id: input.commentId,

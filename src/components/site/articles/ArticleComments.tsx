@@ -8,7 +8,7 @@ import {
   SelectTrigger,
   SelectItem,
 } from "@/components/ui/select";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { formatDistance, subDays } from "date-fns";
 import { DotsVerticalIcon, HeartFilledIcon } from "@radix-ui/react-icons";
 import { Heart, ReplyIcon } from "lucide-react";
@@ -32,6 +32,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { toast } from "sonner";
+import Link from "next/link";
 
 type Props = {
   articleId: string;
@@ -150,90 +152,254 @@ type CommentProps = {
 };
 
 let Comment = ({
-  comment: { id, body: content, user, createdAt, likedBy },
+  comment: { id, body: content, edited, user, createdAt, likedBy },
   articleId,
 }: CommentProps) => {
   let { mutate: like, isLoading } = trpc.comment.likeComment.useMutation();
   let { userId } = useAuth();
-  let hasLiked = likedBy.some((like) => userId === userId);
+  let [editMode, setEditMode] = useState(false);
+
+  let hasLiked = likedBy.some((id) => id === userId);
+  let canEdit = userId === user.id;
+
   let utils = trpc.useUtils();
+  let { mutateAsync: deleteComment, isLoading: isDeleting } =
+    trpc.comment.deleteComment.useMutation();
   let refresh = () => {
     utils.comment.getComments.invalidate({ id: articleId });
   };
+
   return (
     <div className="flex flex-col p-4">
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-3">
-          <Avatar>
-            <AvatarImage src={user.avatar ?? ""} alt={`${user.first_name}`} />
-            <AvatarFallback>
-              {`${user.first_name[0]}${user.last_name[0]}`}
-            </AvatarFallback>
-          </Avatar>
+          <Link
+            href={`/author/${user.username}`}
+            className="rounded-full focus-visible:outline-primary"
+          >
+            <Avatar className="w-8 h-8">
+              <AvatarImage src={user.avatar ?? ""} alt={`${user.first_name}`} />
+              <AvatarFallback>
+                {`${user.first_name[0]}${user.last_name[0]}`}
+              </AvatarFallback>
+            </Avatar>
+          </Link>
+
           <div>
-            <p className="text-sm font-semibold">{`${user.first_name} ${user.last_name}`}</p>
+            <Link
+              href={`/author/${user.username}`}
+              className="text-sm font-semibold transition-colors rounded-full focus-visible:outline-primary hover:text-primary dark:hover:text-primary-400"
+            >
+              {`${user.first_name} ${user.last_name}`}
+            </Link>
             <p className="text-xs text-muted-foreground">
               {formatDistance(new Date(createdAt), new Date(), {
                 addSuffix: true,
               })}
+
+              {edited && (
+                <span className="text-xs text-muted-foreground"> (edited)</span>
+              )}
             </p>
           </div>
         </div>
         <div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button size={"xs"} variant={"ghost"}>
-                <DotsVerticalIcon className="w-4 h-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent side="bottom" align="end">
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem className="font-medium text-red-500 focus:bg-red-500 focus:text-white">
-                Delete
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {canEdit && (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button size={"xs"} variant={"ghost"}>
+                  <DotsVerticalIcon className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent side="bottom" align="end">
+                <DropdownMenuItem
+                  onClick={() => {
+                    setEditMode(true);
+                  }}
+                  disabled={!canEdit}
+                  className="font-medium"
+                >
+                  Edit
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => {
+                    toast.promise(
+                      deleteComment(
+                        { commentId: id },
+                        {
+                          onSuccess: () => {
+                            refresh();
+                          },
+                        },
+                      ),
+                      {
+                        loading: "Deleting comment...",
+                        success: "Comment deleted!",
+                        error: "Error deleting comment!",
+                        duration: 1500,
+                        position: "bottom-center",
+                      },
+                    );
+                  }}
+                  disabled={!canEdit || isDeleting}
+                  className="font-medium text-red-500 focus:bg-red-500 focus:text-white"
+                >
+                  Delete
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          )}
         </div>
       </div>
       <div className="py-2">
-        <p className="w-full text-sm whitespace-pre-wrap ">{content}</p>
+        {editMode ? (
+          <CommentEdit
+            cancel={() => setEditMode(false)}
+            content={content}
+            commentId={id}
+            articleId={articleId}
+          />
+        ) : (
+          <p className="w-full text-sm whitespace-pre-wrap">{content}</p>
+        )}
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Button
-            variant={"ghost"}
-            size={"xs"}
-            disabled={isLoading}
-            className="focus-visible:outline-primary"
-            onClick={() => {
-              like(
-                { commentId: id },
-                {
-                  onSuccess: () => {
-                    refresh();
-                  },
-                },
-              );
-            }}
-          >
-            {hasLiked ? (
-              <Heart className="w-4 h-4 text-red-500 fill-red-500" />
-            ) : (
-              <Heart className="w-4 h-4" />
-            )}
-          </Button>
-          <div className="flex items-center gap-2">
+      {!editMode && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-3">
             <Button
               variant={"ghost"}
               size={"xs"}
-              className="flex items-center gap-2 w-fit focus-visible:outline-primary"
+              disabled={isLoading}
+              className="focus-visible:outline-primary w-fit"
+              onClick={() => {
+                like(
+                  { commentId: id },
+                  {
+                    onSuccess: () => {
+                      refresh();
+                    },
+                  },
+                );
+              }}
             >
-              <ReplyIcon className="w-4 h-4" />
-              <span className="text-sm font-medium">Reply</span>
+              {hasLiked ? (
+                <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+              ) : (
+                <>
+                  <Heart className="w-4 h-4" />
+                </>
+              )}
+              {likedBy.length > 0 ? (
+                <>
+                  <span className="ml-2">{likedBy.length}</span>
+                </>
+              ) : (
+                ""
+              )}
             </Button>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={"ghost"}
+                size={"xs"}
+                className="flex items-center gap-2 w-fit focus-visible:outline-primary"
+              >
+                <ReplyIcon className="w-4 h-4" />
+                <span className="text-sm font-medium">Reply</span>
+              </Button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
+    </div>
+  );
+};
+
+let CommentEdit = ({
+  content,
+  commentId,
+  articleId,
+  cancel,
+}: {
+  content: string;
+  commentId: string;
+  articleId: string;
+  cancel: () => void;
+}) => {
+  let formSchema = z.object({
+    content: z
+      .string()
+      .min(10, "Comment too short")
+      .max(500, "Comment too long"),
+  });
+  let { mutateAsync: updateComment, isLoading } =
+    trpc.comment.updateComment.useMutation();
+  let form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      content,
+    },
+  });
+  let utils = trpc.useUtils();
+  let refresh = () => {
+    utils.comment.getComments.invalidate({ id: articleId });
+  };
+
+  let onSubmit = async (data: z.infer<typeof formSchema>) => {
+    await updateComment({
+      commentId,
+      body: data.content,
+    });
+    refresh();
+    cancel();
+  };
+
+  return (
+    <div className="flex flex-col p-4">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <fieldset disabled={isLoading} className="flex flex-col w-full">
+            <FormField
+              control={form.control}
+              name="content"
+              render={({ field }) => (
+                <FormItem>
+                  <FormControl>
+                    <textarea
+                      value={field.value}
+                      onChange={field.onChange}
+                      className="flex aria-[invalid=true]:border-destructive/80 min-h-[80px] hover:border-muted-foreground/25 transition-colors w-full rounded-md border-[2px] sm:border-2 border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50"
+                      placeholder="What are your thoughts?"
+                    />
+                  </FormControl>
+                  <FormDescription />
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <div className="flex justify-end gap-2 mt-3">
+              <Button
+                disabled={isLoading}
+                type="button"
+                size={"sm"}
+                variant={"ghost"}
+                className="px-4 py-0 min-w-[33px] text-sm font-medium h-[33px]"
+                onClick={() => cancel()}
+              >
+                Cancel
+              </Button>
+              <Button
+                isLoading={isLoading}
+                type="submit"
+                size={"sm"}
+                className="px-4 py-0 min-w-[33px] text-sm font-medium h-[33px]"
+              >
+                Save
+              </Button>
+            </div>
+          </fieldset>
+        </form>
+      </Form>
     </div>
   );
 };
