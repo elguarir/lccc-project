@@ -759,13 +759,18 @@ export async function getArticleBySlug(slug: string) {
   return formattedarticle;
 }
 
-type getUserArticlesProps = {
+type getUserPublishedArticlesProps = {
   id?: string;
   username?: string;
 };
 
-export type TgetUserArticles = Awaited<ReturnType<typeof getUser>>;
-export let getUser = async ({ id, username }: getUserArticlesProps) => {
+export type TgetUserPublishedArticles = Awaited<
+  ReturnType<typeof getUserPublishedArticles>
+>;
+export let getUserPublishedArticles = async ({
+  id,
+  username,
+}: getUserPublishedArticlesProps) => {
   let articles;
   if (username && !id) {
     articles = await db.article.findMany({
