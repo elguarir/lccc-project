@@ -354,6 +354,16 @@ export const articleRouter = router({
       });
       return article;
     }),
+  getArticleRevisions: protectedProcedure
+    .input(z.object({ id: z.string() }))
+    .query(async ({ ctx, input }) => {
+      let revisions = await ctx.prisma.revision.findMany({
+        where: {
+          articleId: input.id,
+        },
+      });
+      return revisions;
+    }),
 });
 
 // get user's articles by id

@@ -1,5 +1,6 @@
 import { formSchema } from "@/lib/validators/UserCreationValidator";
 import { formSchema as userEditSchema } from "@/lib/validators/UserEditValidator";
+import { formSchema as formEditSchema } from "@/lib/validators/ProfileFormValdiator";
 import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
 import { auth, clerkClient } from "@clerk/nextjs";
@@ -214,7 +215,41 @@ export const userRouter = router({
         },
       });
 
-      revalidateTag("user-details");
+      return updatedUser;
+    }),
+  updateProfile: protectedProcedure
+    .input(formEditSchema)
+    .mutation(async ({ input, ctx }) => {
+      let user = await db.user.findUnique({
+        where: {
+          id: ctx.user.id,
+        },
+      });
+
+      if (!user)
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: "User does not exist.",
+        });
+
+      let updatedUser = await db.user.update({
+        where: {
+          id: ctx.user.id,
+        },
+        data: {
+          profile: {
+            update: {
+              bio: input.bio,
+              facebook: input.facebook,
+              twitter: input.twitter,
+              instagram: input.instagram,
+              github: input.github,
+              website: input.website,
+            },
+          },
+        },
+      });
+
       return updatedUser;
     }),
 });

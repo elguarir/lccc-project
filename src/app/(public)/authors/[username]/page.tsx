@@ -1,4 +1,6 @@
 import notFound from "@/app/not-found";
+import { Icons } from "@/assets/icons";
+import ProfileForm from "@/components/site/ProfileEdit";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -7,6 +9,7 @@ import {
   getUserPublishedArticles,
 } from "@/server/routers/article";
 import { getUser } from "@/server/routers/user";
+import { auth } from "@clerk/nextjs";
 import { ExternalLinkIcon } from "@radix-ui/react-icons";
 import { Facebook, Github, Globe, Instagram, Twitter } from "lucide-react";
 import Link from "next/link";
@@ -21,6 +24,7 @@ type Props = {
 const AuthorPage = async (props: Props) => {
   let { username } = props.params;
   let user = await getUser({ username });
+  let { userId } = auth();
 
   if (!user) {
     return notFound();
@@ -51,34 +55,59 @@ const AuthorPage = async (props: Props) => {
             </p>
           </div>
         </div>
-
-        <div className="mt-auto">
-          <div className="flex items-center h-full gap-3 text-muted-foreground">
-            <Button asChild size={"icon"} variant={"outline"}>
-              <Link href={`${user.profile?.website}`}>
-                <Globe size={24} />
-              </Link>
-            </Button>
-            <Button asChild size={"icon"} variant={"outline"}>
-              <Link href={`https://twitter.com/${user.profile?.twitter}`}>
-                <Twitter size={24} />
-              </Link>
-            </Button>
-            <Button asChild size={"icon"} variant={"outline"}>
-              <Link href={`https://instagram.com/${user.profile?.instagram}`}>
-                <Instagram size={24} />
-              </Link>
-            </Button>
-            <Button asChild size={"icon"} variant={"outline"}>
-              <Link href={`https://github.com/${user.profile?.github}`}>
-                <Github size={24} />
-              </Link>
-            </Button>
-            <Button asChild size={"icon"} variant={"outline"}>
-              <Link href={`https://facebook.com/${user.profile?.facebook}`}>
-                <Facebook size={24} />
-              </Link>
-            </Button>
+        <div className="flex flex-col justify-between h-full gap-3">
+          {userId === user.id && (
+            <ProfileForm
+              initialData={{
+                bio: user.profile?.bio ?? undefined,
+                twitter: user.profile?.twitter ?? undefined,
+                facebook: user.profile?.facebook ?? undefined,
+                instagram: user.profile?.instagram ?? undefined,
+                github: user.profile?.github ?? undefined,
+                website: user.profile?.website ?? undefined,
+              }}
+            />
+          )}
+          <div className="mt-auto">
+            <div className="flex items-center h-full gap-3 text-muted-foreground">
+              {user.profile?.website && (
+                <Button asChild size={"icon"} variant={"outline"}>
+                  <Link href={`${user.profile?.website}`}>
+                    <Globe size={24} />
+                  </Link>
+                </Button>
+              )}
+              {user.profile?.twitter && (
+                <Button asChild size={"icon"} variant={"outline"}>
+                  <Link href={`https://twitter.com/${user.profile?.twitter}`}>
+                    <Twitter size={24} />
+                  </Link>
+                </Button>
+              )}
+              {user.profile?.instagram && (
+                <Button asChild size={"icon"} variant={"outline"}>
+                  <Link
+                    href={`https://instagram.com/${user.profile?.instagram}`}
+                  >
+                    <Instagram size={24} />
+                  </Link>
+                </Button>
+              )}
+              {user.profile?.github && (
+                <Button asChild size={"icon"} variant={"outline"}>
+                  <Link href={`https://github.com/${user.profile?.github}`}>
+                    <Github size={24} />
+                  </Link>
+                </Button>
+              )}
+              {user.profile?.facebook && (
+                <Button asChild size={"icon"} variant={"outline"}>
+                  <Link href={`https://facebook.com/${user.profile?.facebook}`}>
+                    <Facebook size={24} />
+                  </Link>
+                </Button>
+              )}
+            </div>
           </div>
         </div>
       </div>
@@ -86,7 +115,7 @@ const AuthorPage = async (props: Props) => {
       <div className="grid w-full grid-cols-12 py-16 gap-7">
         <div className="grid gap-16 py-5 col-span-full xl:col-span-8">
           {articles.map((article) => (
-            <ArticleCard {...article} />
+            <ArticleCard key={article.id} {...article} />
           ))}
         </div>
         <div className="col-span-full xl:col-span-4"></div>
@@ -123,7 +152,7 @@ const ArticleCard = (article: TgetUserPublishedArticles[0]) => {
         >
           {article.title}
         </Link>
-        <p className="mt-2 text-muted-foreground line-clamp-3">
+        <p className="mt-2 text-muted-foreground line-clamp-2">
           {article.excerpt}
         </p>
 
