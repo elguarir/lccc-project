@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { ChevronLeft, Subtitles } from "lucide-react";
+import { ChevronLeft, Plus, Subtitles } from "lucide-react";
 import SideBar from "@/components/editor/SideBar";
 import { notFound } from "next/navigation";
 import CoverImageUpload from "@/components/editor/CoverImageUpload";
 import Editor from "@/components/editor/editor";
-import { getArticleById } from "@/server/routers/article";
+import { getArticleById, getArticleRevisions } from "@/server/routers/article";
 import { auth } from "@clerk/nextjs";
 import ArticleStatus from "@/components/editor/ArticleStatus";
 import {
@@ -13,6 +13,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Await } from "@/components/shared/Await";
+import { Icons } from "@/assets/icons";
+import AddRevision from "@/components/editor/AddRevision";
+import Revisions from "@/components/editor/Revisions";
+import RevisionsCount from "@/components/editor/RevisionsCount";
+import { Suspense } from "react";
+import { useCurrentUser } from "@/hooks/use-current-user";
 
 interface EditorPageProps {
   params: {
@@ -22,9 +29,16 @@ interface EditorPageProps {
 const EditorPage = async ({ params }: EditorPageProps) => {
   let { userId } = auth();
   if (!userId) return notFound();
-  let article = await getArticleById({ id: params.id, userId });
 
-  if (!article) notFound();
+  let article = await getArticleById({ id: params.id });
+  let currentUser = await useCurrentUser();
+  if (!article) return notFound();
+
+  // Check if the current user is an admin or the author of the article
+  if (!(currentUser?.role === "admin" || article.author.id === userId))
+    return notFound();
+  let revisions = getArticleRevisions({ id: params.id });
+
   return (
     <div className="relative flex flex-1 w-full h-screen">
       <ScrollArea className="w-full h-screen">
@@ -74,7 +88,54 @@ const EditorPage = async ({ params }: EditorPageProps) => {
       </ScrollArea>
       <SideBar article={article} />
       <Popover>
-        <PopoverTrigger className="absolute bottom-4 left-4"></PopoverTrigger>
+        <PopoverTrigger className="absolute bottom-6 left-6" asChild>
+          <Button variant={"outline"} size={"icon"}>
+            <Icons.notesIcon className="w-5 h-5" />
+            <div className="absolute w-4 h-4 text-xs text-white bg-red-500 rounded-full -top-1.5 -right-1.5">
+              <RevisionsCount articleId={article!.id} />
+            </div>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent
+          side="top"
+          align="start"
+          className="mb-1 w-[400px] max-w-full flex flex-col gap-4"
+        >
+          <div className="text-xl font-semibold tracking-wide">Revisions</div>
+          <Suspense
+            fallback={
+              <div className="text-sm font-medium tracking-wide text-muted-foreground">
+                Loading...
+              </div>
+            }
+          >
+            <Await promise={revisions}>
+              {(revisions) => {
+                return (
+                  <div className="flex flex-col gap-3">
+                    {revisions.length === 0 && (
+                      <div className="text-sm font-medium tracking-wide text-muted-foreground">
+                        No revisions yet.
+                      </div>
+                    )}
+
+                    <div className="flex flex-col gap-3">
+                      <Revisions
+                        articleId={article!.id}
+                        initialData={revisions}
+                      />
+                    </div>
+                    {currentUser!.role === "admin" && (
+                      <div className="flex items-center justify-end w-full mt-6">
+                        <AddRevision articleId={article!.id} />
+                      </div>
+                    )}
+                  </div>
+                );
+              }}
+            </Await>
+          </Suspense>
+        </PopoverContent>
       </Popover>
     </div>
   );

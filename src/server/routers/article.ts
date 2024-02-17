@@ -364,6 +364,30 @@ export const articleRouter = router({
       });
       return revisions;
     }),
+  createRevision: protectedProcedure
+    .input(z.object({ articleId: z.string(), body: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      let revision = await ctx.prisma.revision.create({
+        data: {
+          articleId: input.articleId,
+          body: input.body,
+        },
+      });
+      return revision;
+    }),
+  updateRivision: protectedProcedure
+    .input(z.object({ id: z.string(), resolved: z.boolean() }))
+    .mutation(async ({ ctx, input }) => {
+      let revision = await ctx.prisma.revision.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          resolved: input.resolved,
+        },
+      });
+      return revision;
+    }),
 });
 
 // get user's articles by id
@@ -491,17 +515,10 @@ export async function getUsersArticles() {
 
 // get article by id
 export type TArticleById = Awaited<ReturnType<typeof getArticleById>>;
-export async function getArticleById({
-  id,
-  userId,
-}: {
-  id: string;
-  userId: string;
-}) {
+export async function getArticleById({ id }: { id: string }) {
   let article = await db.article.findUnique({
     where: {
       id,
-      userId,
       deletedAt: null,
     },
     select: {
@@ -530,6 +547,17 @@ export async function getArticleById({
               slug: true,
             },
           },
+        },
+      },
+      author: {
+        select: {
+          id: true,
+          first_name: true,
+          last_name: true,
+          email: true,
+          avatar_url: true,
+          username: true,
+          role: true,
         },
       },
       publishedAt: true,
@@ -874,4 +902,16 @@ export let getUserPublishedArticles = async ({
     });
   }
   return articles ?? [];
+};
+
+export type TgetArticleRevisions = Awaited<
+  ReturnType<typeof getArticleRevisions>
+>;
+export let getArticleRevisions = async ({ id }: { id: string }) => {
+  let revisions = await db.revision.findMany({
+    where: {
+      articleId: id,
+    },
+  });
+  return revisions;
 };
