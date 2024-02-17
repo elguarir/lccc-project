@@ -19,6 +19,11 @@ const Revisions = ({ initialData, articleId }: Props) => {
 
   return (
     <>
+      {revisions.length === 0 && (
+        <div className="text-sm font-medium tracking-wide text-muted-foreground">
+          No revisions yet.
+        </div>
+      )}
       {revisions.map((revision) => {
         return <Revision key={revision.id} revision={revision} />;
       })}

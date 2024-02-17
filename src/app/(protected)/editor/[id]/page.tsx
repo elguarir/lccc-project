@@ -113,12 +113,6 @@ const EditorPage = async ({ params }: EditorPageProps) => {
               {(revisions) => {
                 return (
                   <div className="flex flex-col gap-3">
-                    {revisions.length === 0 && (
-                      <div className="text-sm font-medium tracking-wide text-muted-foreground">
-                        No revisions yet.
-                      </div>
-                    )}
-
                     <div className="flex flex-col gap-3">
                       <Revisions
                         articleId={article!.id}
