@@ -91,9 +91,7 @@ const EditorPage = async ({ params }: EditorPageProps) => {
         <PopoverTrigger className="absolute bottom-6 left-6" asChild>
           <Button variant={"outline"} size={"icon"}>
             <Icons.notesIcon className="w-5 h-5" />
-            <div className="absolute w-4 h-4 text-xs text-white bg-red-500 rounded-full -top-1.5 -right-1.5">
-              <RevisionsCount articleId={article!.id} />
-            </div>
+            <RevisionsCount articleId={article!.id} />
           </Button>
         </PopoverTrigger>
         <PopoverContent

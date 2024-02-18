@@ -11,7 +11,10 @@ const RevisionsCount = ({ articleId }: Props) => {
     id: articleId,
   });
   if (!revisions || revisions.length === 0) return null;
-  return <>{revisions.length}</>;
+  return (
+    <div className="absolute w-4 h-4 text-xs text-white bg-red-500 rounded-full -top-1.5 -right-1.5">
+      {revisions.length} revisions
+    </div>
+  );
 };
-
 export default RevisionsCount;
