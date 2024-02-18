@@ -28,11 +28,6 @@
     --dark: #232323;
   }
 
-  .prose-primary {
-    --tw-prose-links: var(--primary);
-    --tw-prose-invert-links: var(--primary);
-  }
-
   .dark {
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
@@ -54,6 +49,10 @@
     --input: 0 0% 14.9%;
     --ring: 226, 50%, 60%;
     --dark: #232323;
+  }
+  .prose-primary {
+    --tw-prose-links: var(--primary);
+    --tw-prose-invert-links: var(--primary);
   }
 }
 

@@ -64,7 +64,7 @@ module.exports = {
           background: {
             muted: "#131A2B",
             subtle: colors.neutral[800],
-            DEFAULT: colors.neutral[900],
+            DEFAULT: "hsl(var(--card))",
             emphasis: colors.neutral[300],
           },
           border: {
@@ -75,7 +75,7 @@ module.exports = {
           },
           content: {
             subtle: colors.neutral[600],
-            DEFAULT: colors.neutral[500],
+            DEFAULT: "hsl(var(--muted-foreground))",
             emphasis: colors.neutral[200],
             strong: colors.neutral[50],
             inverted: colors.neutral[950],

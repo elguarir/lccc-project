@@ -2,35 +2,22 @@
 import { cn } from "@/lib/utils";
 import { Card } from "@tremor/react";
 
-const data = [
-  {
-    name: "Total Members",
-    stat: "56",
-    change: "+22.5%",
-    changeType: "positive",
-    chnageDescription: "Since last month",
-  },
-  {
-    name: "Total Articles",
-    stat: "23",
-    change: "+2.8%",
-    changeType: "positive",
-    chnageDescription: "Since last month",
-  },
-  {
-    name: "Total Views",
-    stat: "160",
-    change: "+19.7%",
-    changeType: "positive",
-    chnageDescription: "Since last week",
-  },
-];
 
-export default function QuickStats() {
+type QuickStatsProps = {
+  stats: {
+    name: string;
+    stat: number;
+    change: string;
+    changeType: string;
+    changeDescription: string;
+  }[];
+};
+
+export default function QuickStats({stats}:QuickStatsProps) {
   return (
     <>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {data.map((item) => (
+        {stats.map((item) => (
           <Card key={item.name}>
             <p className="font-medium text-tremor-default text-tremor-content dark:text-dark-tremor-content">
               {item.name}
@@ -52,7 +39,7 @@ export default function QuickStats() {
                 </span>
               </div>
               <span className="text-xs font-medium text-tremor-content dark:text-dark-tremor-content">
-                {item.chnageDescription}
+                {item.changeDescription}
               </span>
             </div>
           </Card>
