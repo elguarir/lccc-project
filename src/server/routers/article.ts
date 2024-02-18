@@ -42,11 +42,17 @@ export const articleRouter = router({
     return categories;
   }),
   createDraft: protectedProcedure
-    .input(z.object({}))
-    .mutation(async ({ ctx }) => {
+    .input(
+      z.object({
+        title: z.string().optional(),
+        description: z.string().optional(),
+      }),
+    )
+    .mutation(async ({ ctx, input }) => {
       let aritcle = await ctx.prisma.article.create({
         data: {
-          title: "Untitled",
+          title: input.title ?? "Untitled",
+          excerpt: input.description,
           userId: ctx.user.id,
           content: initialEditorValue,
         },
@@ -207,6 +213,47 @@ export const articleRouter = router({
     let articlesCount = await getUsersArticlesCount();
     return articlesCount;
   }),
+  submitAgain: protectedProcedure
+    .input(DraftFormSchema.extend({ id: z.string() }))
+    .mutation(async ({ ctx, input }) => {
+      let article = await ctx.prisma.article.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          title: input.title,
+          slug: input.slug,
+          excerpt: input.excerpt,
+          main_image: input.coverImage,
+          status: "submitted",
+          publishedAt: input.publishedAt,
+          category: input.category ? { connect: { id: input.category } } : {},
+        },
+      });
+      try {
+        await ctx.prisma.articleTag.deleteMany({
+          where: {
+            articleId: input.id,
+          },
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+      let tags = (input.tags ?? []).map((tag) => {
+        return {
+          articleId: input.id,
+          tagId: tag.id,
+        };
+      });
+
+      await ctx.prisma.articleTag.createMany({
+        data: tags,
+      });
+
+      return article;
+    }),
+
   submitForApproval: protectedProcedure
     .input(z.object({ id: z.string() }))
     .mutation(async ({ ctx, input }) => {
@@ -373,6 +420,19 @@ export const articleRouter = router({
           body: input.body,
         },
       });
+
+      let article = await getArticleById({ id: input.articleId });
+      if (article?.status === "submitted") {
+        await ctx.prisma.article.update({
+          where: {
+            id: input.articleId,
+          },
+          data: {
+            status: "revisions_requested",
+          },
+        });
+      }
+
       return revision;
     }),
   updateRivision: protectedProcedure

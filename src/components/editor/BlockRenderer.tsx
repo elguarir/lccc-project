@@ -43,7 +43,7 @@ export const BlockRenderer = ({
         <figure>
           <img
             src={block.data.file.url}
-            className="rounded-md shadow"
+            className="mx-auto rounded-md shadow"
             alt={block.data.caption}
           />
           <figcaption className="italic font-[450] text-center text-muted-foreground">

@@ -3,25 +3,67 @@ import ArticleComments from "@/components/site/articles/ArticleComments";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
+import { env } from "@/lib/env/server";
 import { getArticleBySlug } from "@/server/routers/article";
 import { getComments } from "@/server/routers/comment";
+import { auth } from "@clerk/nextjs";
 import { OutputData } from "@editorjs/editorjs";
 import { format } from "date-fns";
+import { Metadata, ResolvingMetadata } from "next";
+import { Author } from "next/dist/lib/metadata/types/metadata-types";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import React, { cache } from "react";
 // import {getComments} = "@/"
 type Props = {
-  params: {
-    slug: string;
-  };
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 };
 
 export const revalidate = 3600;
 
+export async function generateMetadata(
+  { params, searchParams }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
+  // read route params
+  const slug = params.slug;
+
+  // fetch data
+  const article = await getArticleBySlug(slug);
+
+  // optionally access and extend (rather than replace) parent metadata
+  const previousImages = (await parent).openGraph?.images || [];
+
+  if (!article) {
+    return {
+      title: "Article not found",
+      openGraph: {
+        images: previousImages,
+      },
+    };
+  }
+  return {
+    title: article.title,
+    description: article.excerpt,
+    keywords: article.tags.map((tag) => tag.name).join(", "),
+    category: article.category?.name,
+    publisher: article.author.first_name + " " + article.author.last_name,
+    authors: [
+      {
+        name: article.author.first_name + " " + article.author.last_name,
+        url: `${env.BASE_URL}/authors/${article.author.username}`,
+      },
+    ],
+    openGraph: {
+      images: [article.main_image!, ...previousImages],
+    },
+  };
+}
+
 const ArticlePage = async (props: Props) => {
   let article = await getArticle(props.params.slug);
-
+  let { userId } = auth();
   if (!article) {
     return notFound();
   }
@@ -96,7 +138,11 @@ const ArticlePage = async (props: Props) => {
         ))}
       </div>
       <Separator orientation="horizontal" className="w-full my-10" />
-      <ArticleComments initialData={comments} articleId={article.id} />
+      <ArticleComments
+        currentUser={userId}
+        initialData={comments}
+        articleId={article.id}
+      />
     </main>
   );
 };

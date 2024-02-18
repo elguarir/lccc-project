@@ -1,4 +1,13 @@
-import Editor from "@/components/editor/editor";
+import QuickDraft from "@/components/dashboard/QuickDraft";
+import QuickStats from "@/components/dashboard/QuickStats";
+import {
+  Card,
+  CardTitle,
+  CardHeader,
+  CardContent,
+  CardDescription,
+} from "@/components/ui/card";
+
 import { currentUser } from "@clerk/nextjs";
 
 async function DashboardPage() {
@@ -11,8 +20,27 @@ async function DashboardPage() {
       {/* <h1 className="text-3xl mb-8 font-[550] md:font-bold font-display text-foreground">
         Dashboard
       </h1> */}
-      {/* <div className="grid gap-4 xl:grid-cols-2"></div> */}
-      <div className="mt-4">
+      <div className="grid w-full gap-12 py-6">
+        <div className="w-full">
+          <QuickStats />
+        </div>
+        {/* quick draft */}
+        <div className="grid gap-4 xl:grid-cols-12">
+          <Card className="col-span-5">
+            <CardHeader>
+              <CardTitle>
+                Quick Draft
+              </CardTitle>
+              <CardDescription>
+                You've got a new idea? Jot it down here, and get back to it
+                later.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <QuickDraft />
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

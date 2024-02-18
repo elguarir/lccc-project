@@ -38,9 +38,10 @@ import Link from "next/link";
 type Props = {
   articleId: string;
   initialData: TGetComments;
+  currentUser: string | null;
 };
 
-const ArticleComments = ({ articleId, initialData }: Props) => {
+const ArticleComments = ({ articleId, initialData, currentUser }: Props) => {
   let formSchema = z.object({
     content: z
       .string()
@@ -81,48 +82,60 @@ const ArticleComments = ({ articleId, initialData }: Props) => {
 
   return (
     <section className="flex flex-col pb-10">
-      <h4 className="text-2xl font-bold tracking-tight md:text-3xl">
-        Member discussion
-      </h4>
-      {/* comment form */}
-      <div className="py-5">
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)}>
-            <fieldset disabled={isLoading} className="flex flex-col w-full">
-              <FormField
-                control={form.control}
-                name="content"
-                render={({ field }) => (
-                  <FormItem>
-                    {/* <FormLabel /> */}
-                    <FormControl>
-                      <textarea
-                        value={field.value}
-                        onChange={field.onChange}
-                        className="flex aria-[invalid=true]:border-destructive/80 min-h-[80px] hover:border-muted-foreground/25 transition-colors w-full rounded-md border-[2px] sm:border-2 border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="What are your thoughts?"
-                      />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <div className="flex justify-end mt-3">
-                <Button
-                  isLoading={isLoading}
-                  type="submit"
-                  size={"sm"}
-                  className="px-4 py-0 min-w-[33px] text-sm font-medium h-[33px]"
-                >
-                  Reply
-                </Button>
-              </div>
-            </fieldset>
-          </form>
-        </Form>
+      <div className="flex items-center justify-between w-full">
+        <h4 className="text-2xl font-bold tracking-tight md:text-3xl">
+          Member discussion
+        </h4>
+        {!currentUser && (
+          <Button asChild size={"sm"}>
+            <Link href={`/sign-up`}>
+              Join{" "}
+              <span className="hidden ml-0.5 sm:inline">the discussion</span>
+            </Link>
+          </Button>
+        )}
       </div>
+      {/* comment form */}
+      {currentUser && (
+        <div className="py-5">
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)}>
+              <fieldset disabled={isLoading} className="flex flex-col w-full">
+                <FormField
+                  control={form.control}
+                  name="content"
+                  render={({ field }) => (
+                    <FormItem>
+                      {/* <FormLabel /> */}
+                      <FormControl>
+                        <textarea
+                          value={field.value}
+                          onChange={field.onChange}
+                          className="flex aria-[invalid=true]:border-destructive/80 min-h-[80px] hover:border-muted-foreground/25 transition-colors w-full rounded-md border-[2px] sm:border-2 border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:border-primary disabled:cursor-not-allowed disabled:opacity-50"
+                          placeholder="What are your thoughts?"
+                        />
+                      </FormControl>
+                      <FormDescription />
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+
+                <div className="flex justify-end mt-3">
+                  <Button
+                    isLoading={isLoading}
+                    type="submit"
+                    size={"sm"}
+                    className="px-4 py-0 min-w-[33px] text-sm font-medium h-[33px]"
+                  >
+                    Reply
+                  </Button>
+                </div>
+              </fieldset>
+            </form>
+          </Form>
+        </div>
+      )}
       {/* comments */}
       {data?.comments.length === 0 ? (
         <div className="py-5">
@@ -131,7 +144,7 @@ const ArticleComments = ({ articleId, initialData }: Props) => {
           </p>
         </div>
       ) : (
-        <>
+        <div className="pt-6">
           <div className="flex flex-col space-y-3">
             <div className="flex justify-start w-full">
               <Select defaultValue="newest">
@@ -155,7 +168,7 @@ const ArticleComments = ({ articleId, initialData }: Props) => {
               />
             ))}
           </div>
-        </>
+        </div>
       )}
     </section>
   );
@@ -289,6 +302,13 @@ let Comment = ({
               disabled={isLoading}
               className="focus-visible:outline-primary w-fit"
               onClick={() => {
+                if (!userId) {
+                  toast.error("You need to be logged in to like a comment", {
+                    duration: 1500,
+                    position: "bottom-center",
+                  });
+                  return;
+                }
                 like(
                   { commentId: id },
                   {

@@ -103,7 +103,7 @@ export const columns: ColumnDef<Article>[] = [
       }
 
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex items-center w-fit">
           <Badge variant={status.variant}>
             <status.icon className="w-3.5 min-w-fit h-3.5 mr-2" />
             {status.label}

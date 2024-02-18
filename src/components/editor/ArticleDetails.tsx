@@ -56,13 +56,19 @@ export default function ArticleDetails({
   const [conductor, setConductor] = useState<TConductorInstance>();
   const { mutate: saveDraft, isLoading: savingDraft } =
     trpc.article.saveDraft.useMutation();
+  const { mutate: submitAgain, isLoading: submittingAgain } =
+    trpc.article.submitAgain.useMutation();
   const { mutate: unpublish, isLoading: unpublishing } =
     trpc.article.changeArticleStatus.useMutation();
   const { mutate: publish, isLoading: publishing } =
     trpc.article.changeArticleStatus.useMutation();
   const { data: categories, isLoading: categoriesLoading } =
     trpc.article.getArticleCategories.useQuery();
-  let { canEdit, isLoading, articleStatus, isAdmin, isApproved } =
+
+  let { data: revisions, isLoading: revisionsLoading } =
+    trpc.article.getArticleRevisions.useQuery({ id: articleId });
+
+  let { canEdit, isLoading, articleStatus, isAuthor, isAdmin, isApproved } =
     useArticlePermissions({
       id: articleId,
     });
@@ -104,7 +110,7 @@ export default function ArticleDetails({
   };
 
   let ArticleActions = () => {
-    if (isAdmin) {
+    if (isAdmin && isAuthor) {
       if (articleStatus === "published")
         return (
           <Button
@@ -185,6 +191,47 @@ export default function ArticleDetails({
         );
     }
 
+    if (isAdmin && !isAuthor) {
+      return (
+        <Button
+          loadingText="Publishing..."
+          size={"sm"}
+          isLoading={publishing}
+          variant={"default"}
+          type="button"
+          onClick={() => {
+            if (!slug) {
+              formState.setFocus("slug");
+              toast.error(
+                "You need to set a slug for this article before publishing it!",
+                {
+                  position: "bottom-left",
+                },
+              );
+              return;
+            }
+            publish(
+              { id: articleId, action: "publish" },
+              {
+                onSuccess: () => {
+                  toast.success("Article has been published.", {
+                    duration: 1500,
+                    position: "bottom-left",
+                  });
+                  fire();
+                  utils.article.getArticleById.invalidate({
+                    id: articleId,
+                  });
+                },
+              },
+            );
+          }}
+        >
+          Approve and publish
+        </Button>
+      );
+    }
+
     if (isApproved && articleStatus === "published")
       return (
         <Button
@@ -200,6 +247,51 @@ export default function ArticleDetails({
           Unpublish
         </Button>
       );
+
+    if (articleStatus === "revisions_requested" && isAuthor) {
+      let canSubmitAgain =
+        revisions?.find((revision) => revision.resolved === false) ===
+        undefined;
+
+      return (
+        <Button
+          loadingText="Submitting..."
+          size={"sm"}
+          isLoading={submittingAgain}
+          variant={"default"}
+          type="button"
+          onClick={() => {
+            let data = formState.getValues();
+            if (!canSubmitAgain) {
+              toast.error(
+                "You need to resolve all the requested revisions before submitting the article again.",
+                {
+                  position: "bottom-center",
+                },
+              );
+              return;
+            }
+            submitAgain(
+              { ...data, id: articleId },
+              {
+                onSuccess: () => {
+                  toast.success(
+                    "Article has been submitted again for review.",
+                    {
+                      duration: 1500,
+                      position: "bottom-left",
+                    },
+                  );
+                  utils.article.getArticleById.invalidate({ id: articleId });
+                },
+              },
+            );
+          }}
+        >
+          Submit for review
+        </Button>
+      );
+    }
 
     return (
       <>
@@ -232,7 +324,7 @@ export default function ArticleDetails({
         <form onSubmit={formState.handleSubmit(onSubmit)}>
           <fieldset
             className="w-full space-y-6"
-            disabled={savingDraft || !canEdit || isLoading}
+            disabled={savingDraft || !canEdit || isLoading || submittingAgain}
           >
             <FormField
               control={formState.control}

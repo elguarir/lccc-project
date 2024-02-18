@@ -1,10 +1,10 @@
 import db from "@/prisma";
-import { protectedProcedure, router } from "@/server/trpc";
+import { protectedProcedure, publicProcedure, router } from "@/server/trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 export const commentsRouter = router({
-  getComments: protectedProcedure
+  getComments: publicProcedure
     .input(
       z.object({
         id: z.string(),
