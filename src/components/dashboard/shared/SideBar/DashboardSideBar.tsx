@@ -3,7 +3,7 @@ import React from "react";
 import { mainLinks } from "@/lib/constants/DashboardNavLinks";
 import NavItems from "./NavItems";
 import { SideSheet } from "./SideSheet";
-import { UserButton, currentUser } from "@clerk/nextjs";
+import { UserButton } from "@clerk/nextjs";
 import { ThemeToggle } from "@/components/site/theme-toggle";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { DashboardLinkProps } from "@/types/nav";
@@ -16,7 +16,6 @@ import UsersArticlesCount from "./UsersArticlesCount";
 async function DashboardSideBar() {
   let user = await useCurrentUser();
   let usersArticlesCount = await getSubmittedArticlesCount();
-
   let adminLinks: DashboardLinkProps[] = [
     {
       name: "Articles",

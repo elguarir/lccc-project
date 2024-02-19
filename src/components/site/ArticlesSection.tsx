@@ -136,7 +136,7 @@ type ArticleCardProps = {
   };
 };
 
-let ArticleCard = (props: ArticleCardProps) => {
+export let ArticleCard = (props: ArticleCardProps) => {
   if (props.skeleton)
     return (
       <article className="flex flex-col h-full gap-y-3.5">

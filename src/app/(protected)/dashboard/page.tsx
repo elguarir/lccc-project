@@ -1,5 +1,4 @@
 import QuickDraft from "@/components/dashboard/QuickDraft";
-import QuickStats from "@/components/dashboard/QuickStats";
 import SignUpStats from "@/components/dashboard/SignUpStats";
 import {
   Card,
@@ -43,12 +42,12 @@ async function DashboardPage() {
   ];
 
   return (
-    <div className="flex flex-col flex-1 w-full py-6">
+    <div className="flex flex-col flex-1 w-full max-w-6xl py-6 mx-auto">
       <h1 className="mb-8 text-2xl font-bold md:text-3xl text-foreground">
         Howdy, <span className="text-primary-600">{user?.firstName} 👋</span>
       </h1>
       <div className="grid w-full gap-12 py-6">
-        <div className="grid w-full grid-cols-1 lg:grid-cols-2">
+        <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
           {/* <QuickStats stats={stats} /> */}
           <SignUpStats
             data={signupsByDate}
@@ -59,8 +58,8 @@ async function DashboardPage() {
           />
         </div>
         {/* quick draft */}
-        <div className="grid gap-4 lg:grid-cols-10 xl:grid-cols-12">
-          <Card className="col-span-5">
+        <div className="grid gap-8 lg:grid-cols-2">
+          <Card>
             <CardHeader>
               <CardTitle className="text-xl font-medium leading-normal tracking-normal">Quick Draft</CardTitle>
               <CardDescription>
