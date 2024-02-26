@@ -2,12 +2,20 @@ import initialEditorValue from "@/lib/constants/initialEditorValue";
 import slugIt from "@/lib/helpers/slugify";
 import { FormSchema as DraftFormSchema } from "@/lib/validators/ArticleDetailsValidator";
 import db from "@/prisma";
-import { router, protectedProcedure } from "@/server/trpc";
+import { router, protectedProcedure, publicProcedure } from "@/server/trpc";
 import { z } from "zod";
 import { JsonArray } from "@prisma/client/runtime/library";
 import { TRPCError } from "@trpc/server";
 import { useCurrentUser } from "@/hooks/use-current-user";
-
+import { cookies } from "next/headers";
+import {
+  eachDayOfInterval,
+  endOfDay,
+  endOfMonth,
+  format,
+  startOfMonth,
+  subMonths,
+} from "date-fns";
 export const articleRouter = router({
   createTag: protectedProcedure
     .input(z.object({ name: z.string() }))
@@ -448,6 +456,12 @@ export const articleRouter = router({
       });
       return revision;
     }),
+  getArticleViewCount: publicProcedure
+    .input(z.object({ articleId: z.string() }))
+    .query(async ({ ctx, input }) => {
+      let count = await getArticleViewCount(input.articleId);
+      return count;
+    }),
 });
 
 // get user's articles by id
@@ -507,7 +521,15 @@ export async function getUsersArticles() {
     where: {
       deletedAt: null,
       OR: [
-        { status: "submitted" || "published" || "revisions_requested" },
+        {
+          status: "submitted",
+        },
+        {
+          status: "published",
+        },
+        {
+          status: "revisions_requested",
+        },
         {
           approved: true,
         },
@@ -696,16 +718,32 @@ export async function getSubmittedArticles() {
 
 // get submitted articles count
 export async function getSubmittedArticlesCount() {
+  let user = await useCurrentUser();
+  if (!user) return 0;
   let articles = await db.article.count({
     where: {
-      status: "submitted",
-      approved: false,
       deletedAt: null,
+      OR: [
+        {
+          status: "submitted",
+        },
+        {
+          status: "published",
+        },
+        {
+          status: "revisions_requested",
+        },
+        {
+          approved: true,
+        },
+      ],
+      NOT: {
+        userId: user?.id,
+      },
     },
   });
   return articles;
 }
-
 // get user's articles count
 export async function getUsersArticlesCount() {
   let user = await useCurrentUser();
@@ -976,3 +1014,211 @@ export let getArticleRevisions = async ({ id }: { id: string }) => {
   return revisions;
 };
 
+export async function getTopCategories() {
+  let categories = await db.category.findMany({
+    select: {
+      id: true,
+      name: true,
+      slug: true,
+      articles: {
+        select: {
+          id: true,
+        },
+      },
+    },
+    orderBy: {
+      articles: {
+        _count: "desc",
+      },
+    },
+    take: 5,
+  });
+
+  // format
+  let formattedCategories = categories.map((category) => {
+    return {
+      ...category,
+      count: category.articles.length,
+    };
+  });
+  return formattedCategories;
+}
+
+// Function to create a new visitor
+async function createVisitor() {
+  return await db.visitor.create({
+    data: {},
+  });
+}
+
+// Function to create a new visit
+async function createVisit(visitorId: string) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const visit = await db.visit.findFirst({
+    where: {
+      AND: [
+        { visitorId: visitorId },
+        { createdAt: { gte: today } },
+        { createdAt: { lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) } },
+      ],
+    },
+  });
+
+  if (!visit) {
+    return await db.visit.create({
+      data: {
+        visitorId: visitorId,
+      },
+    });
+  }
+}
+
+// Function to create a new article view
+async function createArticleView(articleId: string, visitorId: string) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const view = await db.articleView.findFirst({
+    where: {
+      AND: [
+        { articleId: articleId },
+        { visitorId: visitorId },
+        { createdAt: { gte: today } },
+        { createdAt: { lt: new Date(today.getTime() + 24 * 60 * 60 * 1000) } },
+      ],
+    },
+  });
+  if (!view) {
+    return await db.articleView.create({
+      data: {
+        articleId: articleId,
+        visitorId: visitorId,
+      },
+    });
+  }
+}
+
+// Function to get the number of views for an article
+async function getArticleViewCount(articleId: string) {
+  return await db.articleView.count({
+    where: {
+      articleId: articleId,
+    },
+  });
+}
+
+// Function to get the number of unique visitors for a day
+async function getDailyVisitorCount(date: Date) {
+  const visitorCount = await db.visit.count({
+    where: {
+      createdAt: {
+        gte: date,
+        lt: new Date(date.getTime() + 24 * 60 * 60 * 1000), // add 24 hours to get the end of the day
+      },
+    },
+  });
+
+  return visitorCount;
+}
+
+interface IgetLastMonthVisits {
+  date: string;
+  Visitors: number;
+}
+[];
+
+export async function getLastMonthVisits<IgetLastMonthVisits>() {
+  let visits = await db.visit.findMany({
+    where: {
+      createdAt: {
+        gte: subMonths(new Date(), 1),
+      },
+    },
+    select: {
+      createdAt: true,
+    },
+  });
+
+  const groupedByDate = visits.reduce<Record<string, number>>((acc, visit) => {
+    const date = format(new Date(visit.createdAt), "MMM d");
+    if (!acc[date]) {
+      acc[date] = 0;
+    }
+    acc[date]++;
+    return acc;
+    // Get the first and last date from the data
+  }, {});
+  const dates = Object.keys(groupedByDate);
+  const firstDate = new Date(dates[0]);
+  const lastDate = new Date(dates[dates.length - 1]);
+
+  const allDates = eachDayOfInterval({
+    start: startOfMonth(firstDate),
+    end: endOfMonth(lastDate),
+  }).map((date) => format(date, "MMM d"));
+
+  const result = allDates.map((date) => ({
+    date,
+    Visitors: groupedByDate[date] || 0,
+  }));
+
+  return result;
+}
+
+async function getDailyVisitorCountBetweenDates(
+  startDate: Date,
+  endDate: Date,
+) {
+  const visitorCount = await db.visit.count({
+    where: {
+      createdAt: {
+        gte: startDate,
+        lt: new Date(endDate.getTime() + 24 * 60 * 60 * 1000), // add 24 hours to get the end of the day
+      },
+    },
+  });
+  return visitorCount;
+}
+
+export async function registerVisit() {
+  let existingvisitorId = cookies().get("visitor_id");
+  if (!existingvisitorId) {
+    let visitor = await createVisitor();
+    cookies().set("visitor_id", visitor.id, {
+      maxAge: 60 * 60 * 24 * 365,
+      path: "/",
+      httpOnly: true,
+    });
+    let visit = await createVisit(visitor.id);
+
+    return {
+      success: true,
+      visitorId: visitor.id,
+    };
+  }
+  await createVisit(existingvisitorId.value);
+  return {
+    success: true,
+    visitorId: existingvisitorId.value,
+  };
+}
+export async function registerArticleView(articleId: string) {
+  let visitorId = cookies().get("visitor_id");
+  if (!visitorId) {
+    let visitor = await createVisitor();
+    cookies().set("visitor_id", visitor.id, {
+      maxAge: 60 * 60 * 24 * 365,
+      path: "/",
+      httpOnly: true,
+    });
+    await createArticleView(articleId, visitor.id);
+    return {
+      success: true,
+      visitorId: visitor.id,
+    };
+  }
+
+  await createArticleView(articleId, visitorId.value);
+}

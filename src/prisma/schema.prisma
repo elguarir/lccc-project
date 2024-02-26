@@ -30,13 +30,15 @@ model Event {
   title       String
   slug        String      @unique
   excerpt     String
-  mainImage   String
-  location    String
+  mainImage   String      @map("main_image") @db.Text
+  location    String      @db.Text
   description Json
   status      EventStatus @default(draft)
-  eventDate   DateTime
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  eventDate   DateTime    @map("event_date")
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("events")
 }
 
 model User {
@@ -47,29 +49,32 @@ model User {
   email      String    @unique
   avatar_url String?
   role       Role      @default(user)
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
   profile    Profile?  @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  profileId  String?
+  profileId  String?   @map("profile_id")
   articles   Article[]
   comments   Comment[]
   likes      Like[]
 
   @@index([profileId])
+  @@map("users")
 }
 
 model Profile {
   id        String   @id @default(cuid())
-  userId    String
+  userId    String   @map("user_id")
   bio       String?  @db.Text
   website   String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   user      User[]
   twitter   String?
   facebook  String?
   instagram String?
   github    String?
+
+  @@map("profiles")
 }
 
 model Article {
@@ -80,94 +85,134 @@ model Article {
   content     Json?
   main_image  String?       @db.Text
   status      ArticleStatus @default(draft)
-  publishedAt DateTime?
+  publishedAt DateTime?     @map("published_at")
   approved    Boolean       @default(false)
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
-  deletedAt   DateTime?
-  userId      String
+  createdAt   DateTime      @default(now()) @map("created_at")
+  updatedAt   DateTime      @updatedAt @map("updated_at")
+  deletedAt   DateTime?     @map("deleted_at")
+  userId      String        @map("user_id")
   category    Category?     @relation(fields: [categoryId], references: [id])
-  categoryId  String?
+  categoryId  String?       @map("category_id")
   tags        ArticleTag[]
   comments    Comment[]
   author      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  Revision    Revision[]
+  revisions   Revision[]
+  views       ArticleView[]
 
   @@index([categoryId])
   @@index([userId])
+  @@map("articles")
+}
+
+model ArticleView {
+  id        String   @id @default(cuid())
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId String   @map("article_id")
+  visitor   Visitor  @relation(fields: [visitorId], references: [id])
+  visitorId String   @map("visitor_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([articleId])
+  @@index([visitorId])
+  @@map("article_views")
+}
+
+model Visitor {
+  id          String        @id @default(cuid())
+  visits      Visit[]
+  ArticleView ArticleView[]
+}
+
+model Visit {
+  id        String   @id @default(cuid())
+  visitor   Visitor  @relation(fields: [visitorId], references: [id])
+  visitorId String   @map("visitor_id")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([visitorId])
+  @@map("visits")
 }
 
 model Revision {
   id        String   @id @default(cuid())
   article   Article  @relation(fields: [articleId], references: [id])
-  articleId String
+  articleId String   @map("article_id")
   body      String   @db.Text
   resolved  Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@index([articleId])
+  @@map("revisions")
 }
 
 model Like {
-  id        String   @id @default(cuid())
-  user      User     @relation(fields: [userId], references: [id])
-  userId    String
-  commentId String
-  
+  id        String @id @default(cuid())
+  user      User   @relation(fields: [userId], references: [id])
+  userId    String @map("user_id")
+  commentId String @map("comment_id")
+
   comment   Comment  @relation(fields: [commentId], references: [id])
-  updatedAt DateTime @updatedAt
-  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime @default(now()) @map("created_at")
+
   @@index([commentId])
   @@index([userId])
+  @@map("likes")
 }
 
 model Comment {
   id        String   @id @default(cuid())
   body      String
   edited    Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  userId    String
-  articleId String
-  parentId  String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  userId    String   @map("user_id")
+  articleId String   @map("article_id")
+  parentId  String?  @map("parent_id")
 
   user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   article  Article   @relation(fields: [articleId], references: [id], onDelete: Cascade)
   parent   Comment?  @relation("CommentToComment", fields: [parentId], references: [id], onDelete: NoAction, onUpdate: NoAction)
   children Comment[] @relation("CommentToComment")
-  likes     Like[]
+  likes    Like[]
 
   @@index([parentId])
   @@index([userId])
   @@index([articleId])
+  @@map("comments")
 }
 
 model Tag {
   id        String       @id @default(cuid())
   name      String       @unique
   slug      String       @unique
-  createdAt DateTime     @default(now())
-  updatedAt DateTime     @updatedAt
+  createdAt DateTime     @default(now()) @map("created_at")
+  updatedAt DateTime     @updatedAt @map("updated_at")
   articles  ArticleTag[]
+
+  @@map("tags")
 }
 
 model ArticleTag {
   article   Article @relation(fields: [articleId], references: [id], onDelete: Cascade)
-  articleId String
+  articleId String  @map("article_id")
   tag       Tag     @relation(fields: [tagId], references: [id])
-  tagId     String
+  tagId     String  @map("tag_id")
 
   @@id([articleId, tagId])
   @@index([articleId])
   @@index([tagId])
+  @@map("article_tags")
 }
 
 model Category {
   id        String    @id @default(cuid())
   name      String    @unique
   slug      String    @unique
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  article   Article[]
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  articles  Article[]
+
+  @@map("categories")
 }

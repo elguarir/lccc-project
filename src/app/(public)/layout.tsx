@@ -1,5 +1,6 @@
 import Footer from "@/components/site/Footer";
 import NavBar from "@/components/site/NavBar";
+import { env } from "@/lib/env/server";
 import ProgressBarProvider from "@/providers/ProgressBarProvider";
 import React from "react";
 
@@ -7,7 +8,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-function PublicLayout({ children }: Props) {
+async function PublicLayout({ children }: Props) {
   return (
     <ProgressBarProvider>
       <div className="min-h-screen bg-background text-foreground">

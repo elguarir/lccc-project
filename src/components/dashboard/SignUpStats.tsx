@@ -28,6 +28,7 @@ const SignUpStats = ({ data, summary }: SignUpStatsProps) => {
           colors={["blue"]}
           valueFormatter={valueFormatter}
           showLegend={false}
+          showAnimation
           showYAxis={false}
           showGradient={false}
           startEndOnly={true}

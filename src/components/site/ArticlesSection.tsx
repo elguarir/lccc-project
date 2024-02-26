@@ -48,7 +48,7 @@ const ArticlesSection = async () => {
 
   let latestPublisedArticles = getPublishedArticles();
   return (
-    <section className="flex flex-col gap-10 lg:gap-8 w-full py-6 mb-[800px]">
+    <section className="flex flex-col w-full gap-10 py-6 lg:gap-8">
       <div className="relative w-full pl-3 text-left lg:pl-8">
         <svg
           width={22}

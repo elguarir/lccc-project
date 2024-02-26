@@ -134,7 +134,7 @@ export async function getCategoriesWithArticleCount() {
       createdAt: true,
       _count: {
         select: {
-          article: true,
+          articles: true,
         },
       },
     },
@@ -148,7 +148,7 @@ export async function getCategoriesWithArticleCount() {
     name: category.name,
     slug: category.slug,
     createdAt: category.createdAt,
-    articleCount: category._count.article,
+    articleCount: category._count.articles,
   }));
 }
 

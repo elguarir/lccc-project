@@ -34,11 +34,10 @@ const EditorPage = async ({ params }: EditorPageProps) => {
   let currentUser = await useCurrentUser();
   if (!article) return notFound();
 
-  // Check if the current user is an admin or the author of the article
   if (!(currentUser?.role === "admin" || article.author.id === userId))
     return notFound();
   let revisions = getArticleRevisions({ id: params.id });
-
+  
   return (
     <div className="relative flex flex-1 w-full h-screen">
       <ScrollArea className="w-full h-screen">
@@ -87,48 +86,50 @@ const EditorPage = async ({ params }: EditorPageProps) => {
         </div>
       </ScrollArea>
       <SideBar article={article} />
-      <Popover>
-        <PopoverTrigger className="absolute bottom-6 left-6" asChild>
-          <Button variant={"outline"} size={"icon"}>
-            <Icons.notesIcon className="w-5 h-5" />
-            <RevisionsCount articleId={article!.id} />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          side="top"
-          align="start"
-          className="mb-1 w-[400px] max-w-full flex flex-col gap-4"
-        >
-          <div className="text-xl font-semibold tracking-wide">Revisions</div>
-          <Suspense
-            fallback={
-              <div className="text-sm font-medium tracking-wide text-muted-foreground">
-                Loading...
-              </div>
-            }
+      {currentUser!.role !== "admin" && article.author.role !=="admin" && (
+        <Popover>
+          <PopoverTrigger className="absolute bottom-6 left-6" asChild>
+            <Button variant={"outline"} size={"icon"}>
+              <Icons.notesIcon className="w-5 h-5" />
+              <RevisionsCount articleId={article!.id} />
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent
+            side="top"
+            align="start"
+            className="mb-1 w-[400px] max-w-full flex flex-col gap-4"
           >
-            <Await promise={revisions}>
-              {(revisions) => {
-                return (
-                  <div className="flex flex-col gap-3">
+            <div className="text-xl font-semibold tracking-wide">Revisions</div>
+            <Suspense
+              fallback={
+                <div className="text-sm font-medium tracking-wide text-muted-foreground">
+                  Loading...
+                </div>
+              }
+            >
+              <Await promise={revisions}>
+                {(revisions) => {
+                  return (
                     <div className="flex flex-col gap-3">
-                      <Revisions
-                        articleId={article!.id}
-                        initialData={revisions}
-                      />
-                    </div>
-                    {currentUser!.role === "admin" && (
-                      <div className="flex items-center justify-end w-full mt-6">
-                        <AddRevision articleId={article!.id} />
+                      <div className="flex flex-col gap-3">
+                        <Revisions
+                          articleId={article!.id}
+                          initialData={revisions}
+                        />
                       </div>
-                    )}
-                  </div>
-                );
-              }}
-            </Await>
-          </Suspense>
-        </PopoverContent>
-      </Popover>
+                      {currentUser!.role === "admin" && (
+                        <div className="flex items-center justify-end w-full mt-6">
+                          <AddRevision articleId={article!.id} />
+                        </div>
+                      )}
+                    </div>
+                  );
+                }}
+              </Await>
+            </Suspense>
+          </PopoverContent>
+        </Popover>
+      )}
     </div>
   );
 };

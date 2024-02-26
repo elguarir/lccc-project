@@ -30,7 +30,7 @@ const ArticlesPage = async ({ searchParams }: ArticlesPageProps) => {
       <main className="flex flex-col items-center w-full py-3 md:py-5">
         <header className="flex items-center justify-between w-full">
           <h1 className="text-3xl font-[550] md:font-semibold text-foreground ">
-            Members Articles
+            Member Articles
           </h1>
         </header>
         <MemberArticlesTable initialData={memberArticles} />
@@ -50,7 +50,7 @@ const ArticlesPage = async ({ searchParams }: ArticlesPageProps) => {
         <AddNew />
       </header>
 
-      <ArticlesTable userId={user.id} initialData={ownerArticles} />
+      <ArticlesTable userId={user.id} isAdmin={user.role==="admin"} initialData={ownerArticles} />
     </main>
   );
 };

@@ -50,6 +50,7 @@
     --ring: 226, 50%, 60%;
     --dark: #232323;
   }
+
   .prose-primary {
     --tw-prose-links: var(--primary);
     --tw-prose-invert-links: var(--primary);
@@ -407,4 +408,8 @@
   .details-separator {
     display: inline-block;
   }
+}
+
+.scroll-container>div div {
+  @apply !flex gap-8 pb-2;
 }
