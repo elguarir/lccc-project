@@ -111,11 +111,11 @@ const ArticlesPage = async ({ searchParams }: Props) => {
               });
               if (filteredArticles.length === 0) {
                 return (
-                  <div className="flex items-center justify-center w-full h-28">
-                    <p className="text-2xl font-bold text-center text-muted-foreground">
-                      No articles found in this category.
-                    </p>
-                  </div>
+                  <div className="flex items-center justify-center flex-1 w-full min-h-80">
+                  <h1 className="text-xl font-medium text-center">
+                    No articles found!
+                  </h1>
+                </div>
                 );
               }
               return (
