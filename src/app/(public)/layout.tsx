@@ -1,3 +1,4 @@
+import RegisterVisit from "@/components/shared/utils/RegisterVisit";
 import Footer from "@/components/site/Footer";
 import NavBar from "@/components/site/NavBar";
 import { env } from "@/lib/env/server";
@@ -18,6 +19,7 @@ async function PublicLayout({ children }: Props) {
         </div>
       </div>
       <div>
+        <RegisterVisit />
         <Footer />
       </div>
     </ProgressBarProvider>
