@@ -147,16 +147,6 @@ async function DashboardPage() {
 
 export default DashboardPage;
 
-async function getPublishedArticlesCount() {
-  let articles = await db.article.count({
-    where: {
-      status: "published",
-      approved: true,
-      deletedAt: null,
-    },
-  });
-  return articles;
-}
 
 async function getUsersCountByDate() {
   const users = await db.user.findMany({

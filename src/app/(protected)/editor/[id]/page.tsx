@@ -37,7 +37,7 @@ const EditorPage = async ({ params }: EditorPageProps) => {
   if (!(currentUser?.role === "admin" || article.author.id === userId))
     return notFound();
   let revisions = getArticleRevisions({ id: params.id });
-  
+
   return (
     <div className="relative flex flex-1 w-full h-screen">
       <ScrollArea className="w-full h-screen">
@@ -86,7 +86,9 @@ const EditorPage = async ({ params }: EditorPageProps) => {
         </div>
       </ScrollArea>
       <SideBar article={article} />
-      {currentUser!.role !== "admin" && article.author.role !=="admin" && (
+      {((currentUser!.role !== "admin" && article.author.role !== "admin") ||
+        (currentUser?.role === "admin" &&
+          article.author.id !== currentUser.id)) && (
         <Popover>
           <PopoverTrigger className="absolute bottom-6 left-6" asChild>
             <Button variant={"outline"} size={"icon"}>
