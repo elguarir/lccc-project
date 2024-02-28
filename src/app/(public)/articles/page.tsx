@@ -68,8 +68,8 @@ const ArticlesPage = async ({ searchParams }: Props) => {
         <Link
           href="/articles"
           className={cn(
-            "text-sm font-medium rounded-full transition-colors duration-300 px-3 py-0.5",
-            category === undefined && "bg-primary shadow-sm text-primary-foreground",
+            "text-sm focus-visible:outline-primary shadow-sm border font-medium rounded-full transition-colors duration-300 px-3 py-0.5",
+            category === undefined && "bg-primary text-primary-foreground border-none",
             category !== undefined && "hover:bg-accent",
           )}
         >
@@ -81,9 +81,9 @@ const ArticlesPage = async ({ searchParams }: Props) => {
             href={`/articles?category=${category.slug}`}
             prefetch
             className={cn(
-              "text-sm font-medium rounded-full transition-colors duration-300 px-3 py-0.5",
+              "text-sm focus-visible:outline-primary shadow-sm border font-medium rounded-full transition-colors duration-300 px-3 py-0.5",
               category.slug === searchParams.category &&
-                "bg-primary shadow-md text-primary-foreground",
+                "bg-primary text-primary-foreground border-none",
               category.slug !== searchParams.category && "hover:bg-accent",
             )}
           >

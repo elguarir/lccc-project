@@ -29,7 +29,7 @@ model Event {
   id          String      @id @default(cuid())
   title       String
   slug        String      @unique
-  excerpt     String
+  excerpt     String      @db.Text
   mainImage   String      @map("main_image") @db.Text
   location    String      @db.Text
   description Json

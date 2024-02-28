@@ -1,5 +1,6 @@
 import slugIt from "@/lib/helpers/slugify";
 import { formSchema } from "@/lib/validators/EventCreationValidator";
+import db from "@/prisma";
 import { router, protectedProcedure } from "@/server/trpc";
 import { z } from "zod";
 
@@ -97,3 +98,24 @@ export const eventRouter = router({
       return event;
     }),
 });
+
+export async function getEvents() {
+  let events = await db.event.findMany({
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+  return events;
+}
+
+export async function getEventBySlug(slug: string) {
+  let event = await db.event.findFirst({
+    where: {
+      slug,
+    },
+    orderBy: {
+      eventDate: "desc",
+    },
+  });
+  return event;
+}

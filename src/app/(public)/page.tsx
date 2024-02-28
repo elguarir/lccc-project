@@ -1,5 +1,6 @@
 import ArticlesSection from "@/components/site/ArticlesSection";
 import CategoriesSection from "@/components/site/CategoriesSection";
+import EventsSection from "@/components/site/EventsSection";
 import HeroSection from "@/components/site/HeroSection";
 
 export const metadata = {
@@ -12,6 +13,7 @@ export default function IndexPage() {
       <HeroSection />
       <ArticlesSection />
       <CategoriesSection />
+      <EventsSection />
     </div>
   );
 }

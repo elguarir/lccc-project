@@ -58,7 +58,12 @@ export const columns: ColumnDef<Event>[] = [
             )}
           </div>
           <div className="text-base font-medium truncate max-w-[300px]">
-            {event.title}
+            <Link
+              className="transition-colors duration-300 hover:text-primary"
+              href={`/dashboard/events/${event.id}/edit`}
+            >
+              {event.title}
+            </Link>
           </div>
         </div>
       );

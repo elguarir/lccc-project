@@ -1,4 +1,7 @@
 "use client";
+import { upload } from "@/hooks/use-cloudinary-upload";
+import { uploadFile } from "@/hooks/use-s3-upload";
+import { env } from "@/lib/env/client";
 import EditorJS from "@editorjs/editorjs";
 import { useCallback, useEffect, useRef, useState } from "react";
 
@@ -18,7 +21,9 @@ export default function RichTextEditor({
   const initializeEditor = useCallback(async () => {
     const EditorJS = (await import("@editorjs/editorjs")).default;
     // @ts-ignore
-    const Header = (await import("@editorjs/header")).default;
+    const Header = (await import("@editorjs/header" as any)).default;
+    const AttachesTool = (await import("@editorjs/attaches" as any)).default;
+    const Image = (await import("@editorjs/image" as any)).default;
     const Embed = (await import("@editorjs/embed" as any)).default;
     const Table = (await import("@editorjs/table" as any)).default;
     const List = (await import("@editorjs/list" as any)).default;
@@ -44,13 +49,71 @@ export default function RichTextEditor({
         placeholder: "Type your page content here...",
         inlineToolbar: true,
         tools: {
-          header: Header,
-          linkTool: LinkTool,
-          quote: Quote,
+          header: {
+            class: Header,
+            config: {
+              levels: [1, 2, 3, 4],
+              defaultLevel: 3,
+            },
+          },
+          linkTool: {
+            class: LinkTool,
+            config: {
+              endpoint: `${env.NEXT_PUBLIC_BASE_URL}/api/fetchurl`,
+            },
+          },
           list: List,
           checklist: Checklist,
+          image: {
+            class: Image,
+            config: {
+              uploader: {
+                async uploadByFile(file: File) {
+                  let secure_url = await upload(file);
+                  if (secure_url) {
+                    return {
+                      success: 1,
+                      file: {
+                        url: secure_url,
+                      },
+                    };
+                  }
+                },
+                async uploadByUrl(url: string) {
+                  return {
+                    success: 1,
+                    file: {
+                      url,
+                    },
+                  };
+                },
+              },
+            },
+          },
+          attaches: {
+            class: AttachesTool,
+            config: {
+              uploader: {
+                async uploadByFile(file: File) {
+                  let file_url = await uploadFile(file);
+                  if (file_url) {
+                    return {
+                      success: 1,
+                      file: {
+                        url: file_url,
+                        size: file.size,
+                        name: file.name,
+                        extension: file.name?.split(".")?.pop(),
+                      },
+                      title: file.name,
+                    };
+                  }
+                },
+              },
+            },
+          },
+          quote: Quote,
           delimiter: Delimiter,
-          code: Code,
           inlineCode: InlineCode,
           table: Table,
           embed: Embed,

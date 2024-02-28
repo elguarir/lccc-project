@@ -40,6 +40,7 @@ import RichTextEditor from "@/components/shared/RichTextEditor";
 import { formSchema } from "@/lib/validators/EventCreationValidator";
 import { trpc } from "@/server/client";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type EventFormProps = {
   mode: "create" | "edit";
@@ -55,7 +56,7 @@ const EventForm = ({ mode, event }: EventFormProps) => {
   let { mutate: updateEvent, isLoading: isUpdating } =
     trpc.event.updateEvent.useMutation();
   let { mutateAsync: checkSlug } = trpc.event.checkSlug.useMutation();
-
+  let router = useRouter();
   let form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: event?.initialData,
@@ -75,6 +76,7 @@ const EventForm = ({ mode, event }: EventFormProps) => {
           onSuccess: () => {
             toast.success("Event updated successfully!");
             refresh();
+            router.push(`/dashboard/events`);
           },
           onError: (error) => {
             toast.error(error.message);

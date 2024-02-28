@@ -103,17 +103,21 @@ const ArticlePage = async (props: Props) => {
               </div>
             </div>
           </div>
-          <Separator orientation="vertical" className="details-separator" />
-          <div className="flex items-center">
-            <Link href={`/category/${article.category?.slug}`}>
-              <Badge
-                className="text-sm font-medium transition-colors hover:text-muted-foreground/90"
-                variant={"outline"}
-              >
-                {article.category?.name}
-              </Badge>
-            </Link>
-          </div>
+          {article.category && (
+            <>
+              <Separator orientation="vertical" className="details-separator" />
+              <div className="flex items-center">
+                <Link href={`/category/${article.category?.slug}`}>
+                  <Badge
+                    className="text-sm font-medium transition-colors hover:text-muted-foreground/90"
+                    variant={"outline"}
+                  >
+                    {article.category?.name}
+                  </Badge>
+                </Link>
+              </div>
+            </>
+          )}
           <Separator orientation="vertical" className="h-6" />
           <div className="text-sm font-medium uppercase">
             {format(new Date(article.publishedAt ?? ""), "MMM d, yyyy")}

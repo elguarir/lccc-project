@@ -6,7 +6,7 @@ import { ScrollArea, ScrollBar } from "../ui/scroll-area";
 const CategoriesSection = async () => {
   let categories = await getTopCategories();
   return (
-    <section className="flex flex-col gap-2 lg:gap-8 w-full my-20 mb-[800px]">
+    <section className="flex flex-col w-full gap-2 my-20 lg:gap-8">
       <div className="relative w-full pl-3 text-left lg:pl-8">
         <svg
           width={22}
