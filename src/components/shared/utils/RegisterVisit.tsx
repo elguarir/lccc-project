@@ -5,7 +5,7 @@ import { useEffect } from "react";
 const RegisterVisit = () => {
   useEffect(() => {
     let registervisit = async () => {
-      await fetch("/api/visit");
+      await fetch("/api/visits");
     };
     registervisit();
   }, []);
